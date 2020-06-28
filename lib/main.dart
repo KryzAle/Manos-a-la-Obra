@@ -1,54 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bloc/bloc.dart';
-import 'package:manos_a_la_obra/src/bloc/authentication_bloc/bloc.dart';
-import 'package:manos_a_la_obra/src/bloc/simple_bloc_delegate.dart';
-import 'package:manos_a_la_obra/src/repository/user_repository.dart';
-import 'package:manos_a_la_obra/src/ui/home_screen.dart';
-import 'package:manos_a_la_obra/src/ui/login/login_screen.dart';
-import 'package:manos_a_la_obra/src/ui/splash_screen.dart';
-import 'package:manos_a_la_obra/src/ui/welcome_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:manos_a_la_obra/src/bloc/provider.dart';
+import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
+import 'package:manos_a_la_obra/src/routes/routes.dart';
 
-void main() {
+void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  BlocSupervisor.delegate = SimpleBlocDelegate();
-
-  final UserRepository userRepository = UserRepository();
-  runApp(
-    BlocProvider(
-      create: (context) => AuthenticationBloc(userRepository: userRepository)
-        ..add(AppStarted()),
-      child: App(userRepository: userRepository),
-    )
-  );
-}
-
-class App extends StatelessWidget {
-  final UserRepository _userRepository;
-
-  App({Key key, @required UserRepository userRepository})
-    : assert (userRepository != null),
-      _userRepository = userRepository,
-      super(key: key);
-
+  final provider = new UsuarioProvider();
+  final user = await provider.isSignedIn();
+  String ruta = user ? 'home' : 'welcome';
+  runApp(MyApp(ruta: ruta,));
+} 
+  
+ 
+class MyApp extends StatelessWidget {
+  final String ruta;
+  MyApp({this.ruta});
+  final provider = UsuarioProvider();
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-        builder: (context, state) {
-          if (state is Uninitialized) {
-            return SplashScreen();
-          }
-          if (state is Authenticated) {
-            return HomeScreen(name: state.displayName,);
-          }
-          if (state is Unauthenticated) {
-            //return LoginScreen(userRepository: _userRepository,);
-            return WelcomePage(userRepository: _userRepository,);
-
-          }
-          return Container();
-        },
+    final textTheme = Theme.of(context).textTheme;
+    return Provider(
+        child: MaterialApp(
+        theme: ThemeData(
+          primaryColor: Colors.orangeAccent ,
+          primarySwatch: Colors.orange,
+          textTheme:GoogleFonts.latoTextTheme(textTheme).copyWith(
+            bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+          ),
+        ),
+        title: 'Material App',
+        debugShowCheckedModeBanner: false,
+        initialRoute: ruta,
+        routes: getAplicationRoutes(),
+        
       ),
     );
   }
