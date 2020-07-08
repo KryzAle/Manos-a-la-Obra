@@ -2,11 +2,12 @@ import 'dart:async';
 
 import 'package:manos_a_la_obra/src/models/categoria_servicio_model.dart';
 import 'package:manos_a_la_obra/src/providers/categoria_servicio_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
 
 class CategoriaBloc{
   final categoriaProvider = CategoriasServiciosProviders();
-  final _categoriaController = StreamController<List<CategoriaServicio>>.broadcast();
+  final _categoriaController = BehaviorSubject<List<CategoriaServicio>>();
 
   //escuchar stream
   Stream<List<CategoriaServicio>> get getCategoria => _categoriaController.stream;
@@ -18,10 +19,12 @@ class CategoriaBloc{
     _categoriaController?.close();
   }
 
-  void cargarCategoria() async{
-
-    final datosCategoria = await categoriaProvider.getCategorias();
-    _categoriaController.sink.add(datosCategoria);
+  void cargarCategoria() {
+    final subscriptionCategoria = categoriaProvider.getCategorias();
+    subscriptionCategoria.listen((event) {
+      final categorias = new CategoriasServicios.fromJsonList(event.documents);
+    _categoriaController.sink.add(categorias.items);
+    });
 
   }
   

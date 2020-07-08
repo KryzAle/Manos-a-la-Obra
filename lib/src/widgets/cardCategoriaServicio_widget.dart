@@ -9,14 +9,13 @@ class CardCateriaServicio extends StatelessWidget {
   CardCateriaServicio({@required this.lista});
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
     return Container(
       alignment: Alignment.center,
       child: Column(
         children: <Widget>[
           Wrap(
             spacing: 20.0,
-            runSpacing: 50.0,
+            runSpacing: 40.0,
             alignment: WrapAlignment.center,
             children: _crearCards(),
           ),
@@ -37,6 +36,7 @@ class CardCateriaServicio extends StatelessWidget {
 
       
     }
+    
     return widgets;
   }
 }

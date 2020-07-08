@@ -1,6 +1,6 @@
 class CategoriasServicios{
-
   List<CategoriaServicio> items = new List();
+  CategoriasServicios({this.items});
   CategoriasServicios.fromJsonList(List<dynamic> categorias){
     if(categorias==null) return;
     for (var item in categorias) {
@@ -11,6 +11,7 @@ class CategoriasServicios{
   
 }
 class CategoriaServicio {
+  String id;
   String nombre;
   String icon;
   String color;
@@ -23,5 +24,6 @@ class CategoriaServicio {
     this.nombre = json['nombre'];
     this.icon = json['icon'];
     this.color = json['color'];
+    this.id = json['id'];
   }
 }

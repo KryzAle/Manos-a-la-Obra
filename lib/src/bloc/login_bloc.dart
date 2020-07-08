@@ -11,14 +11,17 @@ class LoginBloc with Validators{
   final _usuarioProvider = new UsuarioProvider();
   final _passwordController = BehaviorSubject<String>();
   final _emailController    = BehaviorSubject<String>();
+  final _cargandoController = StreamController<bool>.broadcast();
 
   //Insertar valores al Stream
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
+  Function(bool) get changeCargando => _cargandoController.sink.add;
 
   //Recurar valores del Stream
   Stream<String> get emailStream => _emailController.stream.transform(validarEmail);
   Stream<String> get passwordStream => _passwordController.stream.transform(validarPassword);
+  Stream<bool> get cargandoStream => _cargandoController.stream;
 
   Stream<bool> get formValidStream => 
       Rx.combineLatest2(emailStream,passwordStream,(e,p) => true);
@@ -46,7 +49,9 @@ class LoginBloc with Validators{
   void logOut() {
     _usuarioProvider.signOut();
   }
-
+  void cargando(bool cargar){
+    changeCargando(cargar);
+  }
 
   Future<FirebaseUser>  loginWithGoogle() async{
     return await _usuarioProvider.signInWithGoogle();
@@ -56,5 +61,6 @@ class LoginBloc with Validators{
   void dispose(){
     _emailController?.close();
     _passwordController?.close();
+    _cargandoController?.close();
   }
 }
