@@ -1,30 +1,48 @@
 import 'dart:async';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
-import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
+import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
+import 'package:rxdart/rxdart.dart';
 
-class ServicioBloc {
-  final servicioProvider = ServicioDataProvider();
-  final _servicioController = StreamController<List<Servicio>>.broadcast();
+
+class ServicioBloc{
+  final servicios = new List<Servicio>();
+  final puntuacionProvider = new UsuarioProvider();
+  final servicioProvider = ServicioProvider();
+  final _serviciosController = BehaviorSubject<List<Servicio>>();
 
   //escuchar stream
-  Stream<List<Servicio>> get getServicio => _servicioController.stream;
-
+  Stream<List<Servicio>> get getServicios => _serviciosController.stream;
+  
   //agregar stream
-  Function(List<Servicio>) get cambiarServicio => _servicioController.sink.add;
+  Function(List<Servicio>) get changeServicio => _serviciosController.sink.add;
 
-  void dispose() {
-    _servicioController?.close();
+  void dispose(){
+    _serviciosController?.close();
   }
 
-  void cargarServicio() async {
-    final datosServicio = await servicioProvider.getServicios();
-    _servicioController.sink.add(datosServicio);
+  void cargarServicios() {
+    final subscriptionServicio = servicioProvider.getServicios();
+    subscriptionServicio.listen((event) async {
+      for (var item in event.documentChanges) {
+        double puntaje = 0;
+        final servicio = Servicio.fromJsonMap(item.document.data, item.document.documentID);
+        final puntuaciones = await puntuacionProvider.puntaje(servicio.idUsuario);
+        if(puntuaciones!=null){
+          for (var puntuacion in puntuaciones) {
+            puntaje += puntuacion.valor;
+          }
+          puntaje /= puntuaciones.length;
+          servicio.puntaje = puntaje;
+        }
+        servicios.add(servicio);
+      }
+    });
+    changeServicio(servicios);
   }
-
-  void insertarServicio(Servicio dataservicio) async {
+   void insertarServicio(Servicio dataservicio) async {
     await servicioProvider.loadServicio("servicio", dataservicio);
   }
+  
 }

@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:manos_a_la_obra/src/models/puntuacion_model.dart';
 
 class UsuarioProvider {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -59,5 +61,13 @@ class UsuarioProvider {
     } catch (e) {
     }
     return register;
+  }
+  Future<List<Puntuacion>> puntaje(String idUsuario) async{
+    final snapshot = await Firestore.instance.collection('usuario').document(idUsuario).collection('puntuacion').getDocuments();
+    if(snapshot.documents.isNotEmpty){
+      final puntajes = new Puntuaciones.fromJsonList(snapshot.documents);
+      return puntajes.items;
+    }
+    return null;
   }
 }

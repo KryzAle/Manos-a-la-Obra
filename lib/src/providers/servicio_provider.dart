@@ -1,12 +1,11 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 
 class ServicioDataProvider {
-  Future<List<Servicio>> getServicios() async {
-    final snapshot =
-        await Firestore.instance.collection('servicio').getDocuments();
-    final servicios = new Servicios.fromList(snapshot.documents);
-    return servicios.items;
+  
+  Stream<QuerySnapshot> getServicios() {
+    return Firestore.instance.collection('servicio').snapshots();
   }
 
   loadServicio(String coleccion, Servicio dataservicio) async {

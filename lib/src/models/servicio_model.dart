@@ -1,39 +1,37 @@
-class Servicios {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:manos_a_la_obra/src/models/categoria_servicio_model.dart';
+
+class Servicios{
+
   List<Servicio> items = new List();
-  Servicios.fromList(List<dynamic> servicios) {
-    if (servicios == null) return;
+  Servicios.fromJsonList(List<DocumentSnapshot> servicios){
+    if(servicios==null) return;
     for (var item in servicios) {
-      final servicio = new Servicio.fromMap(item.data);
+      final servicio = new Servicio.fromJsonMap(item.data, item.documentID);
       items.add(servicio);
     }
   }
+  
 }
-
 class Servicio {
   String id;
-  String categoria;
+  CategoriaServicio categoria ;
   bool disponibilidad;
-  List evidencia;
   String idUsuario;
   String nombre;
-  String descripcion;
   double puntaje;
+  List evidencia;
   Servicio({
-    this.id,
-    this.categoria,
-    this.disponibilidad = true,
-    this.evidencia,
-    this.idUsuario,
     this.nombre,
-    this.descripcion,
-    this.puntaje,
+    this.disponibilidad,
+    this.categoria,
+    this.idUsuario,
+    this.evidencia,
   });
-  Servicio.fromMap(Map<String, dynamic> data) {
-    this.categoria = data['categoria'];
-    this.disponibilidad = data['disponibilidad'];
-    this.evidencia = data['evidencia'];
-    this.idUsuario = data['idUsuario'];
-    this.nombre = data['nombre'];
-    this.descripcion = data['descripcion'];
+  Servicio.fromJsonMap(Map<String,dynamic> json,String id){
+    this.id = id;
+    this.nombre = json['nombre'];
+    this.disponibilidad = json['disponibilidad'];
+    this.idUsuario = json['id-usuario'];
   }
 }
