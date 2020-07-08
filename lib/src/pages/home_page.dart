@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/pages/home_page_inicio.dart';
-import 'package:manos_a_la_obra/src/pages/welcome_page.dart';
+import 'package:manos_a_la_obra/src/pages/solicitudes_page.dart';
+import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
+import 'package:manos_a_la_obra/src/widgets/alert_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,13 +16,24 @@ class _HomePageState extends State<HomePage> {
   List<Widget> _widgetOpciones = <Widget>[
     Text('pedidos'),
     InicioPage(),
-    Text('Solicitudes'),
+    SolicitudesPage(),
+    //AlertSolicitudes(),
   ];
   List<Widget> _homeOptions = <Widget>[
-    Text('Pedidos',style: textStyle,),
-    Text('Hola',style: textStyle,),
-    Text('Solicitudes',style: textStyle,),
+    Text(
+      'Pedidos',
+      style: textStyle,
+    ),
+    Text(
+      'Hola',
+      style: textStyle,
+    ),
+    Text(
+      'Solicitudes',
+      style: textStyle,
+    ),
   ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -31,7 +44,6 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.0,
-
         ),
         body: _agregarBody(),
         bottomNavigationBar: BottomNavigationBar(
@@ -46,10 +58,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _crearPerfil(BuildContext context) {
-    final loginbloc = Provider.of(context); 
+    final loginbloc = Provider.of(context);
     return IconButton(
-      icon: Icon(Icons.account_circle, color: Colors.deepOrangeAccent,),
-      onPressed: (){
+      icon: Icon(
+        Icons.account_circle,
+        color: Colors.deepOrangeAccent,
+      ),
+      onPressed: () {
         Navigator.pushReplacementNamed(context, 'welcome');
         loginbloc.logOut();
         loginbloc.restarValues();
@@ -58,20 +73,15 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<BottomNavigationBarItem>_obtenerItems() {
+  List<BottomNavigationBarItem> _obtenerItems() {
     return <BottomNavigationBarItem>[
       BottomNavigationBarItem(
         icon: Icon(Icons.assignment),
         title: Text('Pedidos'),
       ),
+      BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Inicio')),
       BottomNavigationBarItem(
-        icon: Icon(Icons.home),
-        title: Text('Inicio')
-      ),
-      BottomNavigationBarItem(
-        icon: Icon(Icons.work),
-        title: Text('Solicitudes')
-      ),
+          icon: Icon(Icons.work), title: Text('Solicitudes')),
     ];
   }
 
@@ -86,5 +96,4 @@ class _HomePageState extends State<HomePage> {
       _selectedIndex = value;
     });
   }
-
 }

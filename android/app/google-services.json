@@ -42,35 +42,6 @@
           ]
         }
       }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:734172189145:android:82109d173aa0667eb949c8",
-        "android_client_info": {
-          "package_name": "com.example.manos_a_la_obra"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "734172189145-sc00miol39i2bjdjm1j6pl3utvrj5g1r.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyAJgJF2W4VFuE5WsdPwK7uAhaMb_fLfc4I"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "734172189145-sc00miol39i2bjdjm1j6pl3utvrj5g1r.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
     }
   ],
   "configuration_version": "1"

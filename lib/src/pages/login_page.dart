@@ -4,13 +4,12 @@ import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 
 class LoginPage extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     final loginBloc = Provider.of(context);
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-      body: Container(
+        body: Container(
       height: height,
       child: Stack(
         children: <Widget>[
@@ -25,82 +24,83 @@ class LoginPage extends StatelessWidget {
                   _title(context),
                   SizedBox(height: 50),
                   _mailField(loginBloc),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   _passwordField(loginBloc),
                   SizedBox(height: 20),
-                  _submitButton(context,loginBloc),
+                  _submitButton(context, loginBloc),
                   Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     alignment: Alignment.center,
-                    child: Text('Olvidaste tu contraseña ?',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500
-                        ),
+                    child: Text(
+                      'Olvidaste tu contraseña ?',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
                     ),
                   ),
                   _divider(),
-                  _googleButton(context,loginBloc),
+                  _googleButton(context, loginBloc),
                   SizedBox(height: height * .055),
                   _createAccountLabel(context),
                 ],
               ),
             ),
           ),
-          Positioned(top: 40, left: 0, child: _backButton(context,loginBloc)),
+          Positioned(top: 40, left: 0, child: _backButton(context, loginBloc)),
         ],
       ),
-      )
-    );
+    ));
   }
 
   Widget _title(BuildContext context) {
     return Text(
       'Iniciar Sesion',
       style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline4,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
+        textStyle: Theme.of(context).textTheme.headline4,
+        fontSize: 30,
+        fontWeight: FontWeight.w700,
+        color: Colors.black,
       ),
     );
   }
 
   Widget _passwordField(LoginBloc loginBloc) {
-
     return StreamBuilder(
       stream: loginBloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-        child: TextField(
-          obscureText: true,
-          decoration: InputDecoration(
-            icon: Icon(Icons.lock_outline),
-            hintText: 'Contraseña',
-            counterText: snapshot.data,
-            errorText: snapshot.error,
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_outline),
+              hintText: 'Contraseña',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changePassword,
           ),
-          onChanged: loginBloc.changePassword,
-        ),
         );
       },
     );
   }
+
   Widget _mailField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.emailStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-        child: TextField(
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            icon: Icon(Icons.mail_outline),
-            hintText: 'Correo Electronico',
-            counterText: snapshot.data,
-            errorText: snapshot.error,
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: Icon(Icons.mail_outline),
+              hintText: 'Correo Electronico',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changeEmail,
           ),
-          onChanged: loginBloc.changeEmail,
-        ),
-      );
+        );
       },
     );
   }
@@ -108,7 +108,7 @@ class LoginPage extends StatelessWidget {
   Widget _submitButton(BuildContext context, LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -119,20 +119,20 @@ class LoginPage extends StatelessWidget {
             ),
           ),
           color: Colors.orange,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
-          onPressed: snapshot.hasData ? () => _login(loginBloc,context) : null,
-        );  
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          onPressed: snapshot.hasData ? () => _login(loginBloc, context) : null,
+        );
       },
     );
   }
 
-  _login(LoginBloc loginBloc, BuildContext context) async{
+  _login(LoginBloc loginBloc, BuildContext context) async {
     if (await loginBloc.login()) {
-      Navigator.pushReplacementNamed(context , 'home');
-    }else{
-      _mostrarAlerta(context,'Datos Incorrectos' , 'Tu contraseña o email son incorrectos');
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      _mostrarAlerta(context, 'Datos Incorrectos',
+          'Tu contraseña o email son incorrectos');
     }
   }
 
@@ -172,10 +172,8 @@ class LoginPage extends StatelessWidget {
   Widget _googleButton(BuildContext context, LoginBloc loginBloc) {
     return RaisedButton(
       color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10.0)
-      ),
-      onPressed: ()=>_loginGoogle(context,loginBloc),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      onPressed: () => _loginGoogle(context, loginBloc),
       elevation: 4.0,
       child: Container(
         child: Row(
@@ -183,11 +181,9 @@ class LoginPage extends StatelessWidget {
             Expanded(
               flex: 1,
               child: Container(
-                alignment: Alignment.center,
-                child: Container(
-                  child: Image(image: AssetImage('assets/google.png'))
-                )
-              ),
+                  alignment: Alignment.center,
+                  child: Container(
+                      child: Image(image: AssetImage('assets/google.png')))),
             ),
             Expanded(
               flex: 5,
@@ -238,11 +234,11 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _backButton(BuildContext context,LoginBloc loginBloc) {
+  Widget _backButton(BuildContext context, LoginBloc loginBloc) {
     return InkWell(
       onTap: () {
         loginBloc.restarValues();
-        Navigator.pushReplacementNamed(context,'welcome');
+        Navigator.pushReplacementNamed(context, 'welcome');
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -260,27 +256,26 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void _mostrarAlerta(BuildContext context,String text,String subtext) {
+  void _mostrarAlerta(BuildContext context, String text, String subtext) {
     showDialog(
-      context: context,
-      child: AlertDialog(
-        elevation: 2.0,
-        content: Text(subtext),
-        title: Text(text,style: TextStyle(fontSize: 20.0),),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: ()=> Navigator.of(context).pop(), 
-            child: Text('Ok')
-          )
-        ],
-      )
-    );
+        context: context,
+        child: AlertDialog(
+          elevation: 2.0,
+          content: Text(subtext),
+          title: Text(
+            text,
+            style: TextStyle(fontSize: 20.0),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(), child: Text('Ok'))
+          ],
+        ));
   }
 
-  _loginGoogle(BuildContext context, LoginBloc loginBloc) async{
+  _loginGoogle(BuildContext context, LoginBloc loginBloc) async {
     // final user = await loginBloc.loginWithGoogle();
     // print(user);
-      _mostrarAlerta(context,'Proximamente' , 'Estamos trabajando para ti');
+    _mostrarAlerta(context, 'Proximamente', 'Estamos trabajando para ti');
   }
-
 }
