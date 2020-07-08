@@ -26,17 +26,20 @@ class RegisterPage extends StatelessWidget {
                     _title(context),
                     SizedBox(height: 50),
                     _mailField(loginBloc),
-                    SizedBox(height: 20.0,),
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     _passwordField(loginBloc),
                     SizedBox(height: 20),
-                    _submitButton(context,loginBloc),
+                    _submitButton(context, loginBloc),
                     SizedBox(height: height * .14),
                     _loginAccountLabel(context),
                   ],
                 ),
               ),
             ),
-            Positioned(top: 40, left: 0, child: _backButton(context,loginBloc)),
+            Positioned(
+                top: 40, left: 0, child: _backButton(context, loginBloc)),
           ],
         ),
       ),
@@ -47,10 +50,10 @@ class RegisterPage extends StatelessWidget {
     return Text(
       'Registrarse',
       style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline4,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Colors.black,
+        textStyle: Theme.of(context).textTheme.headline4,
+        fontSize: 30,
+        fontWeight: FontWeight.w700,
+        color: Colors.black,
       ),
     );
   }
@@ -58,19 +61,19 @@ class RegisterPage extends StatelessWidget {
   Widget _mailField(loginBloc) {
     return StreamBuilder(
       stream: loginBloc.emailStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-        child: TextField(
-          keyboardType: TextInputType.emailAddress,
-          decoration: InputDecoration(
-            icon: Icon(Icons.mail_outline),
-            hintText: 'Correo Electronico',
-            counterText: snapshot.data,
-            errorText: snapshot.error,
+          child: TextField(
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              icon: Icon(Icons.mail_outline),
+              hintText: 'Correo Electronico',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changeEmail,
           ),
-          onChanged: loginBloc.changeEmail,
-        ),
-      );
+        );
       },
     );
   }
@@ -78,18 +81,18 @@ class RegisterPage extends StatelessWidget {
   Widget _passwordField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.passwordStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-        child: TextField(
-          obscureText: true,
-          decoration: InputDecoration(
-            icon: Icon(Icons.lock_outline),
-            hintText: 'Contraseña',
-            counterText: snapshot.data,
-            errorText: snapshot.error,
+          child: TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              icon: Icon(Icons.lock_outline),
+              hintText: 'Contraseña',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changePassword,
           ),
-          onChanged: loginBloc.changePassword,
-        ),
         );
       },
     );
@@ -98,7 +101,7 @@ class RegisterPage extends StatelessWidget {
   Widget _submitButton(BuildContext context, LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.formValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -109,11 +112,11 @@ class RegisterPage extends StatelessWidget {
             ),
           ),
           color: Colors.orange,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
-          onPressed: snapshot.hasData ? () => _register(context,loginBloc) : null,
-        );  
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          onPressed:
+              snapshot.hasData ? () => _register(context, loginBloc) : null,
+        );
       },
     );
   }
@@ -154,7 +157,7 @@ class RegisterPage extends StatelessWidget {
     return InkWell(
       onTap: () {
         loginBloc.restarValues();
-        Navigator.pushReplacementNamed(context,'welcome');
+        Navigator.pushReplacementNamed(context, 'welcome');
       },
       child: Container(
         padding: EdgeInsets.symmetric(horizontal: 10),
@@ -172,28 +175,29 @@ class RegisterPage extends StatelessWidget {
     );
   }
 
-  _register(BuildContext context, LoginBloc loginBloc) async{
+  _register(BuildContext context, LoginBloc loginBloc) async {
     if (await loginBloc.register()) {
-      Navigator.pushReplacementNamed(context , 'home');
-    }else{
-      _mostrarAlerta(context,'Datos Incorrectos' , 'Email invalido o se encuentra registrado');
+      Navigator.pushReplacementNamed(context, 'home');
+    } else {
+      _mostrarAlerta(context, 'Datos Incorrectos',
+          'Email invalido o se encuentra registrado');
     }
   }
 
-  void _mostrarAlerta(BuildContext context,String text,String subtext) {
+  void _mostrarAlerta(BuildContext context, String text, String subtext) {
     showDialog(
-      context: context,
-      child: AlertDialog(
-        elevation: 2.0,
-        content: Text(subtext),
-        title: Text(text,style: TextStyle(fontSize: 20.0),),
-        actions: <Widget>[
-          FlatButton(
-            onPressed: ()=> Navigator.of(context).pop(), 
-            child: Text('Ok')
-          )
-        ],
-      )
-    );
+        context: context,
+        child: AlertDialog(
+          elevation: 2.0,
+          content: Text(subtext),
+          title: Text(
+            text,
+            style: TextStyle(fontSize: 20.0),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: () => Navigator.of(context).pop(), child: Text('Ok'))
+          ],
+        ));
   }
 }

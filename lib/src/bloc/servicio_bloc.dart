@@ -41,6 +41,8 @@ class ServicioBloc{
     });
     changeServicio(servicios);
   }
-  
+   void insertarServicio(Servicio dataservicio) async {
+    await servicioProvider.loadServicio("servicio", dataservicio);
+  }
   
 }

@@ -33,6 +33,7 @@ class _MyAppState extends State<MyApp> {
     ruta = user ? 'home' : 'welcome';
     loginBloc.cargando(false);
   }
+  
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;

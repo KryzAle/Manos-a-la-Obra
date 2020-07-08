@@ -1,23 +1,13 @@
 
-import 'package:manos_a_la_obra/src/models/puntuacion_model.dart';
-
-class Servicio {
-  String cedula;
+class Usuario {
   String foto;
   String nombre;
+  String cedula;
   bool proveedor;
-  List<Puntuacion> puntaciones;
-  Servicio({
-    this.nombre,
-    this.cedula,
-    this.foto,
-    this.proveedor,
-  });
-  Servicio.fromJsonMap(Map<String,dynamic> json,List<Puntuacion> puntuaciones){
-    this.nombre = json['nombre'];
-    this.cedula = json['cedula'];
-    this.foto = json['foto'];
-    this.proveedor = json['proveedor'];
-    this.puntaciones = puntuaciones;
+  Usuario.fromMap(Map<String, dynamic> data) {
+    this.foto = data['foto'];
+    this.nombre = data['nombre'];
+    this.cedula = data['cedula'];
+    this.proveedor = data['proveedor'];
   }
 }

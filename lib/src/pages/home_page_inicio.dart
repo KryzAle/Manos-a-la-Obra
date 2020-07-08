@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/search/search_delegate.dart';
 import 'package:manos_a_la_obra/src/widgets/cardCategoriaServicio_widget.dart';
+
 class InicioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) { 
@@ -58,5 +59,6 @@ Widget _crearSearch(BuildContext context) {
         },
         readOnly: true,
       ),
-    );
+    ),
+  );
 }
