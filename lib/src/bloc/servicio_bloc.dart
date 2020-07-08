@@ -9,7 +9,7 @@ import 'package:rxdart/rxdart.dart';
 class ServicioBloc{
   final servicios = new List<Servicio>();
   final puntuacionProvider = new UsuarioProvider();
-  final servicioProvider = ServicioProvider();
+  final servicioProvider = ServicioDataProvider();
   final _serviciosController = BehaviorSubject<List<Servicio>>();
 
   //escuchar stream

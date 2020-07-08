@@ -136,7 +136,6 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     }
 //Formulario
     final categoriaBloc = Provider.categoria(context);
-    categoriaBloc.cargarCategoria();
     //retorna un scaffold con el formulario completo
     return Scaffold(
       appBar: AppBar(
