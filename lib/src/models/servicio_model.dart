@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:manos_a_la_obra/src/models/categoria_servicio_model.dart';
 
 class Servicios{
 
@@ -15,10 +14,11 @@ class Servicios{
 }
 class Servicio {
   String id;
-  CategoriaServicio categoria ;
+  String categoria ;
   bool disponibilidad;
   String idUsuario;
   String nombre;
+  String descripcion;
   double puntaje;
   List evidencia;
   Servicio({
@@ -27,11 +27,13 @@ class Servicio {
     this.categoria,
     this.idUsuario,
     this.evidencia,
+    this.descripcion
   });
   Servicio.fromJsonMap(Map<String,dynamic> json,String id){
     this.id = id;
     this.nombre = json['nombre'];
     this.disponibilidad = json['disponibilidad'];
     this.idUsuario = json['id-usuario'];
+    this.descripcion = json['descripcion'];
   }
 }

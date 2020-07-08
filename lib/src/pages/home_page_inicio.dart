@@ -7,7 +7,6 @@ class InicioPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) { 
     final categoriaBloc = Provider.categoria(context);
-    final loginbloc = Provider.of(context);
     final _screenSize = MediaQuery.of(context).size;
     return Container(
       height: _screenSize.height,
@@ -33,7 +32,6 @@ class InicioPage extends StatelessWidget {
       ),
     );
     }
-}
 
 Widget _crearSearch(BuildContext context) {
   final _screenSize = MediaQuery.of(context).size;
@@ -59,6 +57,6 @@ Widget _crearSearch(BuildContext context) {
         },
         readOnly: true,
       ),
-    ),
   );
+}
 }
