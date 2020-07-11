@@ -81,6 +81,7 @@ class RegisterPage extends StatelessWidget {
   Widget _passwordField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.passwordStream,
+      initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           child: TextField(
@@ -101,6 +102,7 @@ class RegisterPage extends StatelessWidget {
   Widget _submitButton(BuildContext context, LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.formValidStream,
+      initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return RaisedButton(
           child: Container(
@@ -156,7 +158,6 @@ class RegisterPage extends StatelessWidget {
   Widget _backButton(BuildContext context, LoginBloc loginBloc) {
     return InkWell(
       onTap: () {
-        loginBloc.restarValues();
         Navigator.pushReplacementNamed(context, 'welcome');
       },
       child: Container(
@@ -176,7 +177,9 @@ class RegisterPage extends StatelessWidget {
   }
 
   _register(BuildContext context, LoginBloc loginBloc) async {
+    final usuarioBloc = Provider.usuario(context);
     if (await loginBloc.register()) {
+      usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       _mostrarAlerta(context, 'Datos Incorrectos',

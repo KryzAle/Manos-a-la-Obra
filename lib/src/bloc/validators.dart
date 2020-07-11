@@ -26,4 +26,18 @@ class Validators {
       }
     }
   );
+
+  final validarTelefono = StreamTransformer<String,String>.fromHandlers(
+    handleData: (telefono,sink){
+      if(telefono != null){
+        if (telefono.length == 10) {
+          sink.add(telefono);
+        }else{
+          if(telefono.length>0) sink.addError('Debe tener 10 Digitos');
+        }
+      }else{
+        sink.add('');
+      }
+    }
+  );
 }

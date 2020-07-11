@@ -8,6 +8,11 @@ class ServicioDataProvider {
     return Firestore.instance.collection('servicio').snapshots();
   }
 
+  Stream<QuerySnapshot> getServiciosUsuario(String idUsuario) {
+
+    return Firestore.instance.collection('servicio').where('id-usuario',isEqualTo: idUsuario).snapshots();
+  }
+
   loadServicio(String coleccion, Servicio dataservicio) async {
     await Firestore.instance.collection(coleccion).add({
       'categoria': dataservicio.categoria,

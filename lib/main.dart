@@ -2,10 +2,8 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:manos_a_la_obra/src/bloc/categoria_servicio_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
 import 'package:manos_a_la_obra/src/routes/routes.dart';
 
 void main() {
@@ -21,6 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final loginBloc  = new LoginBloc();
   String ruta = 'welcome';
+  bool autenticado = false;
 
   @override
   void initState() {
@@ -30,7 +29,12 @@ class _MyAppState extends State<MyApp> {
   void cargarUsuario() async{
     loginBloc.cargando(true);
     final user = await loginBloc.isLogin();
-    ruta = user ? 'home' : 'welcome';
+    if (user){
+      ruta = 'home';
+      autenticado = true;
+    }else{
+      ruta = 'welcome';
+    }
     loginBloc.cargando(false);
   }
   
@@ -43,10 +47,15 @@ class _MyAppState extends State<MyApp> {
         builder: (BuildContext context, AsyncSnapshot snapshot){
           if(snapshot.hasData){
             if(!snapshot.data ){ 
-              final categoria = Provider.categoria(context);
-              final servicios = Provider.servicio(context);
-              servicios.cargarServicios();
-              categoria.cargarCategoria();
+              final categoriaBloc = Provider.categoria(context);
+              final serviciosBloc = Provider.servicio(context);
+              final usuarioBloc = Provider.usuario(context);
+              serviciosBloc.cargarServicios();
+              categoriaBloc.cargarCategoria();
+              if(autenticado){
+                usuarioBloc.cargarUsuario();
+                serviciosBloc.cargarServiciosUsuario();
+              } 
               return MaterialApp( 
                 theme: ThemeData(
                 primaryColor: Colors.orangeAccent ,

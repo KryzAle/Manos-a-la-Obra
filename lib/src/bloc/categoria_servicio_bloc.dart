@@ -18,7 +18,6 @@ class CategoriaBloc {
 
   void dispose() {
     _categoriaController?.close();
-    print("cerrando esta");
   }
 
   void cargarCategoria() {

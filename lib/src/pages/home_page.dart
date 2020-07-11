@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/pages/home_page_inicio.dart';
 import 'package:manos_a_la_obra/src/pages/solicitudes_page.dart';
-import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
-import 'package:manos_a_la_obra/src/widgets/alert_widget.dart';
+import 'package:manos_a_la_obra/src/widgets/main_drawer_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -39,12 +37,13 @@ class _HomePageState extends State<HomePage> {
     return Container(
       child: Scaffold(
         appBar: AppBar(
-          leading: _crearPerfil(context),
+          leading: _crearPerfil(),
           title: _homeOptions.elementAt(_selectedIndex),
           centerTitle: true,
           backgroundColor: Colors.white,
           elevation: 0.0,
         ),
+        drawer: MainDrawer(),
         body: _agregarBody(),
         bottomNavigationBar: BottomNavigationBar(
           items: _obtenerItems(),
@@ -57,19 +56,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _crearPerfil(BuildContext context) {
-    final loginbloc = Provider.of(context);
-    return IconButton(
-      icon: Icon(
-        Icons.account_circle,
-        color: Colors.deepOrangeAccent,
-      ),
-      onPressed: () {
-        Navigator.pushReplacementNamed(context, 'welcome');
-        loginbloc.logOut();
-        loginbloc.restarValues();
+  Widget _crearPerfil() {
+    return Builder(
+      builder: (context){
+        return IconButton(
+          icon: Icon(
+            Icons.account_circle,
+            color: Colors.deepOrangeAccent,
+          ),
+          onPressed: () {
+            Scaffold.of(context).openDrawer();
+            
+          },
+          iconSize: 40.0,
+        );
       },
-      iconSize: 40.0,
     );
   }
 
