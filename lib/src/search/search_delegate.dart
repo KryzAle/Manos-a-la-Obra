@@ -43,7 +43,7 @@ class ServiciosSearch extends SearchDelegate{
   @override
   Widget buildSuggestions(BuildContext context) {
     final _servicioProvider = Provider.servicio(context);
-    // Son las sugerencias que aparecen cuando escribem
+    // Son las sugerencias que aparecen cuando escriben
     if(query.isEmpty){
       return Container();
     }else{
@@ -83,12 +83,16 @@ class ServiciosSearch extends SearchDelegate{
   List<Widget> _crearPuntaje(double starts){
     final widgets = <Widget>[];
     int numeroStrella = starts.toInt();
-    for (var i = 0; i < numeroStrella; i++) {
-      widgets.add(
-        Icon(Icons.star,color: Colors.orangeAccent,)
-      );
+    if(numeroStrella>0){
+      for (var i = 0; i < numeroStrella; i++) {
+        widgets.add(
+          Icon(Icons.star,color: Colors.orangeAccent,)
+        );
+      }
+      widgets.add(starts-numeroStrella!=0 ? Icon(Icons.star_half,color: Colors.orangeAccent,) : null);
+    }else{
+      widgets.add(Text('Sin Puntuacion'));
     }
-    widgets.add(starts-numeroStrella!=0 ? Icon(Icons.star_half,color: Colors.orangeAccent,) : null);
     return widgets;
   }
 

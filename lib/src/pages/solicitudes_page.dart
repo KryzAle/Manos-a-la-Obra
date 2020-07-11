@@ -14,7 +14,6 @@ class _SolicitudesPageState extends State<SolicitudesPage> {
   @override
   Widget build(BuildContext context) {
     final userbloc = Provider.usuario(context);
-    userbloc.cargarUsuario();
     return StreamBuilder(
       stream: userbloc.getUsuario,
       builder: (BuildContext context, AsyncSnapshot<Usuario> snapshot) {

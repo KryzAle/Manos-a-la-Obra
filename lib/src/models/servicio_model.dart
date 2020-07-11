@@ -23,7 +23,7 @@ class Servicio {
   List evidencia;
   Servicio({
     this.nombre,
-    this.disponibilidad,
+    this.disponibilidad = true,
     this.categoria,
     this.idUsuario,
     this.evidencia,

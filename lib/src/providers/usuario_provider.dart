@@ -54,9 +54,18 @@ class UsuarioProvider {
   Future<bool> signUp(String email, String password) async{
     bool register = false;
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password);
+      await Firestore.instance.collection('usuario').document(user.user.uid).setData(
+        {
+          'foto'  : '',
+          'nombre' : '',
+          'cedula' : '',
+          'proveedor' : false,
+          'celular' : '',
+        }
+      );
       register =true;
     } catch (e) {
     }

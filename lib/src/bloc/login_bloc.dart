@@ -29,11 +29,6 @@ class LoginBloc with Validators{
   // obtenr ultimo valor ingresado
   String get email => _emailController.value;
   String get password => _passwordController.value;
-  
-  void restarValues(){
-    _passwordController.value='';
-    _emailController.value='';
-  }
 
   Future<bool> login() async{
     return await _usuarioProvider.signInWithCredentials(email, password);
@@ -52,7 +47,6 @@ class LoginBloc with Validators{
   void cargando(bool cargar){
     changeCargando(cargar);
   }
-
   Future<FirebaseUser>  loginWithGoogle() async{
     return await _usuarioProvider.signInWithGoogle();
   }

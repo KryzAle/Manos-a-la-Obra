@@ -26,7 +26,6 @@ class _DropdownMakerState extends State<DropdownMaker> {
       onChanged: (newValue) {
         setState(() {
           _selectedLocation = newValue;
-          print(_selectedLocation);
         });
       },
       items: crearLista().map((location) {

@@ -68,6 +68,7 @@ class LoginPage extends StatelessWidget {
   Widget _passwordField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.passwordStream,
+      initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           child: TextField(
@@ -88,6 +89,7 @@ class LoginPage extends StatelessWidget {
   Widget _mailField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.emailStream,
+      initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           child: TextField(
@@ -128,7 +130,9 @@ class LoginPage extends StatelessWidget {
   }
 
   _login(LoginBloc loginBloc, BuildContext context) async {
+    final usuarioBloc = Provider.usuario(context);
     if (await loginBloc.login()) {
+      usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       _mostrarAlerta(context, 'Datos Incorrectos',
@@ -237,7 +241,6 @@ class LoginPage extends StatelessWidget {
   Widget _backButton(BuildContext context, LoginBloc loginBloc) {
     return InkWell(
       onTap: () {
-        loginBloc.restarValues();
         Navigator.pushReplacementNamed(context, 'welcome');
       },
       child: Container(
@@ -276,6 +279,6 @@ class LoginPage extends StatelessWidget {
   _loginGoogle(BuildContext context, LoginBloc loginBloc) async {
     // final user = await loginBloc.loginWithGoogle();
     // print(user);
-    _mostrarAlerta(context, 'Proximamente', 'Estamos trabajando para ti');
+  _mostrarAlerta(context, 'Proximamente', 'Estamos trabajando para ti');
   }
 }

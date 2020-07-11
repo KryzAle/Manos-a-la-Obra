@@ -1,25 +1,26 @@
+
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:manos_a_la_obra/src/models/servicio_model.dart';
-import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 
 class UserDataProvider {
   final databaseReference = Firestore.instance;
 
-  Future<Usuario> getUserDoc() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<Stream<DocumentSnapshot>> getUserDoc() async {
     final Firestore _firestore = Firestore.instance;
-
-    FirebaseUser user = await _auth.currentUser();
-    final snapshot =
-        await _firestore.collection('usuario').document(user.uid).get();
-    final usuario = new Usuario.fromMap(snapshot.data);
-    return usuario;
+    final userId = await getIdCurrentUser();
+    return _firestore.collection('usuario').document(userId).snapshots();
   }
 
-  getIdCurrentUser() async {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+  Future<bool> updateUserDoc(Map<String,dynamic> datos) async{
+    final userId = await getIdCurrentUser();
+    await databaseReference.collection('usuario').document(userId).updateData(datos);
+    return true;
+  }
 
+  Future<String> getIdCurrentUser() async {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     FirebaseUser user = await _auth.currentUser();
     return user.uid;
   }
