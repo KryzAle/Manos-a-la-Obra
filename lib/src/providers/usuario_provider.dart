@@ -51,7 +51,7 @@ class UsuarioProvider {
       return null;
     }
   }
-  Future<bool> signUp(String email, String password) async{
+  Future<bool> signUp(String email, String password, String nombre, String cedula) async{
     bool register = false;
     try {
       final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -60,8 +60,8 @@ class UsuarioProvider {
       await Firestore.instance.collection('usuario').document(user.user.uid).setData(
         {
           'foto'  : '',
-          'nombre' : '',
-          'cedula' : '',
+          'nombre' : nombre,
+          'cedula' : cedula,
           'proveedor' : false,
           'celular' : '',
         }
@@ -78,5 +78,17 @@ class UsuarioProvider {
       return puntajes.items;
     }
     return null;
+  }
+
+  Future<bool> updatePassword(String password) async {
+    bool update = false;
+    try {
+      final usuario = await user();
+      await usuario.updatePassword(password);
+      update = true;
+    } catch (e) {
+      print(e);
+    }
+    return update;
   }
 }

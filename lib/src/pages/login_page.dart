@@ -7,6 +7,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginBloc = Provider.of(context);
+    loginBloc.resetValues();
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
         body: Container(
@@ -42,7 +43,7 @@ class LoginPage extends StatelessWidget {
                   _divider(),
                   _googleButton(context, loginBloc),
                   SizedBox(height: height * .055),
-                  _createAccountLabel(context),
+                  _createAccountLabel(context,loginBloc),
                 ],
               ),
             ),
@@ -111,6 +112,7 @@ class LoginPage extends StatelessWidget {
     return StreamBuilder(
       stream: loginBloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print(snapshot.data);
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -131,10 +133,35 @@ class LoginPage extends StatelessWidget {
 
   _login(LoginBloc loginBloc, BuildContext context) async {
     final usuarioBloc = Provider.usuario(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            SizedBox(height: 20.0,),
+            Text(
+              "Iniciando Sesion...",
+              style: Theme.of(context).textTheme.subtitle2.copyWith(
+              fontSize: 25.0,
+              color: Colors.white,
+              ),
+            ),
+          ],
+        ),);
+      }
+    );
     if (await loginBloc.login()) {
       usuarioBloc.cargarUsuario();
+      loginBloc.resetValues();
+      Navigator.pop(context);
       Navigator.pushReplacementNamed(context, 'home');
     } else {
+      await  Future.delayed(const Duration(seconds: 2));
+      Navigator.pop(context);
       _mostrarAlerta(context, 'Datos Incorrectos',
           'Tu contraseña o email son incorrectos');
     }
@@ -206,7 +233,7 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Widget _createAccountLabel(BuildContext context) {
+  Widget _createAccountLabel(BuildContext context, LoginBloc loginBloc) {
     return InkWell(
       onTap: () {
         Navigator.pushReplacementNamed(context, 'register');

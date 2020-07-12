@@ -4,11 +4,11 @@ import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 
 class RegisterPage extends StatelessWidget {
-  const RegisterPage({Key key}) : super(key: key);
-
+  final formkey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final loginBloc = Provider.of(context);
+    loginBloc.resetValues();
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Container(
@@ -25,6 +25,10 @@ class RegisterPage extends StatelessWidget {
                     SizedBox(height: height * .2),
                     _title(context),
                     SizedBox(height: 50),
+                    _nombreFile(loginBloc),
+                    SizedBox(height: 20),
+                    _cedulaFile(loginBloc),
+                    SizedBox(height: 20),
                     _mailField(loginBloc),
                     SizedBox(
                       height: 20.0,
@@ -57,8 +61,45 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
+  Widget _nombreFile(LoginBloc loginBloc) {
+    return StreamBuilder(
+      stream: loginBloc.nombreStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot){
+        return Container(
+          child: TextField(
+            textCapitalization: TextCapitalization.words,
+            decoration: InputDecoration(
+              icon: Icon(Icons.person_outline),
+              hintText: 'Nombre',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changeNombre,
+          ),
+        );
+      },
+    );
+  }
+  Widget _cedulaFile(LoginBloc loginBloc) {
+    return StreamBuilder(
+      stream: loginBloc.cedulaStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          child: TextField(
+            decoration: InputDecoration(
+              icon: Icon(Icons.mail_outline),
+              hintText: 'Cedula',
+              counterText: snapshot.data,
+              errorText: snapshot.error,
+            ),
+            onChanged: loginBloc.changeCedula,
+          ),
+        );
+      },
+    );
+  }
 
-  Widget _mailField(loginBloc) {
+  Widget _mailField(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.emailStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -101,9 +142,9 @@ class RegisterPage extends StatelessWidget {
 
   Widget _submitButton(BuildContext context, LoginBloc loginBloc) {
     return StreamBuilder(
-      stream: loginBloc.formValidStream,
-      initialData: '',
+      stream: loginBloc.formRegisterValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
+        print(loginBloc.password);
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -178,10 +219,35 @@ class RegisterPage extends StatelessWidget {
 
   _register(BuildContext context, LoginBloc loginBloc) async {
     final usuarioBloc = Provider.usuario(context);
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            CircularProgressIndicator(),
+            SizedBox(height: 20.0,),
+            Text(
+              "Registrando...",
+              style: Theme.of(context).textTheme.subtitle2.copyWith(
+              fontSize: 25.0,
+              color: Colors.white,
+              ),
+            ),
+          ],
+        ),);
+      }
+    );
     if (await loginBloc.register()) {
+      loginBloc.resetValues();
+      Navigator.pop(context);
       usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
+      await  Future.delayed(const Duration(seconds: 2));
+      Navigator.pop(context);
       _mostrarAlerta(context, 'Datos Incorrectos',
           'Email invalido o se encuentra registrado');
     }
@@ -203,4 +269,6 @@ class RegisterPage extends StatelessWidget {
           ],
         ));
   }
+
+
 }
