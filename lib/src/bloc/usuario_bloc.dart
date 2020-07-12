@@ -53,4 +53,5 @@ class UsuarioBloc with Validators{
   void logout(){
     _usuarioController.value = null;
   }
+
 }

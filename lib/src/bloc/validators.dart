@@ -40,4 +40,24 @@ class Validators {
       }
     }
   );
+
+   final validarCedula = StreamTransformer<String,String>.fromHandlers(
+    handleData: (cedula,sink){
+      if (cedula.length==10) {
+        sink.add(cedula);
+      }else{
+        if(cedula.length>0) sink.addError('Debe tener 10 Digitos');
+      }
+    }
+  );
+
+  final validarCampo = StreamTransformer<String,String>.fromHandlers(
+    handleData: (campo,sink){
+      if (campo.length>0) {
+        sink.add(campo);
+      }else{
+        sink.addError('Campo Obligatorio');
+      }
+    }
+  );
 }

@@ -113,26 +113,42 @@ class MiPerfilPage extends StatelessWidget {
               _crearDato('Proveedor', usuario.proveedor?'Si':'No'),
               _crearDato('Nombre', usuario.nombre),
               _crearDato('Celular', usuario.telefono),
-              GestureDetector(
-                onTap: (){
-                  Navigator.pushNamed(context, 'editar_perfil');
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Text('Editar',style: TextStyle(color: Colors.deepOrangeAccent),),
-                    Icon(Icons.keyboard_arrow_right, color: Colors.deepOrangeAccent,)
-                  ],
-                ),
+               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  Expanded(child: Container()),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, 'editar_perfil');
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Text('Editar',style: TextStyle(color: Colors.deepOrangeAccent),),
+                        Icon(Icons.keyboard_arrow_right, color: Colors.deepOrangeAccent,)
+
+                      ],
+                    ),
+                  )
+                ],
               ),
               SizedBox(height: 10.0,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text('Cambiar Contraseña',style: TextStyle(color: Colors.deepOrangeAccent)),
-                  Icon(Icons.keyboard_arrow_right,color: Colors.deepOrangeAccent,)
+                  Expanded(child: Container()),
+                  InkWell(
+                    onTap: (){
+                      Navigator.pushNamed(context, 'cambiar_password');
+                    },
+                    child: Row(
+                      children: <Widget>[
+                        Text('Cambiar Contraseña',style: TextStyle(color: Colors.deepOrangeAccent)),
+                        Icon(Icons.keyboard_arrow_right,color: Colors.deepOrangeAccent,)
+                      ],
+                    ),
+                  )
                 ],
-              )
+              ),
             ],
           ),
         ),

@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/bloc/usuario_bloc.dart';
-import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 
-class EditarPerfilPage extends StatefulWidget {
+class CambiarPasswordPage extends StatefulWidget {
   @override
-  _EditarPerfilPageState createState() => _EditarPerfilPageState();
+  _CambiarPasswordPageState createState() => _CambiarPasswordPageState();
 }
 
-class _EditarPerfilPageState extends State<EditarPerfilPage> {
-  final formkey = GlobalKey<FormState>();
+class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
+ final formkey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
-  final usuarioBloc = Provider.usuario(context);
+  final loginBloc = Provider.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Mis Datos',style: TextStyle(color: Colors.white),),
+        title: Text('Cambiar Contraseña',style: TextStyle(color: Colors.white),),
         centerTitle: true,
         leading: GestureDetector(
           child: Icon(Icons.arrow_back_ios, color: Colors.white,),
@@ -26,72 +25,35 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
       ),
       body:Form(
         key: formkey,
-        child: StreamBuilder(
-          stream: usuarioBloc.getUsuario,
-          builder: (BuildContext context, AsyncSnapshot<Usuario> snapshot) {
-            if(snapshot.hasData){
-              return Container(
-              padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: Column(
-                children: <Widget>[
-                  _crearInputNombre(snapshot.data,usuarioBloc),
-                  _crearInputTelefono(snapshot.data, usuarioBloc),
-                  Expanded(child: Container()),
-                  _crearBotonActualizar(usuarioBloc),
-                ],
-              ),
-              );
-            }
-            return Container();
-          }
-        ),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 20.0),
+          child: Column(
+            children: <Widget>[
+              _crearInputPassword(loginBloc),
+              _crearInputConfirmPassword(loginBloc),
+              Expanded(child: Container()),
+              _crearBotonActualizar(loginBloc),
+            ],
+          ),
+        )
       )
     );
   }
 
-  Widget _crearInputNombre(Usuario usuario,UsuarioBloc usuarioBloc) {
+  Widget _crearInputPassword(LoginBloc loginBloc) {
     return StreamBuilder(
-      stream: usuarioBloc.getNombre,
-      initialData: usuario.nombre != null? usuario.nombre : '',
+      stream: loginBloc.passwordStream,
+      initialData:'',
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return Container(
           margin: EdgeInsets.symmetric(vertical: 30.0),
           child: TextFormField(
+            obscureText: true,
             initialValue: snapshot.data,
+            keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
-              hintText: 'Juan Perez',
-              labelText: 'Nombre',
-              floatingLabelBehavior: FloatingLabelBehavior.always,
-              labelStyle: TextStyle(
-                fontSize: 20.0,
-                fontWeight: FontWeight.bold
-              ),
-              border: OutlineInputBorder(),
-            ),
-            onSaved: (value) {
-              usuarioBloc.cambiarNombre(value);
-            },
-          ),
-        );
-      }
-    );
-  }
-
-  Widget _crearInputTelefono(Usuario usuario, UsuarioBloc usuarioBloc) {
-    String telefono = usuario.telefono != null? usuario.telefono : '';
-    return StreamBuilder(
-      stream: usuarioBloc.getTelefono,
-      initialData: usuario.telefono != null? usuario.telefono : '',
-      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-        return Container(
-          margin: EdgeInsets.symmetric(vertical:10.0),
-          child: TextFormField(
-            initialValue: snapshot.data,
-            keyboardType: TextInputType.phone,
-            decoration: InputDecoration(
-              counter: Text('${telefono?.length.toString()}/10'),
-              hintText: '0987654321',
-              labelText: 'Telefono',
+              labelText: 'Contraseña',
+              errorText: snapshot.error,
               floatingLabelBehavior: FloatingLabelBehavior.always,
               labelStyle: TextStyle(
                 fontSize: 20.0,
@@ -100,15 +62,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
               border: OutlineInputBorder(),
             ),
             onChanged: (value) {
-              usuarioBloc.cambiarTelefono(value);
-              telefono = value;
-            },
-            validator: (value){
-              if(value.length < 10 || value.length>10){
-                return snapshot.error;
-              }else{
-                return null;
-              }
+              loginBloc.changePassword(value);
             },
           ),
         );
@@ -116,15 +70,41 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     );
   }
 
-  Widget _crearBotonActualizar(UsuarioBloc usuarioBloc) {
+  Widget _crearInputConfirmPassword(LoginBloc loginBloc) {
+        return Container(
+          margin: EdgeInsets.symmetric(vertical:10.0),
+          child: TextFormField(
+            obscureText: true,
+            keyboardType: TextInputType.phone,
+            decoration: InputDecoration(
+              labelText: 'Confirmar Contraseña',
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              labelStyle: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+              ),
+              border: OutlineInputBorder(),
+            ),
+            validator: (value){
+              if(value != loginBloc.password){
+                return 'La contraseña de verificación no coincide';
+              }else{
+                return null;
+              }
+            },
+          ),
+        );
+  }
+
+  Widget _crearBotonActualizar(LoginBloc loginBloc) {
     return Container(
       padding: EdgeInsets.all(10.0),
       width: double.infinity,
       child: RaisedButton(
         padding: EdgeInsets.all(15.0),
-        onPressed: ()=>_submit(usuarioBloc),
+        onPressed: ()=>_submit(loginBloc),
         child: Container(
-          child: Text('Actualizar', textAlign: TextAlign.center,style: TextStyle(color: Colors.white,fontSize: 17.0),)
+          child: Text('Cambiar Contraseña', textAlign: TextAlign.center,style: TextStyle(color: Colors.white,fontSize: 17.0),)
         ),
         shape: RoundedRectangleBorder(
           borderRadius: new BorderRadius.circular(10.0),
@@ -135,7 +115,7 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
     );
   }
 
-  void _submit(UsuarioBloc usuarioBloc) async{
+  void _submit(LoginBloc loginBloc) async{
     if (!formkey.currentState.validate()) return;
     formkey.currentState.save();
     showDialog(
@@ -157,9 +137,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
         ),);
       }
     );
-    await usuarioBloc.actualizarUsuario();
+    await loginBloc.cambiarPassword();
     await  Future.delayed(const Duration(seconds: 1));
+    loginBloc.resetValues();
     Navigator.pop(context);
     Navigator.pop(context);
   }
+
 }
