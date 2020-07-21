@@ -43,7 +43,7 @@ class LoginPage extends StatelessWidget {
                   _divider(),
                   _googleButton(context, loginBloc),
                   SizedBox(height: height * .055),
-                  _createAccountLabel(context,loginBloc),
+                  _createAccountLabel(context, loginBloc),
                 ],
               ),
             ),
@@ -132,29 +132,33 @@ class LoginPage extends StatelessWidget {
 
   _login(LoginBloc loginBloc, BuildContext context) async {
     final usuarioBloc = Provider.usuario(context);
+    final serviciosBloc = Provider.servicio(context);
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(height: 20.0,),
-            Text(
-              "Iniciando Sesion...",
-              style: Theme.of(context).textTheme.subtitle2.copyWith(
-              fontSize: 25.0,
-              color: Colors.white,
-              ),
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  "Iniciando Sesion...",
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        fontSize: 25.0,
+                        color: Colors.white,
+                      ),
+                ),
+              ],
             ),
-          ],
-        ),);
-      }
-    );
+          );
+        });
     if (await loginBloc.login()) {
       usuarioBloc.cargarUsuario();
+      serviciosBloc.cargarServiciosUsuario();
       loginBloc.resetValues();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, 'home');
@@ -304,6 +308,6 @@ class LoginPage extends StatelessWidget {
   _loginGoogle(BuildContext context, LoginBloc loginBloc) async {
     // final user = await loginBloc.loginWithGoogle();
     // print(user);
-  _mostrarAlerta(context, 'Proximamente', 'Estamos trabajando para ti');
+    _mostrarAlerta(context, 'Proximamente', 'Estamos trabajando para ti');
   }
 }

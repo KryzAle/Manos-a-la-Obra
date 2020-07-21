@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
@@ -27,6 +26,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   final formkey = GlobalKey<FormState>();
   Servicio servicio = new Servicio();
   final listaImagenes = new List<File>();
+  List<Widget> children;
 
 //metodo para capturar la imagen con el picker, espera que el usuario selecciona la imagen de su Storage
   Future<void> captureImage(ImageSource imageSource) async {
@@ -52,12 +52,34 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
 //devuelve un widget que retorna una Cliprrect con la imagen
   Widget _buildImage(index) {
     if (listaImagenes[index] != null) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8.0),
-        child: Image.file(
-          listaImagenes[index],
-          height: 200,
-        ),
+      return Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Image.file(
+              listaImagenes[index],
+              width: 130,
+            ),
+          ),
+          VerticalDivider(),
+          IconButton(
+            iconSize: 40,
+            icon: Icon(Icons.delete_forever),
+            color: Colors.red,
+            //onPressed: () => _quitarImagen(index),
+            onPressed: () {
+              setState(() {
+                count--;
+                listaImagenes.removeAt(index);
+                children.removeAt(index);
+                mostrarBoton = true;
+              });
+              //print(listaImagenes[index]);
+              //listaImagenes.removeAt(index);
+            },
+          ),
+        ],
       );
     } else {
       return ClipRRect(
@@ -73,9 +95,12 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   @override
   Widget build(BuildContext context) {
     //se genera la lista de widgets que retornan la imagen dentro de un Cliprrect
-    List<Widget> children = new List.generate(count, (int i) {
-      return Row(
-        children: <Widget>[VerticalDivider(), _buildImage(i)],
+    children = new List.generate(count, (int i) {
+      return Column(
+        children: <Widget>[
+          _buildImage(i),
+          Divider(),
+        ],
       );
     });
     //Si la tarea de subida es diferente de nulo entonces se crea un StreamBuilder para gestionar el evento de subida
@@ -134,7 +159,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
             ));
           });
     }
-//Formulario
+    //Formulario
     final categoriaBloc = Provider.categoria(context);
     //retorna un scaffold con el formulario completo
     return Scaffold(
@@ -155,8 +180,56 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Nombre de tu servicio",
+                        labelStyle:
+                            TextStyle(color: Colors.black, fontSize: 16),
+                        hintText: "Ejmp. Encofrados Ecuador",
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: servicio.nombre,
+                      onSaved: (value) => servicio.nombre = value,
+                      validator: (value) {
+                        if (value.length < 6) {
+                          return 'Debe ser mayor a 6 caracteres';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20),
+                    padding: EdgeInsets.only(bottom: 10.0),
+                    child: TextFormField(
+                      decoration: InputDecoration(
+                        labelText: "Detalle de tus servicios",
+                        labelStyle:
+                            TextStyle(color: Colors.black, fontSize: 16),
+                        hintText:
+                            "Ejemplo: Se alquila encofrado y maquinaria para construcción",
+                        border: OutlineInputBorder(),
+                      ),
+                      initialValue: servicio.descripcion,
+                      maxLines: 5,
+                      onSaved: (value) => servicio.descripcion = value,
+                      validator: (value) {
+                        if (value.length < 6) {
+                          return 'Debe ser mayor a 6 caracteres';
+                        } else {
+                          return null;
+                        }
+                      },
+                    ),
+                  ),
+                  SizedBox(height: 20),
                   Text(
-                    "Selecciona una categoria para tu servicio",
+                    "Categoria para tu servicio",
                     style:
                         TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
                   ),
@@ -186,82 +259,52 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                     },
                   ),
                   SizedBox(height: 20),
-                  Text(
-                    "Nombre del Servicio",
-                    style:
-                        TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    width: 250,
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Tu nombre o el de tu Negocio",
-                        border: OutlineInputBorder(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        "Imagenes de tu servicio",
+                        style: TextStyle(
+                            fontSize: 17.0, fontWeight: FontWeight.bold),
                       ),
-                      initialValue: servicio.nombre,
-                      onSaved: (value) => servicio.nombre = value,
-                      validator: (value) {
-                        if (value.length < 6) {
-                          return 'Debe ser mayor a 6 caracteres';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                      VerticalDivider(),
+                      if (mostrarBoton)
+                        _buildActionButton(
+                          key: Key('retake'),
+                          text: 'Foto',
+                          onPressed: () => captureImage(ImageSource.gallery),
+                        ),
+                    ],
                   ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Detalle de tu servicio",
-                    style:
-                        TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                  ),
-                  Container(
-                    width: 300,
-                    margin: EdgeInsets.all(8.0),
-                    padding: EdgeInsets.only(bottom: 10.0),
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        hintText: "Detalle de tus servicios",
-                        border: OutlineInputBorder(),
-                      ),
-                      initialValue: servicio.descripcion,
-                      maxLines: 5,
-                      onSaved: (value) => servicio.descripcion = value,
-                      validator: (value) {
-                        if (value.length < 6) {
-                          return 'Debe ser mayor a 6 caracteres';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  Text(
-                    "Imagenes de tu servicio",
-                    style:
-                        TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
-                  ),
+                  //boton de agregar imagenes
+
                   SizedBox(height: 30),
                   Column(
                     children: <Widget>[
-                      //Column(children: children),
-                      _preBuildImage(children),
+                      Column(children: children),
+                      //_preBuildImage(children),
                     ],
                   ),
                   SizedBox(height: 60),
-                  RaisedButton(
-                    color: Colors.greenAccent,
-                    onPressed: () => _submit(context),
-                    child: new Text("Guardar"),
-                    elevation: 5.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(18.0),
-                      side: BorderSide(color: Colors.black),
+                  Container(
+                    padding: EdgeInsets.all(10.0),
+                    width: double.infinity,
+                    child: RaisedButton(
+                      padding: EdgeInsets.all(15.0),
+                      onPressed: () => _submit(context),
+                      child: Container(
+                          child: Text(
+                        'Guardar',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: Colors.white, fontSize: 17.0),
+                      )),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: new BorderRadius.circular(10.0),
+                        side: BorderSide(color: Colors.orangeAccent),
+                      ),
+                      color: Colors.orangeAccent,
                     ),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -271,7 +314,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     );
   }
 
-//se crea la lista de categorias
+  //se crea la lista de categorias
   List<String> crearLista(lista) {
     final List<String> items = List();
     for (var categoria in lista) {
@@ -280,28 +323,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     return items;
   }
 
-//Devuelve un widget que coloca la imagen en el ConstrainedBox y muestra el boton de agregar imagen.
-  Widget _preBuildImage(children) {
-    return ConstrainedBox(
-        constraints: BoxConstraints.expand(height: 40.0),
-        child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              //se carga el Row con la lista de imagenes
-              Row(children: children),
-              VerticalDivider(),
-              //boton de agregar imagenes
-              if (mostrarBoton)
-                _buildActionButton(
-                  key: Key('retake'),
-                  text: 'Foto',
-                  onPressed: () => captureImage(ImageSource.gallery),
-                ),
-            ]));
-  }
-
-//Boton de Agregar Imagen
+  //Boton de Agregar Imagen
   Widget _buildActionButton({Key key, String text, Function onPressed}) {
     return FloatingActionButton(
       key: key,
@@ -310,7 +332,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     );
   }
 
-//El metodo recibe el archivo a subirse, le asigna un path que es retornado e inicia la subida al cambiar el estado del _uploadTask
+  //El metodo recibe el archivo a subirse, le asigna un path que es retornado e inicia la subida al cambiar el estado del _uploadTask
   String _startUpload(file) {
     String filePath = 'servicios/${DateTime.now()}.png';
 
@@ -320,14 +342,14 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     return filePath;
   }
 
-//se ejecuta al pulsar el boton guardar en el formulario
+  //se ejecuta al pulsar el boton guardar en el formulario
   void _submit(BuildContext context) {
     //genera el provider para obtener el usuario actual, el bloc de servicio y una lista de paths de las imagenes
     final usuarioactual = UserDataProvider();
     final servicioBloc = ServicioBloc();
     final listaPaths = List<String>();
 
-//valida que la categoría se ha señalado
+    //valida que la categoría se ha señalado
     if (servicio.categoria == null) {
       final snackBar =
           SnackBar(content: Text('¡Ups! Olvidaste marcar una categoría'));
@@ -335,7 +357,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     } else {
       //si pasa la primera validacion, se ejecutan las validaciones: validate de los textformfield del formulario
       if (!formkey.currentState.validate()) return;
-//en caso se pasaron las validaciones se guarda el estado del formulario
+      //en caso se pasaron las validaciones se guarda el estado del formulario
       formkey.currentState.save();
       //se recorre la lista de imagenes
       for (var imagen in listaImagenes) {
@@ -350,12 +372,8 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
           servicio.idUsuario = value;
           servicio.evidencia = listaPaths;
           //se envia al bloc el objeto Servicio cargado con la informacion del formulario
-          servicioBloc.insertarServicio(servicio);
+          servicioBloc.insertarServicio(servicio, value);
           //se crea una instancia para modificar el usuario y convertirlo en proveedor al cambiar el atributo proveedor a true
-          Firestore.instance
-              .document("usuario/" + value)
-              .updateData({"proveedor": true}).then(
-                  (value) => print("Inscrito como proveedor"));
         });
       } else {
         final snackBar = SnackBar(
