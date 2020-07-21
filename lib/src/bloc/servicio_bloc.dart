@@ -6,23 +6,24 @@ import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-
-class ServicioBloc{
+class ServicioBloc {
   final puntuacionProvider = new UsuarioProvider();
-  final usuarioProvider= new UserDataProvider();
+  final usuarioProvider = new UserDataProvider();
   final servicioProvider = ServicioDataProvider();
   final _serviciosController = BehaviorSubject<List<Servicio>>();
   final _serviciosUsuarioController = BehaviorSubject<List<Servicio>>();
 
   //escuchar stream
   Stream<List<Servicio>> get getServicios => _serviciosController.stream;
-  Stream<List<Servicio>> get getServiciosUsuario => _serviciosUsuarioController.stream;
-  
+  Stream<List<Servicio>> get getServiciosUsuario =>
+      _serviciosUsuarioController.stream;
+
   //agregar stream
   Function(List<Servicio>) get changeServicio => _serviciosController.sink.add;
-  Function(List<Servicio>) get changeServicioUsuario => _serviciosUsuarioController.sink.add;
+  Function(List<Servicio>) get changeServicioUsuario =>
+      _serviciosUsuarioController.sink.add;
 
-  void dispose(){
+  void dispose() {
     _serviciosController?.close();
     _serviciosUsuarioController?.close();
   }
@@ -30,12 +31,13 @@ class ServicioBloc{
   void cargarServicios() {
     final subscriptionServicio = servicioProvider.getServicios();
     subscriptionServicio.listen((event) async {
-      final servicios  = new List<Servicio>();
+      final servicios = new List<Servicio>();
       for (var item in event.documents) {
         double puntaje = 0;
         final servicio = Servicio.fromJsonMap(item.data, item.documentID);
-        final puntuaciones = await puntuacionProvider.puntaje(servicio.idUsuario);
-        if(puntuaciones!=null){
+        final puntuaciones =
+            await puntuacionProvider.puntaje(servicio.idUsuario);
+        if (puntuaciones != null) {
           for (var puntuacion in puntuaciones) {
             puntaje += puntuacion.valor;
           }
@@ -47,11 +49,12 @@ class ServicioBloc{
       changeServicio(servicios);
     });
   }
+
   void cargarServiciosUsuario() {
     usuarioProvider.getIdCurrentUser().then((value) {
       final subscriptionServicio = servicioProvider.getServiciosUsuario(value);
       subscriptionServicio.listen((event) {
-        final servicios  = new List<Servicio>();
+        final servicios = new List<Servicio>();
         for (var item in event.documents) {
           final servicio = Servicio.fromJsonMap(item.data, item.documentID);
           servicios.add(servicio);
@@ -60,8 +63,8 @@ class ServicioBloc{
       });
     });
   }
-   void insertarServicio(Servicio dataservicio) async {
-    await servicioProvider.loadServicio("servicio", dataservicio);
+
+  void insertarServicio(Servicio dataservicio, String idUsuario) async {
+    await servicioProvider.loadServicio("servicio", dataservicio, idUsuario);
   }
-  
 }

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 import 'package:manos_a_la_obra/src/widgets/alert_widget.dart';
 
 class SolicitudesPage extends StatefulWidget {
-  SolicitudesPage({Key key}) : super(key: key);
+  final AnimationController animationController;
+  final Animation animation;
+  SolicitudesPage({Key key, this.animationController, this.animation})
+      : super(key: key);
 
   @override
   _SolicitudesPageState createState() => _SolicitudesPageState();
@@ -19,76 +23,255 @@ class _SolicitudesPageState extends State<SolicitudesPage> {
       builder: (BuildContext context, AsyncSnapshot<Usuario> snapshot) {
         if (snapshot.hasData) {
           if (snapshot.data.proveedor) {
-            return Center(
-              child: Container(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(
-                      height: 75,
-                      width: 50,
-                    ),
-                    ButtonTheme(
-                      minWidth: 250.0,
-                      height: 80.0,
-                      child: RaisedButton(
-                        color: Colors.greenAccent,
-                        onPressed: () => print("Button Pressed"),
-                        child: new Text(
-                          "Nuevas Solicitudes",
-                          style: TextStyle(fontSize: 20.5),
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 24, top: 16, bottom: 18),
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0),
+                            topRight: Radius.circular(68.0)),
+                      ),
+                      onPressed: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.deepOrange,
+                                Colors.orange,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                              topRight: Radius.circular(68.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.orangeAccent.withOpacity(0.6),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
                         ),
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.black),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Nuevas Solicitudes',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 25,
+                                    letterSpacing: 0.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.work,
+                                          color: Colors.black,
+                                          size: 44,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                    ),
-                    ButtonTheme(
-                      minWidth: 250.0,
-                      height: 80.0,
-                      child: RaisedButton(
-                        color: Colors.greenAccent,
-                        onPressed: () => print("Button Pressed"),
-                        child: new Text(
-                          "Mis Solicitudes",
-                          style: TextStyle(fontSize: 20.5),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 24, top: 16, bottom: 18),
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0),
+                            topRight: Radius.circular(68.0)),
+                      ),
+                      onPressed: () {},
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.green,
+                                Colors.greenAccent,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                              topRight: Radius.circular(68.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.green.withOpacity(0.6),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
                         ),
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.black),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Mis Solicitudes',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 25,
+                                    letterSpacing: 0.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.build,
+                                          color: Colors.black,
+                                          size: 44,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: 50,
-                      width: 50,
-                    ),
-                    ButtonTheme(
-                      minWidth: 250.0,
-                      height: 80.0,
-                      child: RaisedButton(
-                        color: Colors.greenAccent,
-                        onPressed: () => print("Button Pressed"),
-                        child: new Text(
-                          "Mis Servicios",
-                          style: TextStyle(fontSize: 20.5),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 24, right: 24, top: 16, bottom: 18),
+                    child: RaisedButton(
+                      padding: const EdgeInsets.all(0.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(8.0),
+                            bottomLeft: Radius.circular(8.0),
+                            bottomRight: Radius.circular(8.0),
+                            topRight: Radius.circular(68.0)),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, "mis_servicios");
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                              colors: [
+                                Colors.blueAccent,
+                                Colors.lightBlue,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(8.0),
+                              bottomLeft: Radius.circular(8.0),
+                              bottomRight: Radius.circular(8.0),
+                              topRight: Radius.circular(68.0)),
+                          boxShadow: <BoxShadow>[
+                            BoxShadow(
+                                color: Colors.orangeAccent.withOpacity(0.6),
+                                offset: Offset(1.1, 1.1),
+                                blurRadius: 10.0),
+                          ],
                         ),
-                        elevation: 5.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: new BorderRadius.circular(18.0),
-                          side: BorderSide(color: Colors.black),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  'Mis Servicios',
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.normal,
+                                    fontSize: 25,
+                                    letterSpacing: 0.0,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 32,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 4),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Icon(
+                                          Icons.assignment,
+                                          color: Colors.black,
+                                          size: 44,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           } else {
