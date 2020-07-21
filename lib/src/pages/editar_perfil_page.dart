@@ -99,9 +99,11 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
               ),
               border: OutlineInputBorder(),
             ),
-            onChanged: (value) {
-              usuarioBloc.cambiarTelefono(value);
+            onChanged: (value){
               telefono = value;
+            },
+            onSaved: (value) {
+              usuarioBloc.cambiarTelefono(value);
             },
             validator: (value){
               if(value.length < 10 || value.length>10){
@@ -158,7 +160,6 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
       }
     );
     await usuarioBloc.actualizarUsuario();
-    await  Future.delayed(const Duration(seconds: 1));
     Navigator.pop(context);
     Navigator.pop(context);
   }

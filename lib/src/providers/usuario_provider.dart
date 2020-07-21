@@ -59,7 +59,7 @@ class UsuarioProvider {
       password: password);
       await Firestore.instance.collection('usuario').document(user.user.uid).setData(
         {
-          'foto'  : '',
+          'foto'  : '/users/${user.user.uid}.jpg',
           'nombre' : nombre,
           'cedula' : cedula,
           'proveedor' : false,

@@ -144,7 +144,6 @@ class RegisterPage extends StatelessWidget {
     return StreamBuilder(
       stream: loginBloc.formRegisterValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        print(loginBloc.password);
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -246,7 +245,6 @@ class RegisterPage extends StatelessWidget {
       usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
-      await  Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context);
       _mostrarAlerta(context, 'Datos Incorrectos',
           'Email invalido o se encuentra registrado');

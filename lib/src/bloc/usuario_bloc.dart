@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:manos_a_la_obra/src/bloc/validators.dart';
 import 'package:rxdart/rxdart.dart';
+
 
 class UsuarioBloc with Validators{
   final usuarioProvider = UserDataProvider();
@@ -34,8 +36,9 @@ class UsuarioBloc with Validators{
   void cargarUsuario() {
     Usuario usuario;
     usuarioProvider.getUserDoc().then((value) {
-      value.listen((event) {
+      value.listen((event) async{
         usuario = new Usuario.fromMap(event.data);
+        usuario.fotoUrl  = await usuarioProvider.getImageUsuario(usuario.foto);
         cambiarUsuario(usuario);
       });
     });
@@ -52,6 +55,10 @@ class UsuarioBloc with Validators{
 
   void logout(){
     _usuarioController.value = null;
+  }
+
+  Future<void> updateImageUsuario(File foto) async{
+    await usuarioProvider.saveImageUser(foto);
   }
 
 }
