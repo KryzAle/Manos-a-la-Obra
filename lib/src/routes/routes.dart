@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/pages/cambiar_password_page.dart';
+import 'package:manos_a_la_obra/src/pages/editar_foto_page.dart';
 
 import 'package:manos_a_la_obra/src/pages/editar_perfil_page.dart';
 import 'package:manos_a_la_obra/src/pages/home_page.dart';
@@ -22,6 +23,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'perfil': (BuildContext context) => MiPerfilPage(),
     'editar_perfil': (BuildContext context) => EditarPerfilPage(),
     'cambiar_password': (BuildContext context) => CambiarPasswordPage(),
+    'editar_foto': (BuildContext context) => EditarFotoPage(),
     'mis_servicios': (BuildContext context) => MisServiciosPage(),
   };
 }

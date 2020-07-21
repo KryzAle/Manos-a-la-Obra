@@ -112,7 +112,6 @@ class LoginPage extends StatelessWidget {
     return StreamBuilder(
       stream: loginBloc.formValidStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        print(snapshot.data);
         return RaisedButton(
           child: Container(
             padding: EdgeInsets.symmetric(vertical: 15),
@@ -164,7 +163,6 @@ class LoginPage extends StatelessWidget {
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, 'home');
     } else {
-      await Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context);
       _mostrarAlerta(context, 'Datos Incorrectos',
           'Tu contraseña o email son incorrectos');

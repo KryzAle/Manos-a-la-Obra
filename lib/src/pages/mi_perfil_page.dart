@@ -65,23 +65,23 @@ class MiPerfilPage extends StatelessWidget {
           child: GestureDetector(
             child: Icon(Icons.photo_camera, color: Colors.white,),
             onTap: (){
-              
+              Navigator.pushNamed(context, 'editar_foto',arguments: usuario);
             },
           ),
         )
       ],
-      flexibleSpace: Hero(
-        tag: usuario.nombre,
-        child: FlexibleSpaceBar(
-          centerTitle: true,
-          title: Text(usuario.nombre, style: TextStyle(color: Colors.white, fontSize: 18.0),),
-          background: FadeInImage(
-              image: NetworkImage('https://kryzale.files.wordpress.com/2019/03/10928983_1386324075004590_3936503588471348202_n.jpg?w=960&h=730&crop=1'),
+      flexibleSpace: FlexibleSpaceBar(
+        centerTitle: true,
+        title: Text(usuario.nombre, style: TextStyle(color: Colors.white, fontSize: 18.0),),
+        background: Hero(
+          tag: usuario.cedula,
+          child: FadeInImage(
+              image: _getImage(usuario.fotoUrl),
               placeholder: AssetImage('assets/rol.gif'),
               fit: BoxFit.cover,
             ),
-          ),
-      ),
+        ),
+        ),
     );
   }
 
@@ -195,5 +195,13 @@ class MiPerfilPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  ImageProvider _getImage(String url) {
+    if(url!=null){
+      return NetworkImage(url);
+    }else{
+      return AssetImage('assets/no-image.png');
+    }
   }
 }

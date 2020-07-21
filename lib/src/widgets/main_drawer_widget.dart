@@ -27,11 +27,11 @@ class MainDrawer extends StatelessWidget {
                           height: 100,
                           margin: EdgeInsets.only(top: 30),
                           child:  Hero(
-                            tag: snapshot.data.nombre,
+                            tag: snapshot.data.cedula,
                             child: ClipRRect(
                                 borderRadius: BorderRadius.circular(100),
                                 child:  FadeInImage(
-                                    image: NetworkImage('https://kryzale.files.wordpress.com/2019/03/10928983_1386324075004590_3936503588471348202_n.jpg?w=960&h=730&crop=1'),
+                                    image: _getImage(snapshot.data.fotoUrl),
                                     fit: BoxFit.cover,
                                     placeholder: AssetImage('assets/rol.gif'),
                                   ),
@@ -75,5 +75,13 @@ class MainDrawer extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  ImageProvider _getImage(String url) {
+    if(url!=null){
+      return NetworkImage(url);
+    }else{
+      return AssetImage('assets/no-image.png');
+    }
   }
 }
