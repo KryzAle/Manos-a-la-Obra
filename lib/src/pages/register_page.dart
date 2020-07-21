@@ -61,10 +61,11 @@ class RegisterPage extends StatelessWidget {
       ),
     );
   }
+
   Widget _nombreFile(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.nombreStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot){
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
           child: TextField(
             textCapitalization: TextCapitalization.words,
@@ -80,6 +81,7 @@ class RegisterPage extends StatelessWidget {
       },
     );
   }
+
   Widget _cedulaFile(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.cedulaStream,
@@ -218,35 +220,39 @@ class RegisterPage extends StatelessWidget {
   }
 
   _register(BuildContext context, LoginBloc loginBloc) async {
+    final serviciosBloc = Provider.servicio(context);
     final usuarioBloc = Provider.usuario(context);
     showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Center(
-          child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(height: 20.0,),
-            Text(
-              "Registrando...",
-              style: Theme.of(context).textTheme.subtitle2.copyWith(
-              fontSize: 25.0,
-              color: Colors.white,
-              ),
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  "Registrando...",
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                        fontSize: 25.0,
+                        color: Colors.white,
+                      ),
+                ),
+              ],
             ),
-          ],
-        ),);
-      }
-    );
+          );
+        });
     if (await loginBloc.register()) {
       loginBloc.resetValues();
+      serviciosBloc.cargarServiciosUsuario();
       Navigator.pop(context);
       usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
-      await  Future.delayed(const Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
       Navigator.pop(context);
       _mostrarAlerta(context, 'Datos Incorrectos',
           'Email invalido o se encuentra registrado');
@@ -269,6 +275,4 @@ class RegisterPage extends StatelessWidget {
           ],
         ));
   }
-
-
 }
