@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
@@ -64,7 +65,14 @@ class ServicioBloc {
     });
   }
 
-  void insertarServicio(Servicio dataservicio, String idUsuario) async {
+  Future<void> insertarServicio(
+      Servicio dataservicio, String idUsuario, List<File> imagenes) async {
+    final listaPaths = List();
+    for (var imagen in imagenes) {
+      final path = await servicioProvider.guardarImageServicio(imagen);
+      listaPaths.add(path);
+    }
+    dataservicio.evidencia = listaPaths;
     await servicioProvider.loadServicio("servicio", dataservicio, idUsuario);
   }
 }

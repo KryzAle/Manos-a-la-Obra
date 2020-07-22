@@ -21,7 +21,6 @@ class CardServicio extends StatelessWidget {
         nombre: servicio.nombre,
         path: servicio.evidencia[0],
       );
-      print(servicio.categoria);
       widgets.add(card);
     }
 
