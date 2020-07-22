@@ -12,7 +12,7 @@ class AlertSolicitudes extends StatelessWidget {
         new FlatButton(
           child: new Text("Registrar un servicio"),
           onPressed: () {
-            Navigator.popAndPushNamed(context, 'register_solicitudes');
+            Navigator.pushNamed(context, 'register_solicitudes');
           },
         ),
       ],

@@ -19,9 +19,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   bool mostrarBoton = true;
   int count = 0;
 //componente de firebase storage
-  final FirebaseStorage _storage =
-      FirebaseStorage(storageBucket: 'gs://manos-a-la-obra-44f76.appspot.com');
-  StorageUploadTask _uploadTask;
+
   //Llave global para obtener el estado del formulario
   final formkey = GlobalKey<FormState>();
   Servicio servicio = new Servicio();
@@ -104,70 +102,15 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
       );
     });
     //Si la tarea de subida es diferente de nulo entonces se crea un StreamBuilder para gestionar el evento de subida
-    if (_uploadTask != null) {
-      return StreamBuilder<StorageTaskEvent>(
-          //carga como stream los eventos de subida
-          stream: _uploadTask.events,
-          builder: (_, snapshot) {
-            var event = snapshot?.data?.snapshot;
-            //porcentaje de subida
-            double progressPercent = event != null
-                ? event.bytesTransferred / event.totalByteCount
-                : 0;
-            //se retorna un scaffold con el AlertDialog cuando se da submit en el formulario
-            return Scaffold(
-                body: Center(
-              child: AlertDialog(
-                actions: <Widget>[
-                  //si la tarea se completa se muestra el boton de continuar para regresar al inicio
-                  if (_uploadTask.isComplete)
-                    FlatButton(
-                      child: Text('Continuar'),
-                      onPressed: () {
-                        Navigator.pushReplacementNamed(context, "home");
-                      },
-                    ),
-                ],
-                content: SingleChildScrollView(
-                  child: ListBody(
-                    children: <Widget>[
-                      Text('Guardando...'),
-                      Column(
-                        children: [
-                          if (_uploadTask.isPaused)
-                            FlatButton(
-                              child: Icon(Icons.play_arrow),
-                              onPressed: _uploadTask.resume,
-                            ),
 
-                          if (_uploadTask.isInProgress)
-                            FlatButton(
-                              child: Icon(Icons.pause),
-                              onPressed: _uploadTask.pause,
-                            ),
-
-                          // Muestra la barra de progreso de subida y el porcentaje
-                          LinearProgressIndicator(value: progressPercent),
-                          Text(
-                              '${(progressPercent * 100).toStringAsFixed(2)} % '),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ));
-          });
-    }
     //Formulario
     final categoriaBloc = Provider.categoria(context);
     //retorna un scaffold con el formulario completo
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.popAndPushNamed(context, 'home'),
-        ),
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.of(context).pop()),
         title: Text("Registrar Servicio"),
         centerTitle: true,
       ),
@@ -258,6 +201,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                       }
                     },
                   ),
+
                   SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -333,21 +277,12 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   }
 
   //El metodo recibe el archivo a subirse, le asigna un path que es retornado e inicia la subida al cambiar el estado del _uploadTask
-  String _startUpload(file) {
-    String filePath = 'servicios/${DateTime.now()}.png';
-
-    setState(() {
-      _uploadTask = _storage.ref().child(filePath).putFile(file);
-    });
-    return filePath;
-  }
 
   //se ejecuta al pulsar el boton guardar en el formulario
   void _submit(BuildContext context) {
     //genera el provider para obtener el usuario actual, el bloc de servicio y una lista de paths de las imagenes
     final usuarioactual = UserDataProvider();
     final servicioBloc = ServicioBloc();
-    final listaPaths = List<String>();
 
     //valida que la categoría se ha señalado
     if (servicio.categoria == null) {
@@ -360,19 +295,56 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
       //en caso se pasaron las validaciones se guarda el estado del formulario
       formkey.currentState.save();
       //se recorre la lista de imagenes
-      for (var imagen in listaImagenes) {
-        String path = _startUpload(imagen);
-        listaPaths.add(path);
-      }
+
       //se verifica que la lista de imagenes no este vacia
       if (listaImagenes.isNotEmpty) {
+        showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(
+                      height: 20.0,
+                    ),
+                    Text(
+                      "Guardando...",
+                      style: Theme.of(context).textTheme.subtitle2.copyWith(
+                            color: Colors.white,
+                          ),
+                    ),
+                  ],
+                ),
+              );
+            });
         //se obtiene el id del usuario actual a traves del userdataprovider
-        usuarioactual.getIdCurrentUser().then((value) {
+        usuarioactual.getIdCurrentUser().then((value) async {
           //se asigna el value que contiene el id ademas de la lista de paths de las imagenes
           servicio.idUsuario = value;
-          servicio.evidencia = listaPaths;
           //se envia al bloc el objeto Servicio cargado con la informacion del formulario
-          servicioBloc.insertarServicio(servicio, value);
+          await servicioBloc.insertarServicio(servicio, value, listaImagenes);
+          Navigator.of(context).pop();
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text("Guardado!"),
+                    content: Text("Servicio Registrado"),
+                    actions: <Widget>[
+                      //si la tarea se completa se muestra el boton de continuar para regresar al inicio
+                      FlatButton(
+                        child: Text('Continuar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ]);
+              });
           //se crea una instancia para modificar el usuario y convertirlo en proveedor al cambiar el atributo proveedor a true
         });
       } else {
