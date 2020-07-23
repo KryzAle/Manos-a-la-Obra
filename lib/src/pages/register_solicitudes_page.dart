@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/bloc/servicio_bloc.dart';
@@ -65,7 +64,6 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
             iconSize: 40,
             icon: Icon(Icons.delete_forever),
             color: Colors.red,
-            //onPressed: () => _quitarImagen(index),
             onPressed: () {
               setState(() {
                 count--;
@@ -73,8 +71,6 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                 children.removeAt(index);
                 mostrarBoton = true;
               });
-              //print(listaImagenes[index]);
-              //listaImagenes.removeAt(index);
             },
           ),
         ],

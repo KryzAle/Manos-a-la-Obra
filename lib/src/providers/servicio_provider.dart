@@ -57,4 +57,11 @@ class ServicioDataProvider {
     String fileURL = await ref.getDownloadURL();
     return fileURL;
   }
+
+  deleteServicio(idDocument) async {
+    await Firestore.instance
+        .collection("servicio")
+        .document(idDocument)
+        .delete();
+  }
 }
