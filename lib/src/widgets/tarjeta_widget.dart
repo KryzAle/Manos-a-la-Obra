@@ -3,6 +3,7 @@ import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:smooth_star_rating/smooth_star_rating.dart';
 
 class TarjetaWidget extends StatefulWidget {
+  final String id;
   final String categoria;
   final String descripcion;
   final String nombre;
@@ -10,7 +11,8 @@ class TarjetaWidget extends StatefulWidget {
   final String path;
 
   TarjetaWidget(
-      {@required this.categoria,
+      {@required this.id,
+      this.categoria,
       this.descripcion,
       this.nombre,
       this.disponibilidad,
@@ -21,6 +23,7 @@ class TarjetaWidget extends StatefulWidget {
 }
 
 class _TarjetaWidgetState extends State<TarjetaWidget> {
+  final providerServicio = ServicioDataProvider();
   String imgUrl;
   @override
   Widget build(BuildContext context) {
@@ -135,7 +138,31 @@ class _TarjetaWidgetState extends State<TarjetaWidget> {
                       Radius.circular(32.0),
                     ),
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: Text("Eliminar el servicio"),
+                                  content: Text("¿Esta seguro?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Eliminar'),
+                                      onPressed: () {
+                                        providerServicio
+                                            .deleteServicio(widget.id);
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                    FlatButton(
+                                      child: Text('Cancelar'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ]);
+                            });
+                      },
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
@@ -154,17 +181,6 @@ class _TarjetaWidgetState extends State<TarjetaWidget> {
       ),
     );
   }
-
-  /*_obtenerUrlImagen(path) {
-    StorageReference ref = FirebaseStorage.instance.ref().child(path);
-    ref.getDownloadURL().then((fileURL) {
-      if (this.mounted) {
-        setState(() {
-          imgUrl = fileURL;
-        });
-      }
-    });
-  }*/
 
   _obtenerUrlImagen(path) async {
     final providerServicio = ServicioDataProvider();

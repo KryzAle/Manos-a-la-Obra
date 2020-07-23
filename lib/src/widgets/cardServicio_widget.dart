@@ -16,6 +16,7 @@ class CardServicio extends StatelessWidget {
     final List<Widget> widgets = List();
     for (var servicio in lista) {
       final card = TarjetaWidget(
+        id: servicio.id,
         categoria: servicio.categoria,
         descripcion: servicio.descripcion,
         nombre: servicio.nombre,
