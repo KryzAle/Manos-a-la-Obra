@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/pages/home_page_inicio.dart';
+import 'package:manos_a_la_obra/src/pages/mis_pedidos_page.dart';
 import 'package:manos_a_la_obra/src/pages/solicitudes_page.dart';
 import 'package:manos_a_la_obra/src/widgets/main_drawer_widget.dart';
+import 'package:manos_a_la_obra/src/widgets/tarjeta_pedidos_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,10 +14,9 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 1;
   static TextStyle textStyle = TextStyle(color: Colors.black);
   List<Widget> _widgetOpciones = <Widget>[
-    Text('pedidos'),
+    MisPedidosPage(),
     InicioPage(),
     SolicitudesPage(),
-    //AlertSolicitudes(),
   ];
   List<Widget> _homeOptions = <Widget>[
     Text(
@@ -58,7 +59,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _crearPerfil() {
     return Builder(
-      builder: (context){
+      builder: (context) {
         return IconButton(
           icon: Icon(
             Icons.account_circle,
@@ -66,7 +67,6 @@ class _HomePageState extends State<HomePage> {
           ),
           onPressed: () {
             Scaffold.of(context).openDrawer();
-            
           },
           iconSize: 40.0,
         );

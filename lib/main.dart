@@ -8,16 +8,15 @@ import 'package:manos_a_la_obra/src/routes/routes.dart';
 
 void main() {
   runApp(MyApp());
-} 
-  
- 
+}
+
 class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
-  final loginBloc  = new LoginBloc();
+  final loginBloc = new LoginBloc();
   String ruta = 'welcome';
   bool autenticado = false;
 
@@ -26,50 +25,54 @@ class _MyAppState extends State<MyApp> {
     cargarUsuario();
     super.initState();
   }
-  void cargarUsuario() async{
+
+  void cargarUsuario() async {
     loginBloc.cargando(true);
     final user = await loginBloc.isLogin();
-    if (user){
+    if (user) {
       ruta = 'home';
       autenticado = true;
-    }else{
+    } else {
       ruta = 'welcome';
     }
     loginBloc.cargando(false);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     return Provider(
       child: StreamBuilder(
-        stream: loginBloc.cargandoStream ,
-        builder: (BuildContext context, AsyncSnapshot snapshot){
-          if(snapshot.hasData){
-            if(!snapshot.data ){ 
+        stream: loginBloc.cargandoStream,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            if (!snapshot.data) {
               final categoriaBloc = Provider.categoria(context);
               final serviciosBloc = Provider.servicio(context);
               final usuarioBloc = Provider.usuario(context);
+              final solicitudesBloc = Provider.solicitud(context);
               serviciosBloc.cargarServicios();
               categoriaBloc.cargarCategoria();
-              if(autenticado){
+              if (autenticado) {
                 usuarioBloc.cargarUsuario();
                 serviciosBloc.cargarServiciosUsuario();
-              } 
-              return MaterialApp( 
+                solicitudesBloc.cargarSolicitudesUsuario();
+              }
+              return MaterialApp(
                 theme: ThemeData(
-                primaryColor: Colors.orangeAccent ,
-                primarySwatch: Colors.orange,
-                textTheme:GoogleFonts.latoTextTheme(textTheme).copyWith(
-                  bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+                  primaryColor: Colors.orangeAccent,
+                  primarySwatch: Colors.orange,
+                  textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
+                    bodyText1:
+                        GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
+                  ),
                 ),
-              ),
-              title: 'Material App',
-              debugShowCheckedModeBanner: false,
-              initialRoute: ruta,
-              routes: getAplicationRoutes(),
+                title: 'Material App',
+                debugShowCheckedModeBanner: false,
+                initialRoute: ruta,
+                routes: getAplicationRoutes(),
               );
-          }
+            }
           }
           return CircularProgressIndicator();
         },
