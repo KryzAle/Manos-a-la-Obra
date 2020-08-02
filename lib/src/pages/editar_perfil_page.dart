@@ -101,13 +101,14 @@ class _EditarPerfilPageState extends State<EditarPerfilPage> {
             ),
             onChanged: (value){
               telefono = value;
+              usuarioBloc.cambiarTelefono(value);
             },
             onSaved: (value) {
               usuarioBloc.cambiarTelefono(value);
             },
             validator: (value){
               if(value.length < 10 || value.length>10){
-                return snapshot.error;
+                return 'Debe tener 10 Digitos';
               }else{
                 return null;
               }

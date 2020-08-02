@@ -20,7 +20,7 @@ class MiPerfilPage extends StatelessWidget {
                 SliverList(
                   delegate: SliverChildListDelegate([
                     _crearCardDatos(context,snapshot.data),
-                    _crearCardDirecciones(snapshot.data),
+                    _crearCardDirecciones(snapshot.data,context),
                   ])
                 )
               ],
@@ -156,7 +156,7 @@ class MiPerfilPage extends StatelessWidget {
     );
   }
 
-  Widget _crearCardDirecciones(Usuario data) {
+  Widget _crearCardDirecciones(Usuario data, BuildContext context) {
      return Container(
       width: 50.0,
       child: Card(
@@ -166,31 +166,25 @@ class MiPerfilPage extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
         semanticContainer: true,
 
-        child:  Container(
-          padding: EdgeInsets.only(top: 15.0, right: 20.0, left: 20.0, bottom: 20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Text(
-                'Mis Direcciones', 
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15.0
+        child:  InkWell(
+          onTap: (){
+            Navigator.pushNamed(context, 'mis_direcciones');
+          },
+          child: Container(
+            padding: EdgeInsets.only(top: 15.0, right: 20.0, left: 20.0, bottom: 20.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Text(
+                  'Mis Direcciones', 
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 15.0
+                  ),
                 ),
-              ),
-              SizedBox(height: 10.0,),
-              _crearDato('Nombre', 'Mi Casa 1'),
-              _crearDato('Calle Principal', 'Antonio Salas'),
-              _crearDato('Calle Secundaria', 'Av. Atahualpa'),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  Text('Editar',style: TextStyle(color: Colors.deepOrangeAccent),),
-                  Icon(Icons.keyboard_arrow_right, color: Colors.deepOrangeAccent,)
-                ],
-              ),
-             
-            ],
+                Icon(Icons.keyboard_arrow_right, color: Colors.deepOrangeAccent,),
+              ],
+            ),
           ),
         ),
       ),

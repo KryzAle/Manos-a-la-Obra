@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -50,10 +49,12 @@ class _MyAppState extends State<MyApp> {
               final categoriaBloc = Provider.categoria(context);
               final serviciosBloc = Provider.servicio(context);
               final usuarioBloc = Provider.usuario(context);
+              final direccionBloc = Provider.direccion(context);
               serviciosBloc.cargarServicios();
               categoriaBloc.cargarCategoria();
               if(autenticado){
                 usuarioBloc.cargarUsuario();
+                direccionBloc.cargarDireccionUsuario();
                 serviciosBloc.cargarServiciosUsuario();
               } 
               return MaterialApp( 

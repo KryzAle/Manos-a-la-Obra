@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 import 'package:manos_a_la_obra/src/widgets/alert_widget.dart';
