@@ -39,6 +39,10 @@ dependencies:
   image_cropper: 1.0.2
   smooth_star_rating: 1.1.1
   geolocator: ^5.3.2+2
+  carousel_slider: ^2.2.1
+  timeago: ^2.0.26
+  intl: ^0.16.1
+
 
 
 

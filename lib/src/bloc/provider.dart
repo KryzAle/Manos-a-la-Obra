@@ -3,8 +3,8 @@ import 'package:manos_a_la_obra/src/bloc/categoria_servicio_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/direccion_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/servicio_bloc.dart';
+import 'package:manos_a_la_obra/src/bloc/solicitud_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/usuario_bloc.dart';
-
 
 class Provider extends InheritedWidget {
   final loginBloc = LoginBloc();
@@ -12,6 +12,8 @@ class Provider extends InheritedWidget {
   final servicioBloc = ServicioBloc();
   final usuarioBloc = UsuarioBloc();
   final direccionBloc = DireccionBloc();
+  final solicitudBloc = SolicitudBloc();
+
 
   static Provider _instancia;
 
@@ -34,8 +36,9 @@ class Provider extends InheritedWidget {
   static CategoriaBloc categoria(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().categoriaBloc;
   }
-  static ServicioBloc servicio( BuildContext context ){
-   return context.dependOnInheritedWidgetOfExactType<Provider>().servicioBloc;
+
+  static ServicioBloc servicio(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>().servicioBloc;
   }
 
   static UsuarioBloc usuario(BuildContext context) {
@@ -44,5 +47,8 @@ class Provider extends InheritedWidget {
 
   static DireccionBloc direccion(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().direccionBloc;
+  }
+  static SolicitudBloc solicitud(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>().solicitudBloc;
   }
 }
