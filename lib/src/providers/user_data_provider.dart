@@ -46,7 +46,6 @@ class UserDataProvider {
   }
 
   Future<String> getImageUsuario(String foto) async{
-    print(foto);
     try {
     final url =  await FirebaseStorage().ref().child(foto).getDownloadURL();
     return url;

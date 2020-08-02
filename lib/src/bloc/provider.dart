@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/categoria_servicio_bloc.dart';
+import 'package:manos_a_la_obra/src/bloc/direccion_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/servicio_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/solicitud_bloc.dart';
@@ -10,7 +11,9 @@ class Provider extends InheritedWidget {
   final categoriaBloc = CategoriaBloc();
   final servicioBloc = ServicioBloc();
   final usuarioBloc = UsuarioBloc();
+  final direccionBloc = DireccionBloc();
   final solicitudBloc = SolicitudBloc();
+
 
   static Provider _instancia;
 
@@ -42,6 +45,9 @@ class Provider extends InheritedWidget {
     return context.dependOnInheritedWidgetOfExactType<Provider>().usuarioBloc;
   }
 
+  static DireccionBloc direccion(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<Provider>().direccionBloc;
+  }
   static SolicitudBloc solicitud(BuildContext context) {
     return context.dependOnInheritedWidgetOfExactType<Provider>().solicitudBloc;
   }

@@ -11,7 +11,6 @@ class ServicioDataProvider {
   }
 
   Stream<QuerySnapshot> getServiciosUsuario(String idUsuario) {
-    print(idUsuario);
     return Firestore.instance
         .collection('servicio')
         .where('id-usuario', isEqualTo: idUsuario)
