@@ -80,9 +80,10 @@ class ServiciosSearch extends SearchDelegate {
                             descripcion: servicio.descripcion,
                             nombre: servicio.nombre,
                             disponibilidad: servicio.disponibilidad,
-                            path: servicio.evidencia,
+                            evidencia: servicio.evidencia,
                             puntajes: servicio.puntaje,
                             idServicio: servicio.id,
+                            idUsuario: servicio.idUsuario,
                           ),
                         ));
                   },

@@ -20,6 +20,8 @@ class CardPedido extends StatelessWidget {
         descripcion: pedido.descripcion,
         estado: pedido.aceptado,
         fechaInicio: pedido.fechaInicio,
+        image: pedido.servicio["evidencia"],
+        nombreServicio: pedido.servicio["nombre"],
       );
       widgets.add(card);
       print(pedido.fechaInicio);
