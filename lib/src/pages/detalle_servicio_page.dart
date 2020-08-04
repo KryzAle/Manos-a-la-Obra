@@ -9,8 +9,9 @@ class DetalleServicio extends StatefulWidget {
   final String descripcion;
   final String nombre;
   final bool disponibilidad;
-  final List path;
+  final List evidencia;
   final double puntajes;
+  final String idUsuario;
   const DetalleServicio(
       {Key key,
       @required this.idServicio,
@@ -18,7 +19,8 @@ class DetalleServicio extends StatefulWidget {
       @required this.descripcion,
       @required this.nombre,
       @required this.disponibilidad,
-      @required this.path,
+      @required this.evidencia,
+      @required this.idUsuario,
       @required this.puntajes})
       : super(key: key);
 
@@ -55,7 +57,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
             ))
         .toList();
 
-    _obtenerUrlImagen(widget.path);
+    _obtenerUrlImagen(widget.evidencia);
     final double tempHeight = MediaQuery.of(context).size.height -
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
@@ -306,8 +308,13 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   SolicitarServicioPage(
-                                                nombreServicio: widget.nombre,
                                                 idServicio: widget.idServicio,
+                                                descripcionServicio:
+                                                    widget.descripcion,
+                                                evidenciaServicio:
+                                                    widget.evidencia[0],
+                                                idProveedor: widget.idUsuario,
+                                                nombreServicio: widget.nombre,
                                               ),
                                             ));
                                       },

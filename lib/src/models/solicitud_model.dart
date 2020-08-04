@@ -19,7 +19,9 @@ class Solicitud {
   Timestamp fechaInicio;
   Timestamp fechaFin;
   String idCliente;
+  String idProveedor;
   String idServicio;
+  Map<String, dynamic> servicio;
   bool terminado;
   Solicitud({
     this.aceptado = false,
@@ -28,7 +30,9 @@ class Solicitud {
     this.fechaInicio,
     this.fechaFin,
     this.idCliente,
+    this.idProveedor,
     this.idServicio,
+    this.servicio,
     this.terminado = false,
   });
   Solicitud.fromJsonMap(Map<String, dynamic> json, String id) {
@@ -39,7 +43,9 @@ class Solicitud {
     this.fechaInicio = json['fechaInicio'];
     this.fechaFin = json['fechaFin'];
     this.idCliente = json['id-cliente'];
+    this.idProveedor = json['id-cliente'];
     this.idServicio = json['id-servicio'];
+    this.servicio = json['servicio'];
     this.terminado = json['terminado'];
   }
 }

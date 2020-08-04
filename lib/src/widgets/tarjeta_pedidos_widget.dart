@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -7,11 +7,15 @@ class TarjetaPedidosWidget extends StatefulWidget {
   final descripcion;
   final estado;
   final fechaInicio;
+  final image;
+  final nombreServicio;
   TarjetaPedidosWidget({
     Key key,
     @required this.descripcion,
     @required this.estado,
     @required this.fechaInicio,
+    @required this.image,
+    @required this.nombreServicio,
   }) : super(key: key);
 
   @override
@@ -20,14 +24,11 @@ class TarjetaPedidosWidget extends StatefulWidget {
 
 class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
   final providerServicio = SolicitudDataProvider();
+  String imgUrl;
 
   @override
   Widget build(BuildContext context) {
-    DateTime myDateTime =
-        DateTime.parse(widget.fechaInicio.toDate().toString());
-    String formattedDateTime =
-        DateFormat('yyyy-MM-dd – kk:mm').format(myDateTime);
-
+    _obtenerUrlImagen(widget.image);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: InkWell(
@@ -54,10 +55,15 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                   children: <Widget>[
                     AspectRatio(
                       aspectRatio: 2,
-                      child: Image.network(
-                        "https://3.bp.blogspot.com/-ByRv-09pFwQ/WH-El7nWQSI/AAAAAAAAA_w/IEDG-0vPM5grtqPuU44LbWm1qAKuZgc-QCLcB/s1600/0001_7.jpg",
-                        fit: BoxFit.cover,
-                      ),
+                      child: imgUrl != null
+                          ? Image.network(
+                              imgUrl,
+                              fit: BoxFit.cover,
+                            )
+                          : Container(
+                              child: CircularProgressIndicator(),
+                              alignment: Alignment.center,
+                            ),
                     ),
                     Container(
                       color: Colors.white,
@@ -75,11 +81,11 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      widget.descripcion,
+                                      widget.nombreServicio,
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
-                                        fontSize: 22,
+                                        fontSize: 18,
                                       ),
                                     ),
                                     Padding(
@@ -102,15 +108,14 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                                 Text(
-                                  /*timeago
+                                  timeago
                                       .format(widget.fechaInicio.toDate(),
                                           locale: 'es')
-                                      .toString(),*/
-                                  formattedDateTime,
+                                      .toString(),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: 22,
+                                    fontSize: 13,
                                   ),
                                 ),
                               ],
@@ -127,5 +132,15 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
         ),
       ),
     );
+  }
+
+  _obtenerUrlImagen(path) async {
+    final providerServicio = ServicioDataProvider();
+    final fileURL = await providerServicio.getImageServicio(widget.image);
+    if (this.mounted) {
+      setState(() {
+        imgUrl = fileURL;
+      });
+    }
   }
 }

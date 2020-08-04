@@ -24,7 +24,9 @@ class SolicitudDataProvider {
       'fechaFin': datasolicitud.fechaFin,
       'fechaInicio': datasolicitud.fechaInicio,
       'id-cliente': datasolicitud.idCliente,
+      'id-proveedor': datasolicitud.idProveedor,
       'id-servicio': datasolicitud.idServicio,
+      'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
     });
   }

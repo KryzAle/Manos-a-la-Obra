@@ -10,10 +10,18 @@ import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 class SolicitarServicioPage extends StatefulWidget {
-  final nombreServicio;
+  final idProveedor;
   final idServicio;
+  final descripcionServicio;
+  final evidenciaServicio;
+  final nombreServicio;
   SolicitarServicioPage(
-      {Key key, @required this.nombreServicio, @required this.idServicio})
+      {Key key,
+      @required this.idProveedor,
+      @required this.idServicio,
+      @required this.descripcionServicio,
+      @required this.evidenciaServicio,
+      @required this.nombreServicio})
       : super(key: key);
 
   @override
@@ -23,9 +31,7 @@ class SolicitarServicioPage extends StatefulWidget {
 class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
   bool mostrarBoton = true;
   int count = 0;
-//componente de firebase storage
 
-  //Llave global para obtener el estado del formulario
   final formkey = GlobalKey<FormState>();
   Servicio servicio = new Servicio();
   Solicitud solicitud = new Solicitud();
@@ -36,7 +42,6 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
   @override
   Widget build(BuildContext context) {
     final categoriaBloc = Provider.categoria(context);
-    //retorna un scaffold con el formulario completo
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -158,7 +163,6 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
     );
   }
 
-  //se crea la lista de categorias
   List<String> crearLista(lista) {
     final List<String> items = List();
     for (var categoria in lista) {
@@ -166,8 +170,6 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
     }
     return items;
   }
-
-  //Boton de Agregar Imagen
 
   void _submit(BuildContext context) {
     final usuarioactual = UserDataProvider();
@@ -199,15 +201,19 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
             ),
           );
         });
-    //se obtiene el id del usuario actual a traves del userdataprovider
     usuarioactual.getIdCurrentUser().then((value) async {
-      //se asigna el value que contiene el id ademas de la lista de paths de las imagenes
       solicitud.idCliente = value;
-
+      solicitud.idProveedor = widget.idProveedor;
       solicitud.idServicio = widget.idServicio;
+      Map<String, dynamic> mapServicio = {
+        "descripcion": widget.descripcionServicio,
+        "evidencia": widget.evidenciaServicio,
+        "nombre": widget.nombreServicio
+      };
+      solicitud.servicio = new Map<String, dynamic>();
+      solicitud.servicio = mapServicio;
+
       solicitud.fechaInicio = Timestamp.fromDate(DateTime.now());
-      print(widget.idServicio);
-      //se envia al bloc el objeto Servicio cargado con la informacion del formulario
       await solicitudBloc.insertarSolicitud(solicitud);
       Navigator.of(context).pop();
       showDialog(
@@ -219,7 +225,6 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
                 content: Text(
                     "La solicitud ha sido recibida, el proveedor del servicio te contactará pronto"),
                 actions: <Widget>[
-                  //si la tarea se completa se muestra el boton de continuar para regresar al inicio
                   FlatButton(
                     child: Text('Continuar'),
                     onPressed: () {
