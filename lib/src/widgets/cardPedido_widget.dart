@@ -24,7 +24,6 @@ class CardPedido extends StatelessWidget {
         nombreServicio: pedido.servicio["nombre"],
       );
       widgets.add(card);
-      print(pedido.fechaInicio);
     }
 
     return widgets;

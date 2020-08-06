@@ -2,12 +2,11 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/bloc/servicio_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/solicitud_bloc.dart';
+import 'package:manos_a_la_obra/src/models/direccion_model.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
-import 'package:image_picker/image_picker.dart';
 
 class SolicitarServicioPage extends StatefulWidget {
   final idProveedor;
@@ -38,10 +37,12 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
 
   final listaImagenes = new List<File>();
   List<Widget> children;
+  Direccion _direccion;
 
   @override
   Widget build(BuildContext context) {
-    final categoriaBloc = Provider.categoria(context);
+    final direccionBloc = Provider.direccion(context);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -105,27 +106,25 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
                           fontSize: 17.0, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
-                    Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20),
-                      padding: EdgeInsets.only(bottom: 10.0),
-                      child: TextFormField(
-                        decoration: InputDecoration(
-                          labelText: "Dirección para tu solicitud",
-                          labelStyle:
-                              TextStyle(color: Colors.black, fontSize: 16),
-                          hintText: "Mi casa",
-                          border: OutlineInputBorder(),
-                        ),
-                        initialValue: solicitud.direccion,
-                        onSaved: (value) => solicitud.direccion = value,
-                        validator: (value) {
-                          if (value.length < 6) {
-                            return 'Debe ser mayor a 6 caracteres';
-                          } else {
-                            return null;
-                          }
-                        },
-                      ),
+                    StreamBuilder(
+                      stream: direccionBloc.getDireccion,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Direccion>> snapshot) {
+                        if (snapshot.hasData) {
+                          return DropdownButton(
+                            hint: Text('Seleccionar..'),
+                            value: _direccion,
+                            onChanged: (newValue) {
+                              setState(() {
+                                if (newValue != null) _direccion = newValue;
+                              });
+                            },
+                            items: _crearListaDirecciones(snapshot.data),
+                          );
+                        } else {
+                          return Center(child: CircularProgressIndicator());
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -139,6 +138,32 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
         ),
       ),
     );
+  }
+
+  List<dynamic> crearLista(lista) {
+    final List<String> items = List();
+    for (var nombreDireccion in lista) {
+      items.add(nombreDireccion.nombre);
+    }
+    items.add("+ Agregar una nueva dirección");
+    return items;
+  }
+
+  List<DropdownMenuItem<dynamic>> _crearListaDirecciones(
+      List<Direccion> listaDirecciones) {
+    List<DropdownMenuItem<dynamic>> itemsLista = List();
+    for (var value in listaDirecciones) {
+      itemsLista.add(DropdownMenuItem(
+        child: Text(value.nombre),
+        value: value,
+      ));
+    }
+
+    itemsLista.add(DropdownMenuItem(
+      child: Text("+ Agregar una nueva dirección"),
+      value: null,
+    ));
+    return itemsLista;
   }
 
   Widget _crearBotonContratar() {
@@ -163,17 +188,8 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
     );
   }
 
-  List<String> crearLista(lista) {
-    final List<String> items = List();
-    for (var categoria in lista) {
-      items.add(categoria.nombre);
-    }
-    return items;
-  }
-
   void _submit(BuildContext context) {
     final usuarioactual = UserDataProvider();
-    final servicioBloc = ServicioBloc();
     final solicitudBloc = SolicitudBloc();
 
     if (!formkey.currentState.validate()) return;
@@ -214,6 +230,14 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
       solicitud.servicio = mapServicio;
 
       solicitud.fechaInicio = Timestamp.fromDate(DateTime.now());
+
+      Map<String, dynamic> mapDireccion = {
+        "latitud": _direccion.latitud,
+        "longitud": _direccion.longitud,
+      };
+      solicitud.direccion = new Map<String, dynamic>();
+      solicitud.direccion = mapDireccion;
+
       await solicitudBloc.insertarSolicitud(solicitud);
       Navigator.of(context).pop();
       showDialog(
@@ -236,7 +260,6 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
                   ),
                 ]);
           });
-      //se crea una instancia para modificar el usuario y convertirlo en proveedor al cambiar el atributo proveedor a true
     });
   }
 }

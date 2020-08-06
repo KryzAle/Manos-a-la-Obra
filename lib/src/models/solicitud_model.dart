@@ -15,13 +15,16 @@ class Solicitud {
   String id;
   bool aceptado;
   String descripcion;
-  String direccion;
+  Map<String, dynamic> direccion;
+  //String direccion;
+
   Timestamp fechaInicio;
   Timestamp fechaFin;
   String idCliente;
   String idProveedor;
   String idServicio;
   Map<String, dynamic> servicio;
+
   bool terminado;
   Solicitud({
     this.aceptado = false,
