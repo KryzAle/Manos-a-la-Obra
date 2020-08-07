@@ -284,20 +284,16 @@ class _FormDireccionPageState extends State<FormDireccionPage> {
   }
 
   Widget _crearCard() {
-    return Card(
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Column(
+    final children = List<Widget>();
+    children.add(Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text('Tu posicion actual',style: TextStyle(fontWeight: FontWeight.bold),),
                 Text(_direccion.ubicacionMap,style: TextStyle(fontWeight: FontWeight.bold),),
               ],
-            ),
+            ));
+    if(_direccion.id!=null){
+      children.add(
             RaisedButton(
               padding: EdgeInsets.all(12.0),
               onPressed: ()async{
@@ -314,8 +310,15 @@ class _FormDireccionPageState extends State<FormDireccionPage> {
               },
               child: Text('Cambiar ubicacion',style: styleButton,),
               color: Colors.deepOrangeAccent,
-            ),
-          ],
+            ));
+    }
+    return Card(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 20.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: children,
         ),
       ),
     );

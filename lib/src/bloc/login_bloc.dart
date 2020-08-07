@@ -72,8 +72,8 @@ class LoginBloc with Validators{
     _nombreController?.close();
     _cedulaController?.close();
   }
-  Future<bool> cambiarPassword(){
-    return _usuarioProvider.updatePassword(password);
+  Future<bool> cambiarPassword(String oldPassword){
+    return _usuarioProvider.updatePassword(password,oldPassword);
   }
   void resetValues(){
     _emailController.value='';

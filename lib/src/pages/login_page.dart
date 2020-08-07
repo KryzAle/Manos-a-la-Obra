@@ -133,6 +133,7 @@ class LoginPage extends StatelessWidget {
   _login(LoginBloc loginBloc, BuildContext context) async {
     final usuarioBloc = Provider.usuario(context);
     final serviciosBloc = Provider.servicio(context);
+    final direccionBloc = Provider.direccion(context);
     final solicitudesBloc = Provider.solicitud(context);
     showDialog(
         context: context,
@@ -159,6 +160,7 @@ class LoginPage extends StatelessWidget {
         });
     if (await loginBloc.login()) {
       usuarioBloc.cargarUsuario();
+      direccionBloc.cargarDireccionUsuario();
       serviciosBloc.cargarServiciosUsuario();
       solicitudesBloc.cargarSolicitudesUsuario();
       loginBloc.resetValues();
