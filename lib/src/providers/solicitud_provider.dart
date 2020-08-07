@@ -9,10 +9,16 @@ class SolicitudDataProvider {
   }
 
   Stream<QuerySnapshot> getSolicitudesUsuario(String idUsuario) {
-    print(idUsuario);
     return Firestore.instance
         .collection('solicitudes')
         .where('id-cliente', isEqualTo: idUsuario)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getNuevasSolicitudes(String idUsuario) {
+    return Firestore.instance
+        .collection('solicitudes')
+        .where('id-proveedor', isEqualTo: idUsuario)
         .snapshots();
   }
 

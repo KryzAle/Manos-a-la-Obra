@@ -40,12 +40,12 @@ class WelcomePage extends StatelessWidget {
                 height: 40.0,
               ),
               Text(
-              'Revisar aplicacion',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 15,
-                decoration: TextDecoration.underline,
-               ),
+                'Revisar aplicacion',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ],
           ),
@@ -80,7 +80,7 @@ class WelcomePage extends StatelessWidget {
             ],
             color: Colors.white),
         child: Text(
-          'Inciar Sesion',
+          'Iniciar Sesión',
           style: TextStyle(fontSize: 20, color: Color(0xfff7892b)),
         ),
       ),
@@ -107,6 +107,4 @@ class WelcomePage extends StatelessWidget {
       ),
     );
   }
-
-  
 }
