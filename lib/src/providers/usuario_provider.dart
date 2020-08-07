@@ -80,10 +80,11 @@ class UsuarioProvider {
     return null;
   }
 
-  Future<bool> updatePassword(String password) async {
+  Future<bool> updatePassword(String password, String oldPassword) async {
     bool update = false;
     try {
       final usuario = await user();
+      await usuario.reauthenticateWithCredential(EmailAuthProvider.getCredential(email: usuario.email,password: oldPassword));
       await usuario.updatePassword(password);
       update = true;
     } catch (e) {

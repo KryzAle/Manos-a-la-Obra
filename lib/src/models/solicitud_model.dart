@@ -16,8 +16,6 @@ class Solicitud {
   bool aceptado;
   String descripcion;
   Map<String, dynamic> direccion;
-  //String direccion;
-
   Timestamp fechaInicio;
   Timestamp fechaFin;
   String idCliente;

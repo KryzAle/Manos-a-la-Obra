@@ -8,7 +8,8 @@ class CambiarPasswordPage extends StatefulWidget {
 }
 
 class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
- final formkey = GlobalKey<FormState>();
+  String _oldPassword;
+  final formkey = GlobalKey<FormState>();
   Widget build(BuildContext context) {
   final loginBloc = Provider.of(context);
     return Scaffold(
@@ -29,6 +30,7 @@ class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
           padding: EdgeInsets.symmetric(horizontal: 20.0),
           child: Column(
             children: <Widget>[
+              _crearInputPasswordAnterior(loginBloc),
               _crearInputPassword(loginBloc),
               _crearInputConfirmPassword(loginBloc),
               Expanded(child: Container()),
@@ -39,7 +41,35 @@ class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
       )
     );
   }
-
+  Widget _crearInputPasswordAnterior(LoginBloc loginBloc) {
+    return Container(
+          margin: EdgeInsets.symmetric(vertical:10.0),
+          child: TextFormField(
+            obscureText: true,
+            keyboardType: TextInputType.visiblePassword,
+            decoration: InputDecoration(
+              labelText: 'Contraseña Anterior',
+              floatingLabelBehavior: FloatingLabelBehavior.always,
+              labelStyle: TextStyle(
+                fontSize: 20.0,
+                fontWeight: FontWeight.bold
+              ),
+              border: OutlineInputBorder(),
+            ),
+            validator: (value){
+              if(value.length<6){
+                return 'Mas de 6 caracteres';
+              }else{
+                return null;
+              }
+            },
+            onSaved: (value){
+              _oldPassword = value;
+            },
+          ),
+        );
+  }
+  
   Widget _crearInputPassword(LoginBloc loginBloc) {
     return StreamBuilder(
       stream: loginBloc.passwordStream,
@@ -75,7 +105,7 @@ class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
           margin: EdgeInsets.symmetric(vertical:10.0),
           child: TextFormField(
             obscureText: true,
-            keyboardType: TextInputType.phone,
+            keyboardType: TextInputType.visiblePassword,
             decoration: InputDecoration(
               labelText: 'Confirmar Contraseña',
               floatingLabelBehavior: FloatingLabelBehavior.always,
@@ -137,7 +167,7 @@ class _CambiarPasswordPageState extends State<CambiarPasswordPage> {
         ),);
       }
     );
-    await loginBloc.cambiarPassword();
+    await loginBloc.cambiarPassword(_oldPassword);
     await  Future.delayed(const Duration(seconds: 1));
     loginBloc.resetValues();
     Navigator.pop(context);

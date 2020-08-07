@@ -220,7 +220,9 @@ class RegisterPage extends StatelessWidget {
 
   _register(BuildContext context, LoginBloc loginBloc) async {
     final serviciosBloc = Provider.servicio(context);
+    final direccionBloc = Provider.direccion(context);
     final usuarioBloc = Provider.usuario(context);
+    final solicitudesBloc = Provider.solicitud(context);
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -245,10 +247,12 @@ class RegisterPage extends StatelessWidget {
           );
         });
     if (await loginBloc.register()) {
+      usuarioBloc.cargarUsuario();
       loginBloc.resetValues();
       serviciosBloc.cargarServiciosUsuario();
+      solicitudesBloc.cargarSolicitudesUsuario();
+      direccionBloc.cargarDireccionUsuario();
       Navigator.pop(context);
-      usuarioBloc.cargarUsuario();
       Navigator.pushReplacementNamed(context, 'home');
     } else {
       Navigator.pop(context);
