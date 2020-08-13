@@ -6,6 +6,7 @@ import 'package:manos_a_la_obra/src/bloc/solicitud_bloc.dart';
 import 'package:manos_a_la_obra/src/models/direccion_model.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 
 class SolicitarServicioPage extends StatefulWidget {
@@ -217,49 +218,58 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
             ),
           );
         });
-    usuarioactual.getIdCurrentUser().then((value) async {
-      solicitud.idCliente = value;
-      solicitud.idProveedor = widget.idProveedor;
-      solicitud.idServicio = widget.idServicio;
-      Map<String, dynamic> mapServicio = {
-        "descripcion": widget.descripcionServicio,
-        "evidencia": widget.evidenciaServicio,
-        "nombre": widget.nombreServicio
-      };
-      solicitud.servicio = new Map<String, dynamic>();
-      solicitud.servicio = mapServicio;
+    usuarioactual.getIdCurrentUser().then((idCliente) async {
+      usuarioactual.getUserDoc().then((usuario) {
+        usuario.listen((event) async {
+          Usuario usuario = new Usuario.fromMap(event.data);
+          solicitud.nombreCliente = usuario.nombre;
+          print(usuario.foto);
+          solicitud.fotoCliente = usuario.foto;
+          solicitud.idCliente = idCliente;
+          solicitud.idProveedor = widget.idProveedor;
+          solicitud.idServicio = widget.idServicio;
 
-      solicitud.fechaInicio = Timestamp.fromDate(DateTime.now());
+          Map<String, dynamic> mapServicio = {
+            "descripcion": widget.descripcionServicio,
+            "evidencia": widget.evidenciaServicio,
+            "nombre": widget.nombreServicio
+          };
+          solicitud.servicio = new Map<String, dynamic>();
+          solicitud.servicio = mapServicio;
 
-      Map<String, dynamic> mapDireccion = {
-        "latitud": _direccion.latitud,
-        "longitud": _direccion.longitud,
-      };
-      solicitud.direccion = new Map<String, dynamic>();
-      solicitud.direccion = mapDireccion;
+          solicitud.fechaInicio = Timestamp.fromDate(DateTime.now());
 
-      await solicitudBloc.insertarSolicitud(solicitud);
-      Navigator.of(context).pop();
-      showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: Text("Solicitud Registrada!"),
-                content: Text(
-                    "La solicitud ha sido recibida, el proveedor del servicio te contactará pronto"),
-                actions: <Widget>[
-                  FlatButton(
-                    child: Text('Continuar'),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ]);
-          });
+          Map<String, dynamic> mapDireccion = {
+            "latitud": _direccion.latitud,
+            "longitud": _direccion.longitud,
+          };
+          solicitud.direccion = new Map<String, dynamic>();
+          solicitud.direccion = mapDireccion;
+
+          await solicitudBloc.insertarSolicitud(solicitud);
+          Navigator.of(context).pop();
+          showDialog(
+              barrierDismissible: false,
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                    title: Text("Solicitud Registrada!"),
+                    content: Text(
+                        "La solicitud ha sido recibida, el proveedor del servicio te contactará pronto"),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Continuar'),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ]);
+              });
+        });
+      });
     });
   }
 }

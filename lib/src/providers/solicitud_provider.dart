@@ -30,6 +30,8 @@ class SolicitudDataProvider {
       'fechaFin': datasolicitud.fechaFin,
       'fechaInicio': datasolicitud.fechaInicio,
       'id-cliente': datasolicitud.idCliente,
+      'nombre-cliente': datasolicitud.nombreCliente,
+      'foto-cliente': datasolicitud.fotoCliente,
       'id-proveedor': datasolicitud.idProveedor,
       'id-servicio': datasolicitud.idServicio,
       'servicio': datasolicitud.servicio,

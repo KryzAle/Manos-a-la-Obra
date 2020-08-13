@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/widgets/cardpedido_widget.dart';
+import 'package:manos_a_la_obra/src/widgets/cardNuevaSolicitud_widget.dart';
 
 class MisNuevasSolicitudesPage extends StatelessWidget {
   const MisNuevasSolicitudesPage({Key key}) : super(key: key);
@@ -27,7 +27,7 @@ class MisNuevasSolicitudesPage extends StatelessWidget {
                 stream: pedidoUsuario.getNuevasSolicitudes,
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   if (snapshot.hasData) {
-                    return CardPedido(lista: snapshot.data);
+                    return CardNuevaSolicitud(lista: snapshot.data);
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
