@@ -9,16 +9,24 @@ class SolicitudDataProvider {
   }
 
   Stream<QuerySnapshot> getSolicitudesUsuario(String idUsuario) {
-    print(idUsuario);
     return Firestore.instance
         .collection('solicitudes')
         .where('id-cliente', isEqualTo: idUsuario)
         .snapshots();
   }
 
+  Stream<QuerySnapshot> getNuevasSolicitudes(String idUsuario) {
+    return Firestore.instance
+        .collection('solicitudes')
+        .where('id-proveedor', isEqualTo: idUsuario)
+        .where("aceptado", isEqualTo: false)
+        .snapshots();
+  }
+
   loadSolicitud(String coleccion, Solicitud datasolicitud) async {
     await Firestore.instance.collection(coleccion).add({
       'aceptado': datasolicitud.aceptado,
+      'rechazado': datasolicitud.rechazado,
       'descripcion': datasolicitud.descripcion,
       'direccion': datasolicitud.direccion,
       'fechaFin': datasolicitud.fechaFin,
@@ -26,6 +34,7 @@ class SolicitudDataProvider {
       'id-cliente': datasolicitud.idCliente,
       'id-proveedor': datasolicitud.idProveedor,
       'id-servicio': datasolicitud.idServicio,
+      'cliente': datasolicitud.cliente,
       'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
     });

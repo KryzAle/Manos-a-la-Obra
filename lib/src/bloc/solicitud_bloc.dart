@@ -12,21 +12,28 @@ class SolicitudBloc {
   final solicitudProvider = SolicitudDataProvider();
   final _solicitudesController = BehaviorSubject<List<Solicitud>>();
   final _solicitudesUsuarioController = BehaviorSubject<List<Solicitud>>();
+  final _nuevasSolicitudesUsuarioController =
+      BehaviorSubject<List<Solicitud>>();
 
   //escuchar stream
   Stream<List<Solicitud>> get getSolicitudes => _solicitudesController.stream;
   Stream<List<Solicitud>> get getSolicitudesUsuario =>
       _solicitudesUsuarioController.stream;
+  Stream<List<Solicitud>> get getNuevasSolicitudes =>
+      _nuevasSolicitudesUsuarioController.stream;
 
   //agregar stream
   Function(List<Solicitud>) get changeSolicitud =>
       _solicitudesController.sink.add;
   Function(List<Solicitud>) get changeSolicitudUsuario =>
       _solicitudesUsuarioController.sink.add;
+  Function(List<Solicitud>) get changeNuevaSolicitudUsuario =>
+      _nuevasSolicitudesUsuarioController.sink.add;
 
   void dispose() {
     _solicitudesController?.close();
     _solicitudesUsuarioController?.close();
+    _nuevasSolicitudesUsuarioController?.close();
   }
 
   void cargarSolicitudesUsuario() {
@@ -40,6 +47,21 @@ class SolicitudBloc {
           solicitudes.add(solicitud);
         }
         changeSolicitudUsuario(solicitudes);
+      });
+    });
+  }
+
+  void cargarNuevasSolicitudesUsuario() {
+    usuarioProvider.getIdCurrentUser().then((value) {
+      final subscriptionSolicitud =
+          solicitudProvider.getNuevasSolicitudes(value);
+      subscriptionSolicitud.listen((event) {
+        final solicitudes = new List<Solicitud>();
+        for (var item in event.documents) {
+          final solicitud = Solicitud.fromJsonMap(item.data, item.documentID);
+          solicitudes.add(solicitud);
+        }
+        changeNuevaSolicitudUsuario(solicitudes);
       });
     });
   }

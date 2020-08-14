@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
@@ -58,6 +57,7 @@ class _MyAppState extends State<MyApp> {
                 direccionBloc.cargarDireccionUsuario();
                 serviciosBloc.cargarServiciosUsuario();
                 solicitudesBloc.cargarSolicitudesUsuario();
+                solicitudesBloc.cargarNuevasSolicitudesUsuario();
               }
               return MaterialApp(
                 theme: ThemeData(
