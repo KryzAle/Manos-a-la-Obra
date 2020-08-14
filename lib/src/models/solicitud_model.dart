@@ -14,7 +14,7 @@ class Solicitudes {
 class Solicitud {
   String id;
   bool aceptado;
-  bool rechazado;
+  bool revisado;
   String descripcion;
   Map<String, dynamic> direccion;
   Timestamp fechaInicio;
@@ -28,7 +28,7 @@ class Solicitud {
   bool terminado;
   Solicitud({
     this.aceptado = false,
-    this.rechazado = false,
+    this.revisado = false,
     this.descripcion,
     this.direccion,
     this.fechaInicio,

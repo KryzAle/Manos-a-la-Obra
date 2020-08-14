@@ -4,6 +4,7 @@ import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class TarjetaNuevaSolicitudWidget extends StatefulWidget {
+  final idSolicitudDoc;
   final descripcion;
   final estado;
   final fechaInicio;
@@ -13,6 +14,7 @@ class TarjetaNuevaSolicitudWidget extends StatefulWidget {
   final fotoCliente;
   TarjetaNuevaSolicitudWidget({
     Key key,
+    @required this.idSolicitudDoc,
     @required this.descripcion,
     @required this.estado,
     @required this.fechaInicio,
@@ -29,7 +31,7 @@ class TarjetaNuevaSolicitudWidget extends StatefulWidget {
 
 class _TarjetaNuevaSolicitudWidgetState
     extends State<TarjetaNuevaSolicitudWidget> {
-  final providerServicio = SolicitudDataProvider();
+  final providerSolicitud = SolicitudDataProvider();
   String imgUrl;
 
   @override
@@ -166,7 +168,11 @@ class _TarjetaNuevaSolicitudWidgetState
                                   actions: <Widget>[
                                     FlatButton(
                                       child: Text('Eliminar'),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        providerSolicitud.rechazarSolicitud(
+                                            widget.idSolicitudDoc);
+                                        Navigator.of(context).pop();
+                                      },
                                     ),
                                     FlatButton(
                                       child: Text('Cancelar'),
@@ -206,7 +212,11 @@ class _TarjetaNuevaSolicitudWidgetState
                                   actions: <Widget>[
                                     FlatButton(
                                       child: Text('Aceptar'),
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        providerSolicitud.aceptarSolicitud(
+                                            widget.idSolicitudDoc);
+                                        Navigator.of(context).pop();
+                                      },
                                     ),
                                     FlatButton(
                                       child: Text('Cancelar'),
@@ -237,8 +247,8 @@ class _TarjetaNuevaSolicitudWidgetState
   }
 
   _obtenerUrlImagen(path) async {
-    final providerServicio = ServicioDataProvider();
-    final fileURL = await providerServicio.getImageServicio(path);
+    final providerSolicitud = SolicitudDataProvider();
+    final fileURL = await providerSolicitud.getImageUserSolicitud(path);
     if (this.mounted) {
       setState(() {
         imgUrl = fileURL;
