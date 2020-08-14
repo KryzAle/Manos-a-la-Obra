@@ -28,15 +28,11 @@ class CardCateriaServicio extends StatelessWidget {
     final List<Widget> widgets = List();
     for (var categoria in lista) {
       final card = ButtonCircle(
-        icon: getIcon(categoria.icon),
-        texto: categoria.nombre,
-        color: getColor(categoria.color)
-      );
+          icon: getIcon(categoria.icon),
+          texto: categoria.nombre,
+          color: getColor(categoria.color));
       widgets.add(card);
-
-      
     }
-    
     return widgets;
   }
 }

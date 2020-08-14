@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
 
 class SolicitudDataProvider {
@@ -19,14 +20,14 @@ class SolicitudDataProvider {
     return Firestore.instance
         .collection('solicitudes')
         .where('id-proveedor', isEqualTo: idUsuario)
-        .where("aceptado", isEqualTo: false)
+        .where("revisado", isEqualTo: false)
         .snapshots();
   }
 
   loadSolicitud(String coleccion, Solicitud datasolicitud) async {
     await Firestore.instance.collection(coleccion).add({
       'aceptado': datasolicitud.aceptado,
-      'rechazado': datasolicitud.rechazado,
+      'revisado': datasolicitud.revisado,
       'descripcion': datasolicitud.descripcion,
       'direccion': datasolicitud.direccion,
       'fechaFin': datasolicitud.fechaFin,
@@ -40,10 +41,30 @@ class SolicitudDataProvider {
     });
   }
 
+  getImageUserSolicitud(path) async {
+    StorageReference ref = FirebaseStorage.instance.ref().child(path);
+    String fileURL = await ref.getDownloadURL();
+    return fileURL;
+  }
+
   deleteSolicitud(idDocument) async {
     await Firestore.instance
         .collection("solicitudes")
         .document(idDocument)
         .delete();
+  }
+
+  aceptarSolicitud(idSolicitud) async {
+    await Firestore.instance
+        .document("solicitudes/" + idSolicitud)
+        .updateData({"aceptado": true, "revisado": true}).then(
+            (value) => print("Solicitud Aceptada"));
+  }
+
+  rechazarSolicitud(idSolicitud) async {
+    await Firestore.instance
+        .document("solicitudes/" + idSolicitud)
+        .updateData({"aceptado": false, "revisado": true}).then(
+            (value) => print("Solicitud Rechazada"));
   }
 }
