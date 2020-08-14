@@ -14,29 +14,29 @@ class Solicitudes {
 class Solicitud {
   String id;
   bool aceptado;
+  bool rechazado;
   String descripcion;
   Map<String, dynamic> direccion;
   Timestamp fechaInicio;
   Timestamp fechaFin;
   String idCliente;
-  String nombreCliente;
-  String fotoCliente;
   String idProveedor;
   String idServicio;
+  Map<String, dynamic> cliente;
   Map<String, dynamic> servicio;
 
   bool terminado;
   Solicitud({
     this.aceptado = false,
+    this.rechazado = false,
     this.descripcion,
     this.direccion,
     this.fechaInicio,
     this.fechaFin,
     this.idCliente,
-    this.nombreCliente,
-    this.fotoCliente,
     this.idProveedor,
     this.idServicio,
+    this.cliente,
     this.servicio,
     this.terminado = false,
   });
@@ -48,10 +48,9 @@ class Solicitud {
     this.fechaInicio = json['fechaInicio'];
     this.fechaFin = json['fechaFin'];
     this.idCliente = json['id-cliente'];
-    this.nombreCliente = json['nombre-cliente'];
-    this.fotoCliente = json['foto-cliente'];
     this.idProveedor = json['id-cliente'];
     this.idServicio = json['id-servicio'];
+    this.cliente = json['cliente'];
     this.servicio = json['servicio'];
     this.terminado = json['terminado'];
   }

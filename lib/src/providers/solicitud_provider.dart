@@ -19,21 +19,22 @@ class SolicitudDataProvider {
     return Firestore.instance
         .collection('solicitudes')
         .where('id-proveedor', isEqualTo: idUsuario)
+        .where("aceptado", isEqualTo: false)
         .snapshots();
   }
 
   loadSolicitud(String coleccion, Solicitud datasolicitud) async {
     await Firestore.instance.collection(coleccion).add({
       'aceptado': datasolicitud.aceptado,
+      'rechazado': datasolicitud.rechazado,
       'descripcion': datasolicitud.descripcion,
       'direccion': datasolicitud.direccion,
       'fechaFin': datasolicitud.fechaFin,
       'fechaInicio': datasolicitud.fechaInicio,
       'id-cliente': datasolicitud.idCliente,
-      'nombre-cliente': datasolicitud.nombreCliente,
-      'foto-cliente': datasolicitud.fotoCliente,
       'id-proveedor': datasolicitud.idProveedor,
       'id-servicio': datasolicitud.idServicio,
+      'cliente': datasolicitud.cliente,
       'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
     });

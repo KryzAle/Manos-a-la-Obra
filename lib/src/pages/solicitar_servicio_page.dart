@@ -222,13 +222,15 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
       usuarioactual.getUserDoc().then((usuario) {
         usuario.listen((event) async {
           Usuario usuario = new Usuario.fromMap(event.data);
-          solicitud.nombreCliente = usuario.nombre;
-          print(usuario.foto);
-          solicitud.fotoCliente = usuario.foto;
           solicitud.idCliente = idCliente;
           solicitud.idProveedor = widget.idProveedor;
           solicitud.idServicio = widget.idServicio;
-
+          Map<String, dynamic> mapCliente = {
+            "nombre": usuario.nombre,
+            "foto": usuario.foto,
+          };
+          solicitud.cliente = new Map<String, dynamic>();
+          solicitud.cliente = mapCliente;
           Map<String, dynamic> mapServicio = {
             "descripcion": widget.descripcionServicio,
             "evidencia": widget.evidenciaServicio,

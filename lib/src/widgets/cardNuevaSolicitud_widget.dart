@@ -21,8 +21,8 @@ class CardNuevaSolicitud extends StatelessWidget {
         fechaInicio: pedido.fechaInicio,
         image: pedido.servicio["evidencia"],
         nombreServicio: pedido.servicio["nombre"],
-        nombreCliente: pedido.nombreCliente,
-        fotoCliente: pedido.fotoCliente,
+        nombreCliente: pedido.cliente["nombre"],
+        fotoCliente: pedido.cliente["foto"],
       );
       widgets.add(card);
     }

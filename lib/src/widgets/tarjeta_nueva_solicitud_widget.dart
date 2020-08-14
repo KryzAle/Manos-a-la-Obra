@@ -120,17 +120,6 @@ class _TarjetaNuevaSolicitudWidgetState
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
                                 Text(
-                                  widget.nombreServicio,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
                                   timeago
                                       .format(widget.fechaInicio.toDate(),
                                           locale: 'es')
@@ -140,6 +129,17 @@ class _TarjetaNuevaSolicitudWidgetState
                                     fontSize: 13,
                                   ),
                                 ),
+                                SizedBox(
+                                  height: 5.0,
+                                ),
+                                Text(
+                                  widget.nombreServicio,
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 15,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -147,6 +147,86 @@ class _TarjetaNuevaSolicitudWidgetState
                       ),
                     ),
                   ],
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Material(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(32.0),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: Text("Rechazar esta solicitud"),
+                                  content: Text("¿Esta seguro?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Eliminar'),
+                                      onPressed: () {},
+                                    ),
+                                    FlatButton(
+                                      child: Text('Cancelar'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ]);
+                            });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.close,
+                          color: Colors.deepOrange,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 130,
+                  right: 8,
+                  child: Material(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(32.0),
+                    ),
+                    child: InkWell(
+                      onTap: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                  title: Text("Aceptar esta Solicitud"),
+                                  content: Text("¿Esta seguro?"),
+                                  actions: <Widget>[
+                                    FlatButton(
+                                      child: Text('Aceptar'),
+                                      onPressed: () {},
+                                    ),
+                                    FlatButton(
+                                      child: Text('Cancelar'),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ]);
+                            });
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.check,
+                          color: Colors.green,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
