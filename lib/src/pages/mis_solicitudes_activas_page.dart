@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/widgets/cardNuevaSolicitud_widget.dart';
+import 'package:manos_a_la_obra/src/widgets/cardSolicitudActiva_widget.dart';
 
 class MisSolicitudesActivasPage extends StatelessWidget {
   const MisSolicitudesActivasPage({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final pedidoUsuario = Provider.solicitud(context);
+    final solicitudActiva = Provider.solicitud(context);
     final _screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
@@ -24,10 +24,10 @@ class MisSolicitudesActivasPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               StreamBuilder(
-                stream: pedidoUsuario.getNuevasSolicitudes,
+                stream: solicitudActiva.getMisSolicitudesActivas,
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   if (snapshot.hasData) {
-                    return CardNuevaSolicitud(lista: snapshot.data);
+                    return CardSolicitudActiva(lista: snapshot.data);
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }

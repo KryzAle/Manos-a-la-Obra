@@ -239,7 +239,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
           solicitud.servicio = new Map<String, dynamic>();
           solicitud.servicio = mapServicio;
 
-          solicitud.fechaInicio = Timestamp.fromDate(DateTime.now());
+          solicitud.fechaSolicitud = Timestamp.fromDate(DateTime.now());
 
           Map<String, dynamic> mapDireccion = {
             "latitud": _direccion.latitud,

@@ -19,7 +19,7 @@ class CardNuevaSolicitud extends StatelessWidget {
         idSolicitudDoc: pedido.id,
         descripcion: pedido.descripcion,
         estado: pedido.aceptado,
-        fechaInicio: pedido.fechaInicio,
+        fechaSolicitud: pedido.fechaSolicitud,
         image: pedido.servicio["evidencia"],
         nombreServicio: pedido.servicio["nombre"],
         nombreCliente: pedido.cliente["nombre"],
