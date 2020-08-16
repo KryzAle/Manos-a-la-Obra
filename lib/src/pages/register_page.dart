@@ -18,27 +18,30 @@ class RegisterPage extends StatelessWidget {
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: height * .2),
-                    _title(context),
-                    SizedBox(height: 50),
-                    _nombreFile(loginBloc),
-                    SizedBox(height: 20),
-                    _cedulaFile(loginBloc),
-                    SizedBox(height: 20),
-                    _mailField(loginBloc),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    _passwordField(loginBloc),
-                    SizedBox(height: 20),
-                    _submitButton(context, loginBloc),
-                    SizedBox(height: height * .14),
-                    _loginAccountLabel(context),
-                  ],
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      SizedBox(height: height * .2),
+                      _title(context),
+                      SizedBox(height: 50),
+                      _nombreFile(loginBloc),
+                      SizedBox(height: 20),
+                      _cedulaFile(loginBloc),
+                      SizedBox(height: 20),
+                      _mailField(loginBloc),
+                      SizedBox(
+                        height: 20.0,
+                      ),
+                      _passwordField(loginBloc),
+                      SizedBox(height: 20),
+                      _submitButton(context, loginBloc),
+                      SizedBox(height: height * .14),
+                      _loginAccountLabel(context),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -67,15 +70,22 @@ class RegisterPage extends StatelessWidget {
       stream: loginBloc.nombreStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          child: TextField(
+          child: TextFormField(
             textCapitalization: TextCapitalization.words,
             decoration: InputDecoration(
               icon: Icon(Icons.person_outline),
               hintText: 'Nombre',
-              counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: loginBloc.changeNombre,
+            onSaved: (value){
+              loginBloc.changeNombre(value);
+            },
+            validator: (value){
+              if (value.length<10) {
+                return 'Debe tener almenos 10 caracteres';
+              }else{
+                return null;
+              }
+            },
           ),
         );
       },
@@ -87,14 +97,21 @@ class RegisterPage extends StatelessWidget {
       stream: loginBloc.cedulaStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          child: TextField(
+          child: TextFormField(
             decoration: InputDecoration(
               icon: Icon(Icons.mail_outline),
               hintText: 'Cedula',
-              counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: loginBloc.changeCedula,
+            onSaved: (value){
+              loginBloc.changeCedula(value);
+            },
+            validator: (value){
+              if (value.length!=10) {
+                return 'Debe tener 10 digitos';
+              }else{
+                return null;
+              }
+            },
           ),
         );
       },
@@ -106,15 +123,24 @@ class RegisterPage extends StatelessWidget {
       stream: loginBloc.emailStream,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          child: TextField(
+          child: TextFormField(
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
               icon: Icon(Icons.mail_outline),
               hintText: 'Correo Electronico',
-              counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: loginBloc.changeEmail,
+            onSaved: (value){
+              loginBloc.changeEmail(value);
+            },
+            validator: (value){
+              Pattern pattern = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+              RegExp regExp = new RegExp(pattern);
+              if (!regExp.hasMatch(value)) {
+                return 'Correo no valido';
+              }else{
+                return null;
+              }
+            },
           ),
         );
       },
@@ -127,15 +153,22 @@ class RegisterPage extends StatelessWidget {
       initialData: '',
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return Container(
-          child: TextField(
+          child: TextFormField(
             obscureText: true,
             decoration: InputDecoration(
               icon: Icon(Icons.lock_outline),
               hintText: 'Contraseña',
-              counterText: snapshot.data,
-              errorText: snapshot.error,
             ),
-            onChanged: loginBloc.changePassword,
+            onSaved: (value){
+              loginBloc.changePassword(value);
+            },
+            validator: (value){
+              if (value.length<6) {
+                return 'Debe tener mas de 6 caracteres';
+              }else{
+                return null;
+              }
+            },
           ),
         );
       },
@@ -143,25 +176,19 @@ class RegisterPage extends StatelessWidget {
   }
 
   Widget _submitButton(BuildContext context, LoginBloc loginBloc) {
-    return StreamBuilder(
-      stream: loginBloc.formRegisterValidStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return RaisedButton(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 15),
-            alignment: Alignment.center,
-            child: Text(
-              'Registrate',
-              style: TextStyle(fontSize: 20, color: Colors.white),
-            ),
-          ),
-          color: Colors.orange,
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
-          onPressed:
-              snapshot.hasData ? () => _register(context, loginBloc) : null,
-        );
-      },
+    return RaisedButton(
+      child: Container(
+        padding: EdgeInsets.symmetric(vertical: 15),
+        alignment: Alignment.center,
+        child: Text(
+          'Registrate',
+          style: TextStyle(fontSize: 20, color: Colors.white),
+        ),
+      ),
+      color: Colors.orange,
+      shape:
+          RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+      onPressed:() => _register(context, loginBloc),
     );
   }
 
@@ -219,6 +246,8 @@ class RegisterPage extends StatelessWidget {
   }
 
   _register(BuildContext context, LoginBloc loginBloc) async {
+    if (!formkey.currentState.validate()) return;
+    formkey.currentState.save();
     final serviciosBloc = Provider.servicio(context);
     final direccionBloc = Provider.direccion(context);
     final usuarioBloc = Provider.usuario(context);
@@ -246,31 +275,29 @@ class RegisterPage extends StatelessWidget {
             ),
           );
         });
-    if (await loginBloc.register()) {
-      usuarioBloc.cargarUsuario();
-      loginBloc.resetValues();
-      serviciosBloc.cargarServiciosUsuario();
-      solicitudesBloc.cargarSolicitudesUsuario();
-      direccionBloc.cargarDireccionUsuario();
-      Navigator.pop(context);
-      Navigator.pushReplacementNamed(context, 'home');
-    } else {
-      Navigator.pop(context);
-      _mostrarAlerta(context, 'Datos Incorrectos',
-          'Email invalido o se encuentra registrado');
-    }
+        try {
+          await loginBloc.register();
+          usuarioBloc.cargarUsuario();
+          loginBloc.resetValues();
+          serviciosBloc.cargarServiciosUsuario();
+          solicitudesBloc.cargarSolicitudesUsuario();
+          direccionBloc.cargarDireccionUsuario();
+          Navigator.pop(context);
+          Navigator.pushReplacementNamed(context, 'home');
+        } catch (e) {
+          Navigator.pop(context);
+          _mostrarAlerta(context, Icons.error_outline,
+                  e.toString());
+        }
   }
 
-  void _mostrarAlerta(BuildContext context, String text, String subtext) {
+  void _mostrarAlerta(BuildContext context, IconData icon, String subtext) {
     showDialog(
         context: context,
         child: AlertDialog(
           elevation: 2.0,
           content: Text(subtext),
-          title: Text(
-            text,
-            style: TextStyle(fontSize: 20.0),
-          ),
+          title: Icon(icon,size: 70.0, color: Colors.red,),
           actions: <Widget>[
             FlatButton(
                 onPressed: () => Navigator.of(context).pop(), child: Text('Ok'))

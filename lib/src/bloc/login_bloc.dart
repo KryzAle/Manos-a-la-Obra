@@ -29,29 +29,30 @@ class LoginBloc with Validators{
   Stream<String> get nombreStream => _nombreController.stream.transform(validarCampo);
   Stream<bool> get cargandoStream => _cargandoController.stream;
 
-  Stream<bool> get formValidStream => 
-      Rx.combineLatest2(emailStream,passwordStream,(e,p) {
-        return true;
-      });
-
-  Stream<bool> get formRegisterValidStream =>
-      Rx.combineLatest4(nombreStream, cedulaStream, emailStream, passwordStream, (a, b, c, d) => true);
-
+  
   // obtenr ultimo valor ingresado
   String get email => _emailController.value;
   String get nombre => _nombreController.value;
   String get cedula => _cedulaController.value;
   String get password => _passwordController.value;
 
-  Future<bool> login() async{
-    return await _usuarioProvider.signInWithCredentials(email, password);
+  Future<bool> login()async{
+    try {
+      return await _usuarioProvider.signInWithCredentials(email, password);  
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   Future<bool> isLogin() async{
     return await _usuarioProvider.isSignedIn();
   }
   Future<bool> register() async{
-    return await _usuarioProvider.signUp(email,password,nombre,cedula);
+    try {
+      return await _usuarioProvider.signUp(email,password,nombre,cedula);
+    } catch (e) {
+      return Future.error(e);
+    }
   }
 
   void logOut() {
