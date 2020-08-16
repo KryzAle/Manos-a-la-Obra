@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/pages/detalle_servicio_page.dart';
-import 'package:manos_a_la_obra/src/pages/register_solicitudes_page.dart';
-import 'package:manos_a_la_obra/src/pages/solicitar_servicio_page.dart';
 
 class ServiciosSearch extends SearchDelegate {
   @override
