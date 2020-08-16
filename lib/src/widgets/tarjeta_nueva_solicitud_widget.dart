@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

@@ -33,14 +33,12 @@ class MisDireccionesPage extends StatelessWidget {
 
           InkWell(
             onTap: ()async{
-              Position position;
               try {
                 final position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
                 final ubicacion = await transformarUbicacion(position);
                 final direccion = Direccion(latitud: position.latitude,longitud: position.longitude,ubicacionMap: ubicacion.name);
                 Navigator.pushNamed(context, 'form_direccion',arguments: direccion);
               } on Exception {
-                position = null;
               }
             },
             child: _crearBoton('Ubicacion Actual',Icons.near_me)

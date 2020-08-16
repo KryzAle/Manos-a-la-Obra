@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:manos_a_la_obra/src/models/puntuacion_model.dart';
 
@@ -9,6 +10,7 @@ class UsuarioProvider {
 
   Future<bool> signInWithCredentials(String email, String password) async{
     bool login = false;
+    String errorMessage;
     try {
       await _firebaseAuth.signInWithEmailAndPassword(
         email: email,
@@ -16,6 +18,32 @@ class UsuarioProvider {
       );
       login =true;
     } catch (e) {
+      final error = e as PlatformException;
+      switch (error.code) {
+        case "ERROR_INVALID_EMAIL":
+          errorMessage = "Tu email no es valido.";
+          break;
+        case "ERROR_WRONG_PASSWORD":
+          errorMessage = "Tu password es incorrecto.";
+          break;
+        case "ERROR_USER_NOT_FOUND":
+          errorMessage = "No existe ese email registrado";
+          break;
+        case "ERROR_USER_DISABLED":
+          errorMessage = "Correo bloqueado";
+          break;
+        case "ERROR_TOO_MANY_REQUESTS":
+          errorMessage = "Muchas peticiones. Intente mas tarde";
+          break;
+        case "ERROR_OPERATION_NOT_ALLOWED":
+          errorMessage = "El servicio esta suspendido.";
+          break;
+        default:
+          errorMessage = "A ocurrido un error.";
+      }
+      if (errorMessage != null) {
+        return Future.error(errorMessage);
+      }
     }
     return login;
   }
@@ -53,21 +81,40 @@ class UsuarioProvider {
   }
   Future<bool> signUp(String email, String password, String nombre, String cedula) async{
     bool register = false;
+    String errorMessage;
     try {
       final user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password);
       await Firestore.instance.collection('usuario').document(user.user.uid).setData(
         {
-          'foto'  : '/users/${user.user.uid}.jpg',
+          'foto'  : '',
           'nombre' : nombre,
           'cedula' : cedula,
           'proveedor' : false,
-          'celular' : '',
+          'telefono' : '',
         }
       );
       register =true;
     } catch (e) {
+      final error = e as PlatformException;
+      print(error.code);
+      switch (error.code) {
+        case "ERROR_EMAIL_ALREADY_IN_USE":
+          errorMessage = "Ese correo ya esta en uso";
+          break;
+        case "ERROR_TOO_MANY_REQUESTS":
+          errorMessage = "Muchas peticiones. Intente mas tarde";
+          break;
+        case "ERROR_OPERATION_NOT_ALLOWED":
+          errorMessage = "El servicio esta suspendido.";
+          break;
+        default:
+          errorMessage = "A ocurrido un error.";
+      }
+      if (errorMessage != null) {
+        return Future.error(errorMessage);
+      }
     }
     return register;
   }

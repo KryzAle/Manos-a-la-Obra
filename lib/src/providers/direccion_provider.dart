@@ -11,7 +11,7 @@ class DireccionProvider {
 
   Future<void> createDireccion(Direccion direccion) async {
     final userId = await getIdCurrentUser();
-    final res = await Firestore.instance.collection('usuario').document(userId).collection('direccion').add({
+    await Firestore.instance.collection('usuario').document(userId).collection('direccion').add({
       'nombre': direccion.nombre,
       'ubicacionMap': direccion.ubicacionMap, 
       'callePrincipal': direccion.callePrincipal,

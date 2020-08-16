@@ -3,7 +3,6 @@ import 'package:manos_a_la_obra/src/pages/home_page_inicio.dart';
 import 'package:manos_a_la_obra/src/pages/mis_pedidos_page.dart';
 import 'package:manos_a_la_obra/src/pages/solicitudes_page.dart';
 import 'package:manos_a_la_obra/src/widgets/main_drawer_widget.dart';
-import 'package:manos_a_la_obra/src/widgets/tarjeta_pedidos_widget.dart';
 
 class HomePage extends StatefulWidget {
   @override

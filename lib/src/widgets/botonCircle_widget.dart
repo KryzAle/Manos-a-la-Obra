@@ -8,12 +8,11 @@ class ButtonCircle extends StatelessWidget {
   ButtonCircle({@required this.icon, this.color, this.texto});
   @override
   Widget build(BuildContext context) {
-    final _screenSize = MediaQuery.of(context).size;
     return Container(
-      height: _screenSize.height * 0.12,
-      width: _screenSize.width * 0.27,
+      height: 105,
+      width: 120,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(25),
           color: color,
           boxShadow: <BoxShadow>[
             BoxShadow(
@@ -35,9 +34,19 @@ class ButtonCircle extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          Icon(
-            icon,
-            size: 40.0,
+          SizedBox(height: 5.0,),
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.white.withAlpha(100),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              icon,
+              size: 40.0,
+              color: Colors.black,
+            ),
           ),
           Container(
             child: Text(
