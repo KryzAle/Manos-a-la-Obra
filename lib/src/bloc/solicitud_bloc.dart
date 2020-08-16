@@ -14,6 +14,7 @@ class SolicitudBloc {
   final _solicitudesUsuarioController = BehaviorSubject<List<Solicitud>>();
   final _nuevasSolicitudesUsuarioController =
       BehaviorSubject<List<Solicitud>>();
+  final _misSolicitudesActivasController = BehaviorSubject<List<Solicitud>>();
 
   //escuchar stream
   Stream<List<Solicitud>> get getSolicitudes => _solicitudesController.stream;
@@ -21,6 +22,8 @@ class SolicitudBloc {
       _solicitudesUsuarioController.stream;
   Stream<List<Solicitud>> get getNuevasSolicitudes =>
       _nuevasSolicitudesUsuarioController.stream;
+  Stream<List<Solicitud>> get getMisSolicitudesActivas =>
+      _misSolicitudesActivasController.stream;
 
   //agregar stream
   Function(List<Solicitud>) get changeSolicitud =>
@@ -29,11 +32,14 @@ class SolicitudBloc {
       _solicitudesUsuarioController.sink.add;
   Function(List<Solicitud>) get changeNuevaSolicitudUsuario =>
       _nuevasSolicitudesUsuarioController.sink.add;
+  Function(List<Solicitud>) get changeMisSolicitudesActivas =>
+      _misSolicitudesActivasController.sink.add;
 
   void dispose() {
     _solicitudesController?.close();
     _solicitudesUsuarioController?.close();
     _nuevasSolicitudesUsuarioController?.close();
+    _misSolicitudesActivasController?.close();
   }
 
   void cargarSolicitudesUsuario() {
@@ -62,6 +68,21 @@ class SolicitudBloc {
           solicitudes.add(solicitud);
         }
         changeNuevaSolicitudUsuario(solicitudes);
+      });
+    });
+  }
+
+  void cargarMisSolicitudesActivas() {
+    usuarioProvider.getIdCurrentUser().then((value) {
+      final subscriptionSolicitud =
+          solicitudProvider.getMisSolicitudesActivas(value);
+      subscriptionSolicitud.listen((event) {
+        final solicitudes = new List<Solicitud>();
+        for (var item in event.documents) {
+          final solicitud = Solicitud.fromJsonMap(item.data, item.documentID);
+          solicitudes.add(solicitud);
+        }
+        changeMisSolicitudesActivas(solicitudes);
       });
     });
   }

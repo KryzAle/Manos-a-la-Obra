@@ -164,6 +164,7 @@ class LoginPage extends StatelessWidget {
       serviciosBloc.cargarServiciosUsuario();
       solicitudesBloc.cargarSolicitudesUsuario();
       solicitudesBloc.cargarNuevasSolicitudesUsuario();
+      solicitudesBloc.cargarMisSolicitudesActivas();
       loginBloc.resetValues();
       Navigator.pop(context);
       Navigator.pushReplacementNamed(context, 'home');

@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class TarjetaNuevaSolicitudWidget extends StatefulWidget {
+class TarjetaSolicitudActivaWidget extends StatefulWidget {
   final idSolicitudDoc;
   final descripcion;
   final estado;
-  final fechaSolicitud;
+  final fechaInicio;
   final image;
   final nombreServicio;
   final nombreCliente;
   final fotoCliente;
-  TarjetaNuevaSolicitudWidget({
+  TarjetaSolicitudActivaWidget({
     Key key,
     @required this.idSolicitudDoc,
     @required this.descripcion,
     @required this.estado,
-    @required this.fechaSolicitud,
+    @required this.fechaInicio,
     @required this.image,
     @required this.nombreServicio,
     @required this.nombreCliente,
@@ -25,12 +24,12 @@ class TarjetaNuevaSolicitudWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _TarjetaNuevaSolicitudWidgetState createState() =>
-      _TarjetaNuevaSolicitudWidgetState();
+  _TarjetaSolicitudActivaWidgetState createState() =>
+      _TarjetaSolicitudActivaWidgetState();
 }
 
-class _TarjetaNuevaSolicitudWidgetState
-    extends State<TarjetaNuevaSolicitudWidget> {
+class _TarjetaSolicitudActivaWidgetState
+    extends State<TarjetaSolicitudActivaWidget> {
   final providerSolicitud = SolicitudDataProvider();
   String imgUrl;
 
@@ -104,7 +103,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                         children: <Widget>[
                                           Flexible(
                                             child: new Text(
-                                              widget.descripcion,
+                                              widget.nombreServicio,
                                             ),
                                           ),
                                         ],
@@ -123,23 +122,12 @@ class _TarjetaNuevaSolicitudWidgetState
                               children: <Widget>[
                                 Text(
                                   timeago
-                                      .format(widget.fechaSolicitud.toDate(),
+                                      .format(widget.fechaInicio.toDate(),
                                           locale: 'es')
                                       .toString(),
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontSize: 13,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5.0,
-                                ),
-                                Text(
-                                  widget.nombreServicio,
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 15,
                                   ),
                                 ),
                               ],
@@ -163,19 +151,19 @@ class _TarjetaNuevaSolicitudWidgetState
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                  title: Text("Rechazar esta solicitud"),
-                                  content: Text("¿Esta seguro?"),
+                                  title: Text("¿Esta seguro?"),
+                                  content: Text("La solicitud no se completó"),
                                   actions: <Widget>[
                                     FlatButton(
-                                      child: Text('Eliminar'),
+                                      child: Text('Cancelar la solicitud'),
                                       onPressed: () {
-                                        providerSolicitud.rechazarSolicitud(
+                                        providerSolicitud.cancelarSolicitud(
                                             widget.idSolicitudDoc);
                                         Navigator.of(context).pop();
                                       },
                                     ),
                                     FlatButton(
-                                      child: Text('Cancelar'),
+                                      child: Text('Atrás'),
                                       onPressed: () {
                                         Navigator.of(context).pop();
                                       },
@@ -186,7 +174,7 @@ class _TarjetaNuevaSolicitudWidgetState
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.delete_forever,
+                          Icons.not_interested,
                           color: Colors.deepOrange,
                           size: 25,
                         ),
@@ -207,16 +195,16 @@ class _TarjetaNuevaSolicitudWidgetState
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                  title: Text("Aceptar esta Solicitud"),
-                                  content: Text("¿Esta seguro?"),
+                                  title: Text("Finalizar esta Solicitud"),
+                                  content:
+                                      Text("¿La solicitud fue completada?"),
                                   actions: <Widget>[
                                     FlatButton(
-                                      child: Text('Aceptar'),
+                                      child: Text('Solicitud Completada'),
                                       onPressed: () {
-                                        providerSolicitud.aceptarSolicitud(
+                                        providerSolicitud.finalizarSolicitud(
                                             widget.idSolicitudDoc);
-                                        Navigator.popAndPushNamed(
-                                            context, "mis_solicitudes_activas");
+                                        Navigator.of(context).pop();
                                       },
                                     ),
                                     FlatButton(
@@ -231,7 +219,7 @@ class _TarjetaNuevaSolicitudWidgetState
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.work,
+                          Icons.assignment_turned_in,
                           color: Colors.green,
                           size: 25,
                         ),
