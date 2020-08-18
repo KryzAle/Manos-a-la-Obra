@@ -120,16 +120,16 @@ class _TarjetaNuevaSolicitudWidgetState
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
-                                Text(
-                                  timeago
-                                      .format(widget.fechaInicio.toDate(),
-                                          locale: 'es')
-                                      .toString(),
-                                  textAlign: TextAlign.left,
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
+                                // Text(
+                                //   timeago
+                                //       .format(widget.fechaInicio.toDate(),
+                                //           locale: 'es')
+                                //       .toString(),
+                                //   textAlign: TextAlign.left,
+                                //   style: TextStyle(
+                                //     fontSize: 13,
+                                //   ),
+                                // ),
                                 SizedBox(
                                   height: 5.0,
                                 ),

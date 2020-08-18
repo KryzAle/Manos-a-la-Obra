@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/bloc/provider.dart';
 
 class ButtonCircle extends StatelessWidget {
   final IconData icon;
@@ -8,6 +9,7 @@ class ButtonCircle extends StatelessWidget {
   ButtonCircle({@required this.icon, this.color, this.texto});
   @override
   Widget build(BuildContext context) {
+    final _servicioBloc = Provider.servicio(context);
     return Container(
       height: 105,
       width: 120,
@@ -22,8 +24,14 @@ class ButtonCircle extends StatelessWidget {
               offset: Offset(2.0, 10.0),
             )
           ]),
-      child: ClipRRect(
-        child: crearCard(context),
+      child: InkWell(
+        onTap: (){
+          _servicioBloc.filtrarServiciosCategoria(texto);
+          Navigator.pushNamed(context, 'search');
+        },
+        child: ClipRRect(
+          child: crearCard(context),
+        ),
       ),
     );
   }

@@ -41,7 +41,7 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.grey.withOpacity(0.6),
+                color: widget.estado? Colors.greenAccent.withOpacity(0.8): Colors.red.withOpacity(0.8),
                 offset: const Offset(4, 4),
                 blurRadius: 16,
               ),
