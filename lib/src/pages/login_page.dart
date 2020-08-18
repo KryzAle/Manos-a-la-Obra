@@ -175,6 +175,7 @@ class LoginPage extends StatelessWidget  {
             ),
           );
         });
+
         try {
           await loginBloc.login();
           usuarioBloc.cargarUsuario();
@@ -190,7 +191,6 @@ class LoginPage extends StatelessWidget  {
           _mostrarAlerta(context, Icons.error_outline,
                   e.toString());
         }
-      
   }
 
   Widget _divider() {

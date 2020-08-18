@@ -11,6 +11,7 @@ import 'package:manos_a_la_obra/src/pages/mi_perfil_page.dart';
 import 'package:manos_a_la_obra/src/pages/mis_direcciones_page.dart';
 import 'package:manos_a_la_obra/src/pages/mis_nuevas_solicitudes_page.dart';
 import 'package:manos_a_la_obra/src/pages/mis_servicios_page.dart';
+import 'package:manos_a_la_obra/src/pages/mis_solicitudes_activas_page.dart';
 import 'package:manos_a_la_obra/src/pages/register_page.dart';
 import 'package:manos_a_la_obra/src/pages/register_solicitudes_page.dart';
 import 'package:manos_a_la_obra/src/pages/search_page.dart';
@@ -36,5 +37,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'search': (BuildContext context) => SearchPage(),
     'mis_nuevas_solicitudes': (BuildContext context) =>
         MisNuevasSolicitudesPage(),
+    'mis_solicitudes_activas': (BuildContext context) =>
+        MisSolicitudesActivasPage(),
   };
 }

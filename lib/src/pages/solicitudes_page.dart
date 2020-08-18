@@ -120,7 +120,9 @@ class _SolicitudesPageState extends State<SolicitudesPage> {
                             bottomRight: Radius.circular(8.0),
                             topRight: Radius.circular(68.0)),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pushNamed(context, "mis_solicitudes_activas");
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           gradient: LinearGradient(

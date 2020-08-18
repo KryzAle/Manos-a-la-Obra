@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
-import 'package:manos_a_la_obra/src/widgets/tarjeta_nueva_solicitud_widget.dart';
+import 'package:manos_a_la_obra/src/widgets/tarjeta_solicitud_activa_widget.dart';
 
 class CardSolicitudActiva extends StatelessWidget {
   final List<Solicitud> lista;
@@ -15,7 +15,7 @@ class CardSolicitudActiva extends StatelessWidget {
   List<Widget> _crearCardSolicitudActiva() {
     final List<Widget> widgets = List();
     for (var pedido in lista) {
-      final card = TarjetaNuevaSolicitudWidget(
+      final card = TarjetaSolicitudActivaWidget(
         idSolicitudDoc: pedido.id,
         descripcion: pedido.descripcion,
         estado: pedido.aceptado,

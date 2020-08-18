@@ -21,6 +21,18 @@ class SolicitudDataProvider {
         .collection('solicitudes')
         .where('id-proveedor', isEqualTo: idUsuario)
         .where("revisado", isEqualTo: false)
+        .orderBy("fechaSolicitud", descending: true)
+        .snapshots();
+  }
+
+  Stream<QuerySnapshot> getMisSolicitudesActivas(String idUsuario) {
+    return Firestore.instance
+        .collection('solicitudes')
+        .where('id-proveedor', isEqualTo: idUsuario)
+        .where("aceptado", isEqualTo: true)
+        .where("terminado", isEqualTo: false)
+        .where("cancelado", isEqualTo: false)
+        .orderBy("fechaInicio", descending: true)
         .snapshots();
   }
 
@@ -30,6 +42,7 @@ class SolicitudDataProvider {
       'revisado': datasolicitud.revisado,
       'descripcion': datasolicitud.descripcion,
       'direccion': datasolicitud.direccion,
+      'fechaSolicitud': datasolicitud.fechaSolicitud,
       'fechaFin': datasolicitud.fechaFin,
       'fechaInicio': datasolicitud.fechaInicio,
       'id-cliente': datasolicitud.idCliente,
@@ -38,6 +51,7 @@ class SolicitudDataProvider {
       'cliente': datasolicitud.cliente,
       'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
+      'cancelado': datasolicitud.cancelado,
     });
   }
 
@@ -55,10 +69,11 @@ class SolicitudDataProvider {
   }
 
   aceptarSolicitud(idSolicitud) async {
-    await Firestore.instance
-        .document("solicitudes/" + idSolicitud)
-        .updateData({"aceptado": true, "revisado": true}).then(
-            (value) => print("Solicitud Aceptada"));
+    await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
+      "aceptado": true,
+      "revisado": true,
+      "fechaInicio": Timestamp.fromDate(DateTime.now())
+    }).then((value) => print("Solicitud Aceptada"));
   }
 
   rechazarSolicitud(idSolicitud) async {
@@ -66,5 +81,18 @@ class SolicitudDataProvider {
         .document("solicitudes/" + idSolicitud)
         .updateData({"aceptado": false, "revisado": true}).then(
             (value) => print("Solicitud Rechazada"));
+  }
+
+  finalizarSolicitud(idSolicitud) async {
+    await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
+      "terminado": true,
+      "fechaFin": Timestamp.fromDate(DateTime.now())
+    }).then((value) => print("Solicitud Aceptada"));
+  }
+
+  cancelarSolicitud(idSolicitud) async {
+    await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
+      "cancelado": true,
+    }).then((value) => print("Solicitud Cancelada"));
   }
 }

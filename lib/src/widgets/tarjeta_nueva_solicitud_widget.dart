@@ -6,7 +6,7 @@ class TarjetaNuevaSolicitudWidget extends StatefulWidget {
   final idSolicitudDoc;
   final descripcion;
   final estado;
-  final fechaInicio;
+  final fechaSolicitud;
   final image;
   final nombreServicio;
   final nombreCliente;
@@ -16,7 +16,7 @@ class TarjetaNuevaSolicitudWidget extends StatefulWidget {
     @required this.idSolicitudDoc,
     @required this.descripcion,
     @required this.estado,
-    @required this.fechaInicio,
+    @required this.fechaSolicitud,
     @required this.image,
     @required this.nombreServicio,
     @required this.nombreCliente,
@@ -120,16 +120,17 @@ class _TarjetaNuevaSolicitudWidgetState
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
-                                // Text(
-                                //   timeago
-                                //       .format(widget.fechaInicio.toDate(),
-                                //           locale: 'es')
-                                //       .toString(),
-                                //   textAlign: TextAlign.left,
-                                //   style: TextStyle(
-                                //     fontSize: 13,
-                                //   ),
-                                // ),
+
+                                Text(
+                                  timeago
+                                      .format(widget.fechaSolicitud.toDate(),
+                                          locale: 'es')
+                                      .toString(),
+                                  textAlign: TextAlign.left,
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                  ),
+                                ),
                                 SizedBox(
                                   height: 5.0,
                                 ),
@@ -185,7 +186,7 @@ class _TarjetaNuevaSolicitudWidgetState
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.close,
+                          Icons.delete_forever,
                           color: Colors.deepOrange,
                           size: 25,
                         ),
@@ -214,7 +215,8 @@ class _TarjetaNuevaSolicitudWidgetState
                                       onPressed: () {
                                         providerSolicitud.aceptarSolicitud(
                                             widget.idSolicitudDoc);
-                                        Navigator.of(context).pop();
+                                        Navigator.popAndPushNamed(
+                                            context, "mis_solicitudes_activas");
                                       },
                                     ),
                                     FlatButton(
@@ -229,7 +231,7 @@ class _TarjetaNuevaSolicitudWidgetState
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Icon(
-                          Icons.check,
+                          Icons.work,
                           color: Colors.green,
                           size: 25,
                         ),

@@ -13,7 +13,7 @@ class ServicioDataProvider {
   Stream<QuerySnapshot> getServiciosUsuario(String idUsuario) {
     return Firestore.instance
         .collection('servicio')
-        .where('id-usuario', isEqualTo: idUsuario)
+        .where('usuario.id', isEqualTo: idUsuario)
         .snapshots();
   }
 
@@ -23,9 +23,13 @@ class ServicioDataProvider {
       'categoria': dataservicio.categoria,
       'disponibilidad': dataservicio.disponibilidad,
       'evidencia': dataservicio.evidencia,
-      'id-usuario': dataservicio.idUsuario,
+      'usuario': dataservicio.usuario,
       'nombre': dataservicio.nombre,
       'descripcion': dataservicio.descripcion,
+      'fechaCreacion': Timestamp.fromDate(DateTime.now()),
+      'fechaModificacion': dataservicio.fechaModificacion,
+      'popuparidad': dataservicio.popularidad,
+      'valoracionTotal': dataservicio.valoracionTotal,
     });
     Firestore.instance.document("usuario/" + idUsuario).updateData(
         {"proveedor": true}).then((value) => print("Inscrito como proveedor"));
