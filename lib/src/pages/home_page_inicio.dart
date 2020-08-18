@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
-import 'package:manos_a_la_obra/src/search/search_delegate.dart';
 import 'package:manos_a_la_obra/src/widgets/cardCategoriaServicio_widget.dart';
 
 class InicioPage extends StatelessWidget {
@@ -34,29 +33,32 @@ class InicioPage extends StatelessWidget {
     }
 
 Widget _crearSearch(BuildContext context) {
+  final _servicioBloc = Provider.servicio(context);
   final _screenSize = MediaQuery.of(context).size;
-   return Container(
-      width: _screenSize.width *0.60,
-      height: 35.0,
-      child: TextField(
-        enableInteractiveSelection: false,
-        textAlign: TextAlign.center,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30.0)
-          ),
-          hintText: 'Que necesitas?',
-          contentPadding: EdgeInsets.only(top:5.0,right: 40.0),
-          prefixIcon: Icon(Icons.search),
+  return Container(
+    width: _screenSize.width *0.60,
+    height: 35.0,
+    child: TextField(
+      enableInteractiveSelection: false,
+      textAlign: TextAlign.center,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0)
         ),
-        onTap: (){
-          showSearch(
-            context: context, 
-            delegate: ServiciosSearch(),
-          );
-        },
-        readOnly: true,
+        hintText: 'Que necesitas?',
+        contentPadding: EdgeInsets.only(top:5.0,right: 40.0),
+        prefixIcon: Icon(Icons.search),
       ),
+      onTap: (){
+        _servicioBloc.filtrarServiciosCategoria('todos');
+        Navigator.pushNamed(context, 'search');
+        // showSearch(
+        //   context: context, 
+        //   delegate: ServiciosSearch(),
+        // );
+      },
+      readOnly: true,
+    ),
   );
 }
 }

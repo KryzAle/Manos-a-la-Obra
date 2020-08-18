@@ -120,6 +120,7 @@ class _TarjetaNuevaSolicitudWidgetState
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
+
                                 Text(
                                   timeago
                                       .format(widget.fechaSolicitud.toDate(),

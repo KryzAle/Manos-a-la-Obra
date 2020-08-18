@@ -14,6 +14,7 @@ import 'package:manos_a_la_obra/src/pages/mis_servicios_page.dart';
 import 'package:manos_a_la_obra/src/pages/mis_solicitudes_activas_page.dart';
 import 'package:manos_a_la_obra/src/pages/register_page.dart';
 import 'package:manos_a_la_obra/src/pages/register_solicitudes_page.dart';
+import 'package:manos_a_la_obra/src/pages/search_page.dart';
 import 'package:manos_a_la_obra/src/pages/solicitudes_page.dart';
 import 'package:manos_a_la_obra/src/pages/welcome_page.dart';
 
@@ -33,6 +34,7 @@ Map<String, WidgetBuilder> getAplicationRoutes() {
     'mis_direcciones': (BuildContext context) => MisDireccionesPage(),
     'map': (BuildContext context) => MapSample(),
     'form_direccion': (BuildContext context) => FormDireccionPage(),
+    'search': (BuildContext context) => SearchPage(),
     'mis_nuevas_solicitudes': (BuildContext context) =>
         MisNuevasSolicitudesPage(),
     'mis_solicitudes_activas': (BuildContext context) =>
