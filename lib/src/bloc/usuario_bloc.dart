@@ -6,8 +6,7 @@ import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:manos_a_la_obra/src/bloc/validators.dart';
 import 'package:rxdart/rxdart.dart';
 
-
-class UsuarioBloc with Validators{
+class UsuarioBloc with Validators {
   final usuarioProvider = UserDataProvider();
   final _usuarioController = BehaviorSubject<Usuario>();
   final _telefonoController = BehaviorSubject<String>();
@@ -18,13 +17,17 @@ class UsuarioBloc with Validators{
   Stream<Usuario> get getUsuario => _usuarioController.stream;
   Stream<String> get getNombre => _nombreController.stream;
   Stream<bool> get getUpdateProgress => _updateProgressController.stream;
-  Stream<String> get getTelefono => _telefonoController.stream.transform(validarTelefono);
+  Stream<String> get getTelefono =>
+      _telefonoController.stream.transform(validarTelefono);
 
   //agregar stream
   Function(Usuario) get cambiarUsuario => _usuarioController.sink.add;
   Function(String) get cambiarNombre => _nombreController.sink.add;
   Function(String) get cambiarTelefono => _telefonoController.sink.add;
-  Function(bool) get cambiarUpdateProgress => _updateProgressController.sink.add;
+  Function(bool) get cambiarUpdateProgress =>
+      _updateProgressController.sink.add;
+
+  Usuario get usuario => _usuarioController.value;
 
   void dispose() {
     _usuarioController?.close();
@@ -36,29 +39,27 @@ class UsuarioBloc with Validators{
   void cargarUsuario() {
     Usuario usuario;
     usuarioProvider.getUserDoc().then((value) {
-      value.listen((event) async{
+      value.listen((event) async {
         usuario = new Usuario.fromMap(event.data);
-        usuario.fotoUrl  = await usuarioProvider.getImageUsuario(usuario.foto);
+        usuario.fotoUrl = await usuarioProvider.getImageUsuario(usuario.foto);
         cambiarUsuario(usuario);
       });
     });
   }
-  
-  Future<void> actualizarUsuario() async{
-    Map<String,dynamic> _datos = {
-      'nombre' : _nombreController.value,
-      'telefono' : _telefonoController.value
+
+  Future<void> actualizarUsuario() async {
+    Map<String, dynamic> _datos = {
+      'nombre': _nombreController.value,
+      'telefono': _telefonoController.value
     };
     cambiarUpdateProgress(await usuarioProvider.updateUserDoc(_datos));
   }
-  
 
-  void logout(){
+  void logout() {
     _usuarioController.value = null;
   }
 
-  Future<void> updateImageUsuario(File foto) async{
+  Future<void> updateImageUsuario(File foto) async {
     await usuarioProvider.saveImageUser(foto);
   }
-
 }

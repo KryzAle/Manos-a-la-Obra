@@ -278,6 +278,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   void _submit(BuildContext context) {
     //genera el provider para obtener el usuario actual, el bloc de servicio y una lista de paths de las imagenes
     final usuarioactual = UserDataProvider();
+    final usuarioBloc = Provider.usuario(context);
     final servicioBloc = ServicioBloc();
 
     //valida que la categoría se ha señalado
@@ -319,7 +320,15 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
         //se obtiene el id del usuario actual a traves del userdataprovider
         usuarioactual.getIdCurrentUser().then((value) async {
           //se asigna el value que contiene el id ademas de la lista de paths de las imagenes
-          servicio.idUsuario = value;
+          final usuario = usuarioBloc.usuario;
+
+          Map<String, dynamic> mapUsuario = {
+            "id": value,
+            "nombre": usuario.nombre,
+            "foto": usuario.foto,
+          };
+          servicio.usuario = new Map<String, dynamic>();
+          servicio.usuario = mapUsuario;
           //se envia al bloc el objeto Servicio cargado con la informacion del formulario
           await servicioBloc.insertarServicio(servicio, value, listaImagenes);
           Navigator.of(context).pop();

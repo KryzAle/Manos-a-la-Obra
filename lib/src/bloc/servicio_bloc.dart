@@ -34,17 +34,8 @@ class ServicioBloc {
     subscriptionServicio.listen((event) async {
       final servicios = new List<Servicio>();
       for (var item in event.documents) {
-        double puntaje = 0;
         final servicio = Servicio.fromJsonMap(item.data, item.documentID);
-        final puntuaciones =
-            await puntuacionProvider.puntaje(servicio.idUsuario);
-        if (puntuaciones != null) {
-          for (var puntuacion in puntuaciones) {
-            puntaje += puntuacion.valor;
-          }
-          puntaje /= puntuaciones.length;
-        }
-        servicio.puntaje = puntaje;
+        servicio.puntaje = 3.0;
         servicios.add(servicio);
       }
       changeServicio(servicios);
