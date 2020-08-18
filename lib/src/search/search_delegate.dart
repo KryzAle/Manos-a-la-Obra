@@ -81,7 +81,7 @@ class ServiciosSearch extends SearchDelegate {
                             evidencia: servicio.evidencia,
                             puntajes: servicio.puntaje,
                             idServicio: servicio.id,
-                            idUsuario: servicio.idUsuario,
+                            idUsuario: servicio.usuario["id"],
                           ),
                         ));
                   },
