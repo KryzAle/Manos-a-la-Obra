@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/pages/detalle_servicio_page.dart';
+
 class SearchPage extends StatefulWidget {
   const SearchPage({Key key}) : super(key: key);
 
@@ -12,21 +13,20 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   double _currentSliderValue = 0;
   List<bool> isSelected = List.generate(3, (_) => false);
-  List<String> filtros = ['puntuacion','disponibilidad','popularidad'];
+  List<String> filtros = ['puntuacion', 'disponibilidad', 'popularidad'];
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Container(
           height: 30.0,
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius:BorderRadius.circular(40),
+            borderRadius: BorderRadius.circular(40),
           ),
           child: TextField(
-            onChanged: (value){
-              _filtrar(value,context);
+            onChanged: (value) {
+              _filtrar(value, context);
             },
             autofocus: true,
             decoration: InputDecoration(
@@ -40,8 +40,11 @@ class _SearchPageState extends State<SearchPage> {
           Container(
             padding: EdgeInsets.only(right: 20.0),
             child: GestureDetector(
-              child: Icon(Icons.filter_list, color: Colors.white,),
-              onTap: (){
+              child: Icon(
+                Icons.filter_list,
+                color: Colors.white,
+              ),
+              onTap: () {
                 _mostrarBottomSheet(context);
               },
             ),
@@ -49,8 +52,11 @@ class _SearchPageState extends State<SearchPage> {
         ],
         centerTitle: false,
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back_ios, color: Colors.white,),
-          onTap: (){
+          child: Icon(
+            Icons.arrow_back_ios,
+            color: Colors.white,
+          ),
+          onTap: () {
             Navigator.pop(context);
           },
         ),
@@ -59,61 +65,72 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  _mostrarBottomSheet(BuildContext context){
+  _mostrarBottomSheet(BuildContext context) {
     final _servicioBloc = Provider.servicio(context);
     final style = TextStyle(fontSize: 16.0);
     showModalBottomSheet(
-      isDismissible: false,
-      enableDrag: false,
-      context: context,
-      builder: (context){
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            ListTile(
-              title: Row(
+        isDismissible: false,
+        enableDrag: false,
+        context: context,
+        builder: (context) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              ListTile(
+                  title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   InkWell(
                     child: Text('Limpiar'),
                   ),
-                  Text('Filtros',style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text(
+                    'Filtros',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   InkWell(
                     child: Text('Hecho'),
-                    onTap: (){
+                    onTap: () {
                       Navigator.of(context).pop();
                     },
                   ),
                 ],
-              )
-            ),
-            Divider(color: Colors.grey,),
-            Expanded(
-              child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.0),
-                child: ListView(
-                  children: <Widget>[
-                    Text('Distancia',style: style,),
-                    SizedBox(height: 5.0,),
-                    StatefulBuilder(
-                      builder: (context, setState){
+              )),
+              Divider(
+                color: Colors.grey,
+              ),
+              Expanded(
+                child: Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.0),
+                  child: ListView(
+                    children: <Widget>[
+                      Text(
+                        'Distancia',
+                        style: style,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      StatefulBuilder(builder: (context, setState) {
                         return Slider(
-                        value: _currentSliderValue,
-                        min: 0,
-                        max: 200,
-                        divisions: 5,
-                        label: _currentSliderValue.round().toString()+'m',
-                        onChanged: (double value) {
-                          setState(() {
-                            _currentSliderValue = value;
-                          });
-                        });
-                      }
-                    ),
-                    Text('Ordenar Por',style: style,),
-                    SizedBox(height: 5.0,),
-                    StatefulBuilder(
-                      builder: (context, setState){
+                            value: _currentSliderValue,
+                            min: 0,
+                            max: 200,
+                            divisions: 5,
+                            label: _currentSliderValue.round().toString() + 'm',
+                            onChanged: (double value) {
+                              setState(() {
+                                _currentSliderValue = value;
+                              });
+                            });
+                      }),
+                      Text(
+                        'Ordenar Por',
+                        style: style,
+                      ),
+                      SizedBox(
+                        height: 5.0,
+                      ),
+                      StatefulBuilder(builder: (context, setState) {
                         return ToggleButtons(
                           constraints: BoxConstraints(
                             minHeight: 50,
@@ -123,33 +140,33 @@ class _SearchPageState extends State<SearchPage> {
                             Text('Puntuacion'),
                             Text('Disponibilidad'),
                             Text('Popularidad'),
-                          ], 
+                          ],
                           onPressed: (int index) {
                             setState(() {
-                              for (int buttonIndex = 0; buttonIndex < isSelected.length; buttonIndex++) {
+                              for (int buttonIndex = 0;
+                                  buttonIndex < isSelected.length;
+                                  buttonIndex++) {
                                 if (buttonIndex == index) {
                                   isSelected[buttonIndex] = true;
                                   print(filtros[buttonIndex]);
-                                _servicioBloc.filtrarServiciosFiltros(filtros[buttonIndex]);
+                                  _servicioBloc.filtrarServiciosFiltros(
+                                      filtros[buttonIndex]);
                                 } else {
                                   isSelected[buttonIndex] = false;
                                 }
-
                               }
                             });
                           },
                           isSelected: isSelected,
                         );
-                      }
-                    ),
-                  ],
+                      }),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
-        );
-      }
-    );
+            ],
+          );
+        });
   }
 
   List<Widget> _crearPuntaje(double starts) {
@@ -217,13 +234,13 @@ class _SearchPageState extends State<SearchPage> {
           } else {
             return Center(
               child: CircularProgressIndicator(),
-            );
-          }
-        },
-      );
+          );
+        }
+      },
+    );
   }
 
-  _filtrar(String query, BuildContext context){
+  _filtrar(String query, BuildContext context) {
     final _servicioBloc = Provider.servicio(context);
 
     _servicioBloc.filtrarServiciosQuery(query);

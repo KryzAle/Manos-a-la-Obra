@@ -41,7 +41,9 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: widget.estado? Colors.greenAccent.withOpacity(0.8): Colors.red.withOpacity(0.8),
+                color: widget.estado
+                    ? Colors.greenAccent.withOpacity(0.9)
+                    : Colors.redAccent.withOpacity(0.8),
                 offset: const Offset(4, 4),
                 blurRadius: 16,
               ),
@@ -92,7 +94,17 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: <Widget>[
-                                          Text("Esperando Aprobación")
+                                          widget.estado
+                                              ? Text(
+                                                  "Aceptado",
+                                                  style: TextStyle(
+                                                      color: Colors.green),
+                                                )
+                                              : Text(
+                                                  "Esperando Aprobación",
+                                                  style: TextStyle(
+                                                      color: Colors.redAccent),
+                                                ),
                                         ],
                                       ),
                                     ),
