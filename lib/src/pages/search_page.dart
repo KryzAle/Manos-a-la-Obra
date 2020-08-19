@@ -167,7 +167,7 @@ class _SearchPageState extends State<SearchPage> {
               Icons.star_half,
               color: Colors.orangeAccent,
             )
-          : null);
+          : Container());
     } else {
       widgets.add(Text('Sin Puntuacion'));
     }
@@ -208,7 +208,7 @@ class _SearchPageState extends State<SearchPage> {
                             evidencia: servicio.evidencia,
                             puntajes: servicio.puntaje,
                             idServicio: servicio.id,
-                            idUsuario: servicio.idUsuario,
+                            idUsuario: servicio.usuario["id"],
                           ),
                         ));
                   },

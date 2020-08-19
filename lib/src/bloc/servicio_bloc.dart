@@ -43,7 +43,7 @@ class ServicioBloc {
       final servicios = new List<Servicio>();
       for (var item in event.documents) {
         final servicio = Servicio.fromJsonMap(item.data, item.documentID);
-        servicio.puntaje = 3.0;
+        servicio.puntaje = servicio.valoracionTotal!=0? servicio.valoracionTotal/servicio.popularidad: 0;
         servicios.add(servicio);
       }
       changeServicio(servicios);
