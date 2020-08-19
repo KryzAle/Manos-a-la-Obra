@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/bloc/servicio_bloc.dart';
+import 'package:manos_a_la_obra/src/models/direccion_model.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:image_picker/image_picker.dart';
@@ -24,6 +25,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
   Servicio servicio = new Servicio();
   final listaImagenes = new List<File>();
   List<Widget> children;
+  Direccion _direccion;
 
 //metodo para capturar la imagen con el picker, espera que el usuario selecciona la imagen de su Storage
   Future<void> captureImage(ImageSource imageSource) async {
@@ -88,6 +90,8 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
 
   @override
   Widget build(BuildContext context) {
+    final direccionBloc = Provider.direccion(context);
+
     //se genera la lista de widgets que retornan la imagen dentro de un Cliprrect
     children = new List.generate(count, (int i) {
       return Column(
@@ -197,6 +201,33 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                       }
                     },
                   ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Selecciona una direccion donde brindas tu servicio",
+                    style:
+                        TextStyle(fontSize: 17.0, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  StreamBuilder(
+                    stream: direccionBloc.getDireccion,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Direccion>> snapshot) {
+                      if (snapshot.hasData) {
+                        return DropdownButton(
+                          hint: Text('Seleccionar..'),
+                          value: _direccion,
+                          onChanged: (newValue) {
+                            setState(() {
+                              if (newValue != null) _direccion = newValue;
+                            });
+                          },
+                          items: _crearListaDirecciones(snapshot.data),
+                        );
+                      } else {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  ),
 
                   SizedBox(height: 20),
                   Row(
@@ -263,6 +294,23 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
     return items;
   }
 
+  List<DropdownMenuItem<dynamic>> _crearListaDirecciones(
+      List<Direccion> listaDirecciones) {
+    List<DropdownMenuItem<dynamic>> itemsLista = List();
+    for (var value in listaDirecciones) {
+      itemsLista.add(DropdownMenuItem(
+        child: Text(value.nombre),
+        value: value,
+      ));
+    }
+
+    itemsLista.add(DropdownMenuItem(
+      child: Text("+ Agregar una nueva dirección"),
+      value: null,
+    ));
+    return itemsLista;
+  }
+
   //Boton de Agregar Imagen
   Widget _buildActionButton({Key key, String text, Function onPressed}) {
     return FloatingActionButton(
@@ -287,75 +335,88 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
           SnackBar(content: Text('¡Ups! Olvidaste marcar una categoría'));
       Scaffold.of(context).showSnackBar(snackBar);
     } else {
-      //si pasa la primera validacion, se ejecutan las validaciones: validate de los textformfield del formulario
-      if (!formkey.currentState.validate()) return;
-      //en caso se pasaron las validaciones se guarda el estado del formulario
-      formkey.currentState.save();
-      //se recorre la lista de imagenes
+      if (_direccion == null) {
+        final snackBar =
+            SnackBar(content: Text('¡Ups! Olvidaste selecionar una dirección'));
+        Scaffold.of(context).showSnackBar(snackBar);
+      } else {
+        //si pasa la primera validacion, se ejecutan las validaciones: validate de los textformfield del formulario
+        if (!formkey.currentState.validate()) return;
+        //en caso se pasaron las validaciones se guarda el estado del formulario
+        formkey.currentState.save();
+        //se recorre la lista de imagenes
 
-      //se verifica que la lista de imagenes no este vacia
-      if (listaImagenes.isNotEmpty) {
-        showDialog(
-            barrierDismissible: false,
-            context: context,
-            builder: (BuildContext context) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Text(
-                      "Guardando...",
-                      style: Theme.of(context).textTheme.subtitle2.copyWith(
-                            color: Colors.white,
-                          ),
-                    ),
-                  ],
-                ),
-              );
-            });
-        //se obtiene el id del usuario actual a traves del userdataprovider
-        usuarioactual.getIdCurrentUser().then((value) async {
-          //se asigna el value que contiene el id ademas de la lista de paths de las imagenes
-          final usuario = usuarioBloc.usuario;
-
-          Map<String, dynamic> mapUsuario = {
-            "id": value,
-            "nombre": usuario.nombre,
-            "foto": usuario.foto,
-          };
-          servicio.usuario = new Map<String, dynamic>();
-          servicio.usuario = mapUsuario;
-          //se envia al bloc el objeto Servicio cargado con la informacion del formulario
-          await servicioBloc.insertarServicio(servicio, value, listaImagenes);
-          Navigator.of(context).pop();
+        //se verifica que la lista de imagenes no este vacia
+        if (listaImagenes.isNotEmpty) {
           showDialog(
               barrierDismissible: false,
               context: context,
               builder: (BuildContext context) {
-                return AlertDialog(
-                    title: Text("Guardado!"),
-                    content: Text("Servicio Registrado"),
-                    actions: <Widget>[
-                      //si la tarea se completa se muestra el boton de continuar para regresar al inicio
-                      FlatButton(
-                        child: Text('Continuar'),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
-                        },
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      SizedBox(
+                        height: 20.0,
                       ),
-                    ]);
+                      Text(
+                        "Guardando...",
+                        style: Theme.of(context).textTheme.subtitle2.copyWith(
+                              color: Colors.white,
+                            ),
+                      ),
+                    ],
+                  ),
+                );
               });
-          //se crea una instancia para modificar el usuario y convertirlo en proveedor al cambiar el atributo proveedor a true
-        });
-      } else {
-        final snackBar = SnackBar(
-            content: Text('¡Asegurate de adjutar al menos una Imagen!'));
-        Scaffold.of(context).showSnackBar(snackBar);
+          //se obtiene el id del usuario actual a traves del userdataprovider
+          usuarioactual.getIdCurrentUser().then((value) async {
+            //se asigna el value que contiene el id ademas de la lista de paths de las imagenes
+            final usuario = usuarioBloc.usuario;
+
+            Map<String, dynamic> mapUsuario = {
+              "id": value,
+              "nombre": usuario.nombre,
+              "foto": usuario.foto,
+            };
+            servicio.usuario = new Map<String, dynamic>();
+            servicio.usuario = mapUsuario;
+            //se envia al bloc el objeto Servicio cargado con la informacion del formulario
+            Map<String, dynamic> mapDireccion = {
+              "latitud": _direccion.latitud,
+              "longitud": _direccion.longitud,
+            };
+            servicio.direccion = new Map<String, dynamic>();
+            servicio.direccion = mapDireccion;
+
+            await servicioBloc.insertarServicio(servicio, value, listaImagenes);
+            Navigator.of(context).pop();
+            showDialog(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                      title: Text("Guardado!"),
+                      content: Text("Servicio Registrado"),
+                      actions: <Widget>[
+                        //si la tarea se completa se muestra el boton de continuar para regresar al inicio
+                        FlatButton(
+                          child: Text('Continuar'),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ]);
+                });
+            //se crea una instancia para modificar el usuario y convertirlo en proveedor al cambiar el atributo proveedor a true
+          });
+        } else {
+          final snackBar = SnackBar(
+              content: Text('¡Asegurate de adjutar al menos una Imagen!'));
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
       }
     }
   }

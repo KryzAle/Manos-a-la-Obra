@@ -25,6 +25,7 @@ class ServicioDataProvider {
       'evidencia': dataservicio.evidencia,
       'usuario': dataservicio.usuario,
       'nombre': dataservicio.nombre,
+      'direccion': dataservicio.direccion,
       'descripcion': dataservicio.descripcion,
       'fechaCreacion': Timestamp.fromDate(DateTime.now()),
       'fechaModificacion': dataservicio.fechaModificacion,
