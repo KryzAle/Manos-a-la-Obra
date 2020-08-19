@@ -24,6 +24,7 @@ class Servicio {
   int popularidad;
   double valoracionTotal;
   Map<String, dynamic> usuario;
+  Map<String, dynamic> direccion;
   Servicio(
       {this.nombre,
       this.disponibilidad = true,
@@ -34,7 +35,8 @@ class Servicio {
       this.fechaModificacion,
       this.popularidad = 0,
       this.valoracionTotal = 0,
-      this.usuario});
+      this.usuario,
+      this.direccion});
   Servicio.fromJsonMap(Map<String, dynamic> json, String id) {
     this.id = id;
     this.nombre = json['nombre'];
@@ -47,5 +49,6 @@ class Servicio {
     this.popularidad = json['popuparidad'];
     this.valoracionTotal = json['valoracionTotal'];
     this.usuario = json['usuario'];
+    this.direccion = json['direccion'];
   }
 }
