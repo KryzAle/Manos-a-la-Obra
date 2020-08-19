@@ -184,7 +184,7 @@ class _SearchPageState extends State<SearchPage> {
               Icons.star_half,
               color: Colors.orangeAccent,
             )
-          : null);
+          : Container());
     } else {
       widgets.add(Text('Sin Puntuacion'));
     }
@@ -194,45 +194,46 @@ class _SearchPageState extends State<SearchPage> {
   Widget _crearLista(BuildContext context) {
     final _servicioBloc = Provider.servicio(context);
     return StreamBuilder(
-      stream: _servicioBloc.getServiciosSearch,
-      builder: (BuildContext context, AsyncSnapshot<List<Servicio>> snapshot) {
-        if (snapshot.hasData) {
-          return ListView(
-              children: snapshot.data.map((servicio) {
-            return ListTile(
-              title: Text(
-                servicio.nombre.toUpperCase(),
-                style: Theme.of(context).textTheme.subtitle1,
-              ),
-              subtitle: Row(
-                children: _crearPuntaje(servicio.puntaje),
-              ),
-              leading: CircleAvatar(
-                backgroundImage: NetworkImage(
-                    'https://www.christiangarces.org/wp-content/uploads/2017/11/perfil-profesional.jpg'),
-              ),
-              trailing: Icon(Icons.arrow_right),
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetalleServicio(
-                        categoria: servicio.categoria,
-                        descripcion: servicio.descripcion,
-                        nombre: servicio.nombre,
-                        disponibilidad: servicio.disponibilidad,
-                        evidencia: servicio.evidencia,
-                        puntajes: servicio.puntaje,
-                        idServicio: servicio.id,
-                        idUsuario: servicio.usuario["id"],
-                      ),
-                    ));
-              },
-            );
-          }).toList());
-        } else {
-          return Center(
-            child: CircularProgressIndicator(),
+        stream: _servicioBloc.getServiciosSearch,
+        builder:
+            (BuildContext context, AsyncSnapshot<List<Servicio>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+                children: snapshot.data.map((servicio) {
+                return ListTile(
+                  title: Text(
+                    servicio.nombre.toUpperCase(),
+                    style: Theme.of(context).textTheme.subtitle1,
+                  ),
+                  subtitle: Row(
+                    children: _crearPuntaje(servicio.puntaje),
+                  ),
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(
+                        'https://www.christiangarces.org/wp-content/uploads/2017/11/perfil-profesional.jpg'),
+                  ),
+                  trailing: Icon(Icons.arrow_right),
+                  onTap: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DetalleServicio(
+                            categoria: servicio.categoria,
+                            descripcion: servicio.descripcion,
+                            nombre: servicio.nombre,
+                            disponibilidad: servicio.disponibilidad,
+                            evidencia: servicio.evidencia,
+                            puntajes: servicio.puntaje,
+                            idServicio: servicio.id,
+                            idUsuario: servicio.usuario["id"],
+                          ),
+                        ));
+                  },
+                );
+            }).toList());
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
           );
         }
       },
