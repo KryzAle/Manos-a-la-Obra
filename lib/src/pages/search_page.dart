@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/pages/detalle_servicio_page.dart';
+import 'package:manos_a_la_obra/src/widgets/tarjeta_servicios_search_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key key}) : super(key: key);
@@ -73,123 +74,108 @@ class _SearchPageState extends State<SearchPage> {
         enableDrag: false,
         context: context,
         builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ListTile(
-                  title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  InkWell(
-                    child: Text('Limpiar'),
-                  ),
-                  Text(
-                    'Filtros',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                  InkWell(
-                    child: Text('Hecho'),
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              )),
-              Divider(
-                color: Colors.grey,
-              ),
-              Expanded(
-                child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.0),
-                  child: ListView(
-                    children: <Widget>[
-                      Text(
-                        'Distancia',
-                        style: style,
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      StatefulBuilder(builder: (context, setState) {
-                        return Slider(
-                            value: _currentSliderValue,
-                            min: 0,
-                            max: 200,
-                            divisions: 5,
-                            label: _currentSliderValue.round().toString() + 'm',
-                            onChanged: (double value) {
+          return Container(
+            child: StatefulBuilder(builder: (context, setState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                ListTile(
+                    title: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    InkWell(
+                      child: Text('Limpiar'),
+                      onTap: (){
+                        setState(() {
+                          _currentSliderValue=0;
+                          isSelected.setAll(0, [false,false,false]);
+                          _servicioBloc.filtrarServiciosFiltros('');
+                        });
+                      },
+                    ),
+                    Text(
+                      'Filtros',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    InkWell(
+                      child: Text('Hecho'),
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                  ],
+                )),
+                Divider(
+                  color: Colors.grey,
+                ),
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.symmetric(horizontal: 20.0),
+                    child: ListView(
+                      children: <Widget>[
+                        // Text(
+                        //   'Distancia',
+                        //   style: style,
+                        // ),
+                        // SizedBox(
+                        //   height: 5.0,
+                        // ),
+                        //   Slider(
+                        //       value: _currentSliderValue,
+                        //       min: 0,
+                        //       max: 200,
+                        //       divisions: 5,
+                        //       label: _currentSliderValue.round().toString() + 'm',
+                        //       onChanged: (double value) {
+                        //         setState(() {
+                        //           _currentSliderValue = value;
+                        //         });
+                        //       }),
+                        Text(
+                          'Ordenar Por',
+                          style: style,
+                        ),
+                        SizedBox(
+                          height: 5.0,
+                        ),
+                          ToggleButtons(
+                            constraints: BoxConstraints(
+                              minHeight: 50.0
+                            ),
+                            children: [
+                              Container(child: Center(child: Text('Puntuacion')), width: (MediaQuery.of(context).size.width-50)/3,),
+                              Container(child: Center(child: Text('Disponibilidad')), width: (MediaQuery.of(context).size.width-50)/3,),
+                              Container(child: Center(child: Text('Popularidad')), width: (MediaQuery.of(context).size.width-50)/3,),
+                            ],
+                            onPressed: (int index) {
                               setState(() {
-                                _currentSliderValue = value;
-                              });
-                            });
-                      }),
-                      Text(
-                        'Ordenar Por',
-                        style: style,
-                      ),
-                      SizedBox(
-                        height: 5.0,
-                      ),
-                      StatefulBuilder(builder: (context, setState) {
-                        return ToggleButtons(
-                          constraints: BoxConstraints(
-                            minHeight: 50,
-                            minWidth: 120,
-                          ),
-                          children: [
-                            Text('Puntuacion'),
-                            Text('Disponibilidad'),
-                            Text('Popularidad'),
-                          ],
-                          onPressed: (int index) {
-                            setState(() {
-                              for (int buttonIndex = 0;
-                                  buttonIndex < isSelected.length;
-                                  buttonIndex++) {
-                                if (buttonIndex == index) {
-                                  isSelected[buttonIndex] = true;
-                                  print(filtros[buttonIndex]);
-                                  _servicioBloc.filtrarServiciosFiltros(
-                                      filtros[buttonIndex]);
-                                } else {
-                                  isSelected[buttonIndex] = false;
+                                for (int buttonIndex = 0;
+                                    buttonIndex < isSelected.length;
+                                    buttonIndex++) {
+                                  if (buttonIndex == index) {
+                                    isSelected[buttonIndex] = true;
+                                    _servicioBloc.filtrarServiciosFiltros(
+                                        filtros[buttonIndex]);
+                                  } else {
+                                    isSelected[buttonIndex] = false;
+                                  }
                                 }
-                              }
-                            });
-                          },
-                          isSelected: isSelected,
-                        );
-                      }),
-                    ],
+                              });
+                            },
+                            isSelected: isSelected,
+                          ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            );
+            }),
           );
         });
   }
 
-  List<Widget> _crearPuntaje(double starts) {
-    final widgets = <Widget>[];
-    int numeroStrella = starts.toInt();
-    if (numeroStrella > 0) {
-      for (var i = 0; i < numeroStrella; i++) {
-        widgets.add(Icon(
-          Icons.star,
-          color: Colors.orangeAccent,
-        ));
-      }
-      widgets.add(starts - numeroStrella != 0
-          ? Icon(
-              Icons.star_half,
-              color: Colors.orangeAccent,
-            )
-          : Container());
-    } else {
-      widgets.add(Text('Sin Puntuacion'));
-    }
-    return widgets;
-  }
+  
 
   Widget _crearLista(BuildContext context) {
     final _servicioBloc = Provider.servicio(context);
@@ -200,20 +186,7 @@ class _SearchPageState extends State<SearchPage> {
           if (snapshot.hasData) {
             return ListView(
                 children: snapshot.data.map((servicio) {
-                return ListTile(
-                  title: Text(
-                    servicio.nombre.toUpperCase(),
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                  subtitle: Row(
-                    children: _crearPuntaje(servicio.puntaje),
-                  ),
-                  leading: CircleAvatar(
-                    backgroundImage: NetworkImage(
-                        'https://www.christiangarces.org/wp-content/uploads/2017/11/perfil-profesional.jpg'),
-                  ),
-                  trailing: Icon(Icons.arrow_right),
-                  onTap: () {
+                  return TarjetaServiciosSearch(servicio: servicio,funcion: (){
                     Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -228,8 +201,7 @@ class _SearchPageState extends State<SearchPage> {
                             idUsuario: servicio.usuario["id"],
                           ),
                         ));
-                  },
-                );
+                  },);
             }).toList());
           } else {
             return Center(

@@ -47,7 +47,7 @@ class Servicio {
     this.fechaCreacion = json['fechaCreacion'];
     this.fechaModificacion = json['fechaModificacion'];
     this.popularidad = json['popuparidad'];
-    this.valoracionTotal = json['valoracionTotal'];
+    this.valoracionTotal = json['valoracionTotal']/1;
     this.usuario = json['usuario'];
     this.direccion = json['direccion'];
   }
