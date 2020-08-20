@@ -81,22 +81,25 @@ class ServicioBloc {
     }
   }
   void filtrarServiciosFiltros(String filtros){
+    print(_filtrado.elementAt(1).nombre);
     List<Servicio> _filtro = List<Servicio>();
     if(filtros!=''){
       switch (filtros) {
         case 'puntuacion':
-          print('fitrando por puntuacion');
-          
+          _filtro.addAll(_filtrado);
+          _filtro.sort((a,b){
+            return b.puntaje.compareTo(a.puntaje);
+          });
           break;
         case 'popularidad':
-          print('fitrando por polaridad');
-          _filtro = _filtrado;
+          _filtro.addAll(_filtrado);
           _filtro.sort((a,b){
-            return b.nombre.toLowerCase().compareTo(a.nombre.toLowerCase());
+            print(a.popularidad);
+            print(b.popularidad);
+            return b.popularidad.compareTo(a.popularidad);
           });
           break;
         case 'disponibilidad':
-          print('fitrando por disponibilidad');
 
           for (var value in _filtrado) {
             if (value.disponibilidad==true) {
