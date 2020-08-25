@@ -27,7 +27,10 @@ class Solicitud {
   Map<String, dynamic> servicio;
 
   bool terminado;
-  bool cancelado;
+  bool canceladoCliente;
+  bool canceladoProveedor;
+  bool puntuacionPendiente;
+  bool puntuado;
 
   Solicitud({
     this.aceptado = false,
@@ -43,11 +46,15 @@ class Solicitud {
     this.cliente,
     this.servicio,
     this.terminado = false,
-    this.cancelado = false,
+    this.canceladoCliente = false,
+    this.canceladoProveedor = false,
+    this.puntuacionPendiente = false,
+    this.puntuado = false,
   });
   Solicitud.fromJsonMap(Map<String, dynamic> json, String id) {
     this.id = id;
     this.aceptado = json['aceptado'];
+    this.revisado = json['revisado'];
     this.descripcion = json['descripcion'];
     this.direccion = json['direccion'];
     this.fechaSolicitud = json['fechaSolicitud'];
@@ -59,6 +66,9 @@ class Solicitud {
     this.cliente = json['cliente'];
     this.servicio = json['servicio'];
     this.terminado = json['terminado'];
-    this.cancelado = json['cancelado'];
+    this.canceladoCliente = json['canceladoCliente'];
+    this.canceladoProveedor = json['canceladoProveedor'];
+    this.puntuacionPendiente = json['puntuacionPendiente'];
+    this.puntuado = json['puntuado'];
   }
 }

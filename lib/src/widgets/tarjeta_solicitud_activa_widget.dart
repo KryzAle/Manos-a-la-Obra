@@ -158,7 +158,7 @@ class _TarjetaSolicitudActivaWidgetState
                                       child: Text('Cancelar la solicitud'),
                                       onPressed: () {
                                         providerSolicitud.cancelarSolicitud(
-                                            widget.idSolicitudDoc);
+                                            widget.idSolicitudDoc, true);
                                         Navigator.of(context).pop();
                                       },
                                     ),
