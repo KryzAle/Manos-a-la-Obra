@@ -55,7 +55,7 @@ class MainDrawer extends StatelessWidget {
             title: Text('Mi Perfil'),
             leading: Icon(Icons.person_outline),
             onTap: (){
-              Navigator.pushNamed(context, 'perfil');
+              Navigator.popAndPushNamed(context, 'perfil');
             },
           ),
           ListTile(

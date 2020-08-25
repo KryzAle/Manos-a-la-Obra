@@ -198,7 +198,7 @@ class _SearchPageState extends State<SearchPage> {
                             evidencia: servicio.evidencia,
                             puntajes: servicio.puntaje,
                             idServicio: servicio.id,
-                            idUsuario: servicio.usuario["id"],
+                            usuario: servicio.usuario,
                           ),
                         ));
                   },);
