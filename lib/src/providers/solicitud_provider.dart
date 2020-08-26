@@ -60,6 +60,7 @@ class SolicitudDataProvider {
       'canceladoProveedor': datasolicitud.canceladoProveedor,
       'puntuacionPendiente': datasolicitud.puntuacionPendiente,
       'puntuado': datasolicitud.puntuado,
+      'razonCancelacion': datasolicitud.razonCancelacion,
     });
   }
 
@@ -98,9 +99,10 @@ class SolicitudDataProvider {
     }).then((value) => print("Solicitud Aceptada"));
   }
 
-  cancelarSolicitud(idSolicitud, proveedor) async {
+  cancelarSolicitud(idSolicitud, proveedor, razonCancelacion) async {
     await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
       proveedor ? "canceladoProveedor" : "canceladoCliente": true,
+      "razonCancelacion": razonCancelacion,
     }).then((value) => print("Solicitud Cancelada"));
   }
 }
