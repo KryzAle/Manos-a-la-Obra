@@ -42,6 +42,7 @@ dependencies:
   carousel_slider: ^2.2.1
   timeago: ^2.0.26
   intl: ^0.16.1
+  url_launcher: ^5.5.0
 
 
 

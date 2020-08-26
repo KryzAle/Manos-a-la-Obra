@@ -280,7 +280,8 @@ class _FormDireccionPageState extends State<FormDireccionPage> {
     }else{
       await direccionProvider.createDireccion(_direccion);
     }
-    Navigator.popUntil(context, ModalRoute.withName('mis_direcciones'));
+    Navigator.pop(context);
+    Navigator.pop(context);
   }
 
   Widget _crearCard() {

@@ -218,7 +218,12 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
                           value: _direccion,
                           onChanged: (newValue) {
                             setState(() {
-                              if (newValue != null) _direccion = newValue;
+                              if (newValue != ''){
+                                _direccion = newValue;
+                              }else{
+                                _direccion = null;
+                                Navigator.pushNamed(context, 'map',arguments: false);
+                              }
                             });
                           },
                           items: _crearListaDirecciones(snapshot.data),
@@ -306,7 +311,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
 
     itemsLista.add(DropdownMenuItem(
       child: Text("+ Agregar una nueva dirección"),
-      value: null,
+      value: '',
     ));
     return itemsLista;
   }
@@ -379,6 +384,7 @@ class _RegisterSolicitudesPageState extends State<RegisterSolicitudesPage> {
               "id": value,
               "nombre": usuario.nombre,
               "foto": usuario.foto,
+              "telefono" : usuario.telefono.replaceFirst("0", "593"),
             };
             servicio.usuario = new Map<String, dynamic>();
             servicio.usuario = mapUsuario;

@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/pages/solicitar_servicio_page.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetalleServicio extends StatefulWidget {
   final String idServicio;
@@ -11,7 +14,7 @@ class DetalleServicio extends StatefulWidget {
   final bool disponibilidad;
   final List evidencia;
   final double puntajes;
-  final String idUsuario;
+  final Map<String,dynamic> usuario;
   const DetalleServicio(
       {Key key,
       @required this.idServicio,
@@ -20,7 +23,7 @@ class DetalleServicio extends StatefulWidget {
       @required this.nombre,
       @required this.disponibilidad,
       @required this.evidencia,
-      @required this.idUsuario,
+      @required this.usuario,
       @required this.puntajes})
       : super(key: key);
 
@@ -30,7 +33,6 @@ class DetalleServicio extends StatefulWidget {
 
 class _DetalleServicioState extends State<DetalleServicio> {
   int _current = 0;
-
   List<String> imgList = [];
   String imgUrl;
   @override
@@ -313,7 +315,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                                     widget.descripcion,
                                                 evidenciaServicio:
                                                     widget.evidencia[0],
-                                                idProveedor: widget.idUsuario,
+                                                idProveedor: widget.usuario["id"],
                                                 nombreServicio: widget.nombre,
                                               ),
                                             ));
@@ -352,22 +354,42 @@ class _DetalleServicioState extends State<DetalleServicio> {
             Positioned(
               top: (MediaQuery.of(context).size.width / 1.2) - 24.0 - 35,
               right: 35,
-              child: Card(
-                color: Colors.green,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50.0)),
-                elevation: 10.0,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  child: Center(
-                    child: Icon(
-                      Icons.call,
-                      color: Colors.white,
-                      size: 30,
+              child: InkWell(
+                child: Card(
+                  color: Colors.green,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0)),
+                  elevation: 10.0,
+                  child: Container(
+                    width: 60,
+                    height: 60,
+                    child: Center(
+                      child: Icon(
+                        Icons.sms,
+                        color: Colors.white,
+                        size: 30,
+                      ),
                     ),
                   ),
                 ),
+                onTap: (){
+                  try {
+                  _launchWhatsApp();
+                    
+                  } catch (e) {
+                    showDialog(
+                    context: context,
+                    child: AlertDialog(
+                      elevation: 2.0,
+                      content: Text("A ocurrido un Error"),
+                      title: Icon(Icons.error_outline,size: 70.0, color: Colors.red,),
+                      actions: <Widget>[
+                        FlatButton(
+                            onPressed: () => Navigator.of(context).pop(), child: Text('Ok'))
+                      ],
+                    ));
+                  }
+                },
               ),
             ),
             Padding(
@@ -455,5 +477,25 @@ class _DetalleServicioState extends State<DetalleServicio> {
         imgList = urlFiles;
       });
     }
+  }
+
+  Future<void> _launchWhatsApp() async{
+    String url() {
+    if (Platform.isIOS) {
+      return "whatsapp://wa.me/${widget.usuario["telefono"]}}";
+    } else {
+      return "whatsapp://send?phone=${widget.usuario["telefono"]}";
+    }
+  }
+    if(await canLaunch(url())){
+      await launch(
+        url(),
+        forceSafariVC: false,
+        forceWebView: false,
+      );
+    }else{
+      throw 'No se puede Lanzar WhatsApp';
+    }
+
   }
 }
