@@ -31,6 +31,8 @@ class TarjetaSolicitudActivaWidget extends StatefulWidget {
 class _TarjetaSolicitudActivaWidgetState
     extends State<TarjetaSolicitudActivaWidget> {
   final providerSolicitud = SolicitudDataProvider();
+  final formkey = GlobalKey<FormState>();
+  String razonCancelacion;
   String imgUrl;
 
   @override
@@ -152,14 +154,44 @@ class _TarjetaSolicitudActivaWidgetState
                             builder: (BuildContext context) {
                               return AlertDialog(
                                   title: Text("¿Esta seguro?"),
-                                  content: Text("La solicitud no se completó"),
+                                  content: Form(
+                                    key: formkey,
+                                    child: Container(
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                      padding: EdgeInsets.only(bottom: 10.0),
+                                      child: TextFormField(
+                                        decoration: InputDecoration(
+                                          labelText:
+                                              "Escriba la razón de la cancelación",
+                                          labelStyle: TextStyle(
+                                              color: Colors.black87,
+                                              fontSize: 13),
+                                          hintText:
+                                              "Ejemplo: No puedo movilizarme a brindar el servicio",
+                                          hintStyle: TextStyle(fontSize: 12.0),
+                                          border: OutlineInputBorder(),
+                                        ),
+                                        initialValue: razonCancelacion,
+                                        maxLines: 5,
+                                        onSaved: (value) {
+                                          razonCancelacion = value;
+                                        },
+                                        validator: (value) {
+                                          if (value.length < 10) {
+                                            return 'Debe ser mayor a 10 caracteres';
+                                          } else {
+                                            return null;
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
                                   actions: <Widget>[
                                     FlatButton(
                                       child: Text('Cancelar la solicitud'),
                                       onPressed: () {
-                                        providerSolicitud.cancelarSolicitud(
-                                            widget.idSolicitudDoc);
-                                        Navigator.of(context).pop();
+                                        _submit(context);
                                       },
                                     ),
                                     FlatButton(
@@ -243,5 +275,14 @@ class _TarjetaSolicitudActivaWidgetState
         imgUrl = fileURL;
       });
     }
+  }
+
+  void _submit(BuildContext context) {
+    if (!formkey.currentState.validate()) return;
+    formkey.currentState.save();
+
+    providerSolicitud.cancelarSolicitud(
+        widget.idSolicitudDoc, true, razonCancelacion);
+    Navigator.of(context).pop();
   }
 }

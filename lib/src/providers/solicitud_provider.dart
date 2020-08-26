@@ -13,6 +13,10 @@ class SolicitudDataProvider {
     return Firestore.instance
         .collection('solicitudes')
         .where('id-cliente', isEqualTo: idUsuario)
+        .where("terminado", isEqualTo: false)
+        .where("canceladoProveedor", isEqualTo: false)
+        .where("canceladoCliente", isEqualTo: false)
+        .orderBy("fechaSolicitud", descending: true)
         .snapshots();
   }
 
@@ -31,7 +35,8 @@ class SolicitudDataProvider {
         .where('id-proveedor', isEqualTo: idUsuario)
         .where("aceptado", isEqualTo: true)
         .where("terminado", isEqualTo: false)
-        .where("cancelado", isEqualTo: false)
+        .where("canceladoProveedor", isEqualTo: false)
+        .where("canceladoCliente", isEqualTo: false)
         .orderBy("fechaInicio", descending: true)
         .snapshots();
   }
@@ -51,7 +56,11 @@ class SolicitudDataProvider {
       'cliente': datasolicitud.cliente,
       'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
-      'cancelado': datasolicitud.cancelado,
+      'canceladoCliente': datasolicitud.canceladoCliente,
+      'canceladoProveedor': datasolicitud.canceladoProveedor,
+      'puntuacionPendiente': datasolicitud.puntuacionPendiente,
+      'puntuado': datasolicitud.puntuado,
+      'razonCancelacion': datasolicitud.razonCancelacion,
     });
   }
 
@@ -90,9 +99,10 @@ class SolicitudDataProvider {
     }).then((value) => print("Solicitud Aceptada"));
   }
 
-  cancelarSolicitud(idSolicitud) async {
+  cancelarSolicitud(idSolicitud, proveedor, razonCancelacion) async {
     await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
-      "cancelado": true,
+      proveedor ? "canceladoProveedor" : "canceladoCliente": true,
+      "razonCancelacion": razonCancelacion,
     }).then((value) => print("Solicitud Cancelada"));
   }
 }
