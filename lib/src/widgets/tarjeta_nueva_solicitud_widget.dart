@@ -1,26 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/pages/detalle_nueva_solicitud_page.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class TarjetaNuevaSolicitudWidget extends StatefulWidget {
-  final idSolicitudDoc;
-  final descripcion;
-  final estado;
-  final fechaSolicitud;
-  final image;
-  final nombreServicio;
-  final nombreCliente;
-  final fotoCliente;
+  final Solicitud solicitud;
   TarjetaNuevaSolicitudWidget({
     Key key,
-    @required this.idSolicitudDoc,
-    @required this.descripcion,
-    @required this.estado,
-    @required this.fechaSolicitud,
-    @required this.image,
-    @required this.nombreServicio,
-    @required this.nombreCliente,
-    @required this.fotoCliente,
+    @required this.solicitud,
   }) : super(key: key);
 
   @override
@@ -35,13 +23,13 @@ class _TarjetaNuevaSolicitudWidgetState
 
   @override
   Widget build(BuildContext context) {
-    _obtenerUrlImagen(widget.fotoCliente);
+    _obtenerUrlImagen(widget.solicitud.cliente["foto"]);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: InkWell(
         splashColor: Colors.transparent,
         onTap: () {
-          //callback();
+          _irDetalleSolicitud(context, widget.solicitud);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -88,7 +76,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      widget.nombreCliente,
+                                      widget.solicitud.cliente["nombre"],
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -103,7 +91,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                         children: <Widget>[
                                           Flexible(
                                             child: new Text(
-                                              widget.descripcion,
+                                              widget.solicitud.descripcion,
                                             ),
                                           ),
                                         ],
@@ -120,10 +108,11 @@ class _TarjetaNuevaSolicitudWidgetState
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
                               children: <Widget>[
-
                                 Text(
                                   timeago
-                                      .format(widget.fechaSolicitud.toDate(),
+                                      .format(
+                                          widget.solicitud.fechaSolicitud
+                                              .toDate(),
                                           locale: 'es')
                                       .toString(),
                                   textAlign: TextAlign.left,
@@ -135,7 +124,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                   height: 5.0,
                                 ),
                                 Text(
-                                  widget.nombreServicio,
+                                  widget.solicitud.servicio["nombre"],
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w600,
@@ -170,7 +159,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                       child: Text('Eliminar'),
                                       onPressed: () {
                                         providerSolicitud.rechazarSolicitud(
-                                            widget.idSolicitudDoc);
+                                            widget.solicitud.id);
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -214,7 +203,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                       child: Text('Aceptar'),
                                       onPressed: () {
                                         providerSolicitud.aceptarSolicitud(
-                                            widget.idSolicitudDoc);
+                                            widget.solicitud.id);
                                         Navigator.popAndPushNamed(
                                             context, "mis_solicitudes_activas");
                                       },
@@ -255,5 +244,15 @@ class _TarjetaNuevaSolicitudWidgetState
         imgUrl = fileURL;
       });
     }
+  }
+
+  void _irDetalleSolicitud(BuildContext context, Solicitud misolicitud) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (c) {
+          return DetalleNuevaSolicitudPage(misolicitud);
+        },
+      ),
+    );
   }
 }

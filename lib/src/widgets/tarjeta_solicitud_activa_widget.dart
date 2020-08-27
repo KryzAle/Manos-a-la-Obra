@@ -1,26 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/pages/detalle_nueva_solicitud_page.dart';
+import 'package:manos_a_la_obra/src/pages/detalle_solicitud_activa_page.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class TarjetaSolicitudActivaWidget extends StatefulWidget {
-  final idSolicitudDoc;
-  final descripcion;
-  final estado;
-  final fechaInicio;
-  final image;
-  final nombreServicio;
-  final nombreCliente;
-  final fotoCliente;
+  final Solicitud solicitud;
+
   TarjetaSolicitudActivaWidget({
     Key key,
-    @required this.idSolicitudDoc,
-    @required this.descripcion,
-    @required this.estado,
-    @required this.fechaInicio,
-    @required this.image,
-    @required this.nombreServicio,
-    @required this.nombreCliente,
-    @required this.fotoCliente,
+    @required this.solicitud,
   }) : super(key: key);
 
   @override
@@ -37,13 +27,13 @@ class _TarjetaSolicitudActivaWidgetState
 
   @override
   Widget build(BuildContext context) {
-    _obtenerUrlImagen(widget.fotoCliente);
+    _obtenerUrlImagen(widget.solicitud.cliente["foto"]);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: InkWell(
         splashColor: Colors.transparent,
         onTap: () {
-          //callback();
+          _irDetalleSolicitud(context, widget.solicitud);
         },
         child: Container(
           decoration: BoxDecoration(
@@ -90,7 +80,7 @@ class _TarjetaSolicitudActivaWidgetState
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      widget.nombreCliente,
+                                      widget.solicitud.cliente["nombre"],
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -105,7 +95,8 @@ class _TarjetaSolicitudActivaWidgetState
                                         children: <Widget>[
                                           Flexible(
                                             child: new Text(
-                                              widget.nombreServicio,
+                                              widget
+                                                  .solicitud.servicio["nombre"],
                                             ),
                                           ),
                                         ],
@@ -124,7 +115,8 @@ class _TarjetaSolicitudActivaWidgetState
                               children: <Widget>[
                                 Text(
                                   timeago
-                                      .format(widget.fechaInicio.toDate(),
+                                      .format(
+                                          widget.solicitud.fechaInicio.toDate(),
                                           locale: 'es')
                                       .toString(),
                                   textAlign: TextAlign.left,
@@ -235,7 +227,7 @@ class _TarjetaSolicitudActivaWidgetState
                                       child: Text('Solicitud Completada'),
                                       onPressed: () {
                                         providerSolicitud.finalizarSolicitud(
-                                            widget.idSolicitudDoc);
+                                            widget.solicitud.id);
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -282,7 +274,17 @@ class _TarjetaSolicitudActivaWidgetState
     formkey.currentState.save();
 
     providerSolicitud.cancelarSolicitud(
-        widget.idSolicitudDoc, true, razonCancelacion);
+        widget.solicitud.id, true, razonCancelacion);
     Navigator.of(context).pop();
+  }
+
+  void _irDetalleSolicitud(BuildContext context, Solicitud misolicitud) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (c) {
+          return DetalleSolicitudActivaPage(misolicitud);
+        },
+      ),
+    );
   }
 }

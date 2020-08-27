@@ -1,31 +1,19 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/pages/solicitar_servicio_page.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetalleServicio extends StatefulWidget {
-  final String idServicio;
-  final String categoria;
-  final String descripcion;
-  final String nombre;
-  final bool disponibilidad;
-  final List evidencia;
-  final double puntajes;
-  final Map<String,dynamic> usuario;
-  const DetalleServicio(
-      {Key key,
-      @required this.idServicio,
-      @required this.categoria,
-      @required this.descripcion,
-      @required this.nombre,
-      @required this.disponibilidad,
-      @required this.evidencia,
-      @required this.usuario,
-      @required this.puntajes})
-      : super(key: key);
+  final Servicio servicio;
+
+  const DetalleServicio({
+    Key key,
+    @required this.servicio,
+  }) : super(key: key);
 
   @override
   _DetalleServicioState createState() => _DetalleServicioState();
@@ -59,7 +47,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
             ))
         .toList();
 
-    _obtenerUrlImagen(widget.evidencia);
+    _obtenerUrlImagen(widget.servicio.evidencia);
     final double tempHeight = MediaQuery.of(context).size.height -
         (MediaQuery.of(context).size.width / 1.2) +
         24.0;
@@ -163,7 +151,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                             padding: const EdgeInsets.only(
                                 top: 32.0, left: 18, right: 16),
                             child: Text(
-                              widget.nombre,
+                              widget.servicio.nombre,
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
@@ -180,7 +168,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                widget.disponibilidad
+                                widget.servicio.disponibilidad
                                     ? Text(
                                         "Disponible",
                                         textAlign: TextAlign.left,
@@ -205,7 +193,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        widget.puntajes.toString(),
+                                        widget.servicio.puntaje.toString(),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w200,
@@ -246,7 +234,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                 padding: const EdgeInsets.only(
                                     left: 16, right: 16, top: 8, bottom: 8),
                                 child: Text(
-                                  widget.descripcion,
+                                  widget.servicio.descripcion,
                                   textAlign: TextAlign.justify,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w200,
@@ -310,13 +298,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                             MaterialPageRoute(
                                               builder: (context) =>
                                                   SolicitarServicioPage(
-                                                idServicio: widget.idServicio,
-                                                descripcionServicio:
-                                                    widget.descripcion,
-                                                evidenciaServicio:
-                                                    widget.evidencia[0],
-                                                idProveedor: widget.usuario["id"],
-                                                nombreServicio: widget.nombre,
+                                                servicio: widget.servicio,
                                               ),
                                             ));
                                       },

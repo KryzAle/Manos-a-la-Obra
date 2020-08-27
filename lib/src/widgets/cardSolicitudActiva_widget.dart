@@ -16,14 +16,7 @@ class CardSolicitudActiva extends StatelessWidget {
     final List<Widget> widgets = List();
     for (var pedido in lista) {
       final card = TarjetaSolicitudActivaWidget(
-        idSolicitudDoc: pedido.id,
-        descripcion: pedido.descripcion,
-        estado: pedido.aceptado,
-        fechaInicio: pedido.fechaInicio,
-        image: pedido.servicio["evidencia"],
-        nombreServicio: pedido.servicio["nombre"],
-        nombreCliente: pedido.cliente["nombre"],
-        fotoCliente: pedido.cliente["foto"],
+        solicitud: pedido,
       );
       widgets.add(card);
     }
