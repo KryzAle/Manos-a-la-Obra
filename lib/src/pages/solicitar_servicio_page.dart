@@ -106,7 +106,12 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
                             value: _direccion,
                             onChanged: (newValue) {
                               setState(() {
-                                if (newValue != null) _direccion = newValue;
+                                if (newValue != ''){
+                                _direccion = newValue;
+                              }else{
+                                _direccion = null;
+                                Navigator.pushNamed(context, 'map',arguments: false);
+                              }
                               });
                             },
                             items: _crearListaDirecciones(snapshot.data),
@@ -151,7 +156,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
 
     itemsLista.add(DropdownMenuItem(
       child: Text("+ Agregar una nueva dirección"),
-      value: null,
+      value: '',
     ));
     return itemsLista;
   }

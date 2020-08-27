@@ -94,7 +94,7 @@ class MapSampleState extends State<MapSample> {
             if(_edit){
               Navigator.pop(context,ubicacion);
             }else{
-              Navigator.pushNamed(context, 'form_direccion',arguments: direccion);
+              Navigator.popAndPushNamed(context, 'form_direccion',arguments: direccion);
             }
           }
         },
