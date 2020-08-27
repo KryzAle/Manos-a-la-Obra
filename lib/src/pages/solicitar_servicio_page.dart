@@ -222,12 +222,14 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
           Map<String, dynamic> mapCliente = {
             "nombre": usuario.nombre,
             "foto": usuario.foto,
+            "telefono": usuario.telefono.replaceFirst("0", "593"),
           };
           solicitud.cliente = new Map<String, dynamic>();
           solicitud.cliente = mapCliente;
           Map<String, dynamic> mapProveedor = {
             "nombre": widget.servicio.usuario["nombre"],
             "foto": widget.servicio.usuario["foto"],
+            "telefono": widget.servicio.usuario["telefono"],
           };
           solicitud.proveedor = new Map<String, dynamic>();
           solicitud.proveedor = mapProveedor;

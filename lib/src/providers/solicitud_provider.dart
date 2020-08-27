@@ -13,7 +13,7 @@ class SolicitudDataProvider {
     return Firestore.instance
         .collection('solicitudes')
         .where('id-cliente', isEqualTo: idUsuario)
-        .where("terminado", isEqualTo: false)
+        .where("puntuado", isEqualTo: false)
         .where("canceladoProveedor", isEqualTo: false)
         .where("canceladoCliente", isEqualTo: false)
         .orderBy("fechaSolicitud", descending: true)

@@ -9,23 +9,9 @@ import 'package:timeago/timeago.dart' as timeago;
 
 class TarjetaPedidosWidget extends StatefulWidget {
   final Solicitud solicitud;
-  /*final idDoc;
-  final descripcion;
-  final revisado;
-  final aceptado;
-  final fechaInicio;
-  final image;
-  final nombreServicio;*/
   TarjetaPedidosWidget({
     Key key,
     @required this.solicitud,
-    /*@required this.idDoc,
-    @required this.descripcion,
-    @required this.revisado,
-    @required this.aceptado,
-    @required this.fechaInicio,
-    @required this.image,
-    @required this.nombreServicio,*/
   }) : super(key: key);
 
   @override
@@ -113,23 +99,7 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: <Widget>[
-                                          widget.solicitud.revisado
-                                              ? widget.solicitud.aceptado
-                                                  ? Text(
-                                                      "Aceptado",
-                                                      style: TextStyle(
-                                                          color: Colors.green),
-                                                    )
-                                                  : Text(
-                                                      "Rechazado",
-                                                      style: TextStyle(
-                                                          color: Colors.red),
-                                                    )
-                                              : Text(
-                                                  "Esperando Aprobación",
-                                                  style: TextStyle(
-                                                      color: Colors.orange),
-                                                ),
+                                          _mostrarMensaje(),
                                         ],
                                       ),
                                     ),
@@ -274,5 +244,40 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
     providerServicio.cancelarSolicitud(
         widget.solicitud.id, true, razonCancelacion);
     Navigator.of(context).pop();
+  }
+
+  Widget _mostrarMensaje() {
+    Text _widget;
+    if(widget.solicitud.revisado){
+      if (widget.solicitud.aceptado ) {
+        if(widget.solicitud.terminado & !widget.solicitud.puntuado){
+          _widget = Text(
+            "Esperando Puntuacion",
+            style: TextStyle(
+                color: Colors.purple),
+            );
+        }else{
+        _widget = Text(
+          "Aprobado",
+          style: TextStyle(
+              color: Colors.green),
+          );
+        }
+      }else{
+        _widget = Text(
+        "Rechazado",
+        style: TextStyle(
+            color: Colors.red),
+        );
+      }
+      
+    }else{
+      _widget = Text(
+        "Esperando Aprobación",
+        style: TextStyle(
+            color: Colors.orange),
+      );
+    }
+    return _widget;
   }
 }

@@ -464,9 +464,9 @@ class _DetalleServicioState extends State<DetalleServicio> {
   Future<void> _launchWhatsApp() async{
     String url() {
     if (Platform.isIOS) {
-      return "whatsapp://wa.me/${widget.usuario["telefono"]}}";
+      return "whatsapp://wa.me/${widget.servicio.usuario["telefono"]}}";
     } else {
-      return "whatsapp://send?phone=${widget.usuario["telefono"]}";
+      return "whatsapp://send?phone=${widget.servicio.usuario["telefono"]}";
     }
   }
     if(await canLaunch(url())){

@@ -36,7 +36,7 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
                 width: double.infinity,
                 // height: double.infinity,
 
-                child: widget.solicitud.terminado
+                child: !widget.solicitud.puntuado&widget.solicitud.terminado
                     ? RaisedButton(
                         onPressed: () => {
                           showDialog(
@@ -106,7 +106,8 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
               child: SizedBox(
                 width: double.infinity,
-                child: OutlineButton(
+                child: !widget.solicitud.terminado 
+                ? OutlineButton(
                   onPressed: () => {
                     showDialog(
                         context: context,
@@ -185,7 +186,8 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
                   splashColor: Colors.red.shade200,
                   highlightElevation: 0,
                   highlightedBorderColor: Colors.red.shade400,
-                ),
+                )
+                : Container(),
               ),
             ),
             Padding(
