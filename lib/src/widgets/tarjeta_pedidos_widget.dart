@@ -1,27 +1,31 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/pages/detalle_mis_pedidos_page.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class TarjetaPedidosWidget extends StatefulWidget {
-  final idDoc;
+  final Solicitud solicitud;
+  /*final idDoc;
   final descripcion;
   final revisado;
   final aceptado;
   final fechaInicio;
   final image;
-  final nombreServicio;
+  final nombreServicio;*/
   TarjetaPedidosWidget({
     Key key,
-    @required this.idDoc,
+    @required this.solicitud,
+    /*@required this.idDoc,
     @required this.descripcion,
     @required this.revisado,
     @required this.aceptado,
     @required this.fechaInicio,
     @required this.image,
-    @required this.nombreServicio,
+    @required this.nombreServicio,*/
   }) : super(key: key);
 
   @override
@@ -37,21 +41,21 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _obtenerUrlImagen(widget.image);
+    _obtenerUrlImagen(widget.solicitud.servicio["evidencia"]);
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       child: InkWell(
         splashColor: Colors.transparent,
         onTap: () {
-          //callback();
+          _irDetalleSolicitud(context, widget.solicitud);
         },
         child: Container(
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(20.0)),
             boxShadow: <BoxShadow>[
-              widget.revisado
+              widget.solicitud.revisado
                   ? BoxShadow(
-                      color: widget.aceptado
+                      color: widget.solicitud.aceptado
                           ? Colors.greenAccent.withOpacity(0.9)
                           : Colors.red.withOpacity(0.8),
                       offset: const Offset(4, 4),
@@ -98,7 +102,7 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: <Widget>[
                                     Text(
-                                      widget.nombreServicio,
+                                      widget.solicitud.servicio["nombre"],
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
@@ -109,8 +113,8 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
                                         children: <Widget>[
-                                          widget.revisado
-                                              ? widget.aceptado
+                                          widget.solicitud.revisado
+                                              ? widget.solicitud.aceptado
                                                   ? Text(
                                                       "Aceptado",
                                                       style: TextStyle(
@@ -142,7 +146,9 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
                               children: <Widget>[
                                 Text(
                                   timeago
-                                      .format(widget.fechaInicio.toDate(),
+                                      .format(
+                                          widget.solicitud.fechaSolicitud
+                                              .toDate(),
                                           locale: 'es')
                                       .toString(),
                                   textAlign: TextAlign.left,
@@ -243,7 +249,7 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
 
   _obtenerUrlImagen(path) async {
     final providerServicio = ServicioDataProvider();
-    final fileURL = await providerServicio.getImageServicio(widget.image);
+    final fileURL = await providerServicio.getImageServicio(path);
     if (this.mounted) {
       setState(() {
         imgUrl = fileURL;
@@ -251,11 +257,22 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
     }
   }
 
+  void _irDetalleSolicitud(BuildContext context, Solicitud misolicitud) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (c) {
+          return DetalleMisPedidosPage(misolicitud);
+        },
+      ),
+    );
+  }
+
   void _submit(BuildContext context) {
     if (!formkey.currentState.validate()) return;
     formkey.currentState.save();
 
-    providerServicio.cancelarSolicitud(widget.idDoc, true, razonCancelacion);
+    providerServicio.cancelarSolicitud(
+        widget.solicitud.id, true, razonCancelacion);
     Navigator.of(context).pop();
   }
 }

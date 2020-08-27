@@ -10,19 +10,8 @@ import 'package:manos_a_la_obra/src/models/usuario_model.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 
 class SolicitarServicioPage extends StatefulWidget {
-  final idProveedor;
-  final idServicio;
-  final descripcionServicio;
-  final evidenciaServicio;
-  final nombreServicio;
-  SolicitarServicioPage(
-      {Key key,
-      @required this.idProveedor,
-      @required this.idServicio,
-      @required this.descripcionServicio,
-      @required this.evidenciaServicio,
-      @required this.nombreServicio})
-      : super(key: key);
+  final Servicio servicio;
+  SolicitarServicioPage({Key key, @required this.servicio}) : super(key: key);
 
   @override
   _SolicitarServicioPageState createState() => _SolicitarServicioPageState();
@@ -66,7 +55,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
                       padding:
                           const EdgeInsets.only(top: 32.0, left: 18, right: 16),
                       child: Text(
-                        widget.nombreServicio,
+                        widget.servicio.nombre,
                         textAlign: TextAlign.left,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -223,18 +212,24 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
         usuario.listen((event) async {
           Usuario usuario = new Usuario.fromMap(event.data);
           solicitud.idCliente = idCliente;
-          solicitud.idProveedor = widget.idProveedor;
-          solicitud.idServicio = widget.idServicio;
+          solicitud.idProveedor = widget.servicio.usuario["id"];
+          solicitud.idServicio = widget.servicio.id;
           Map<String, dynamic> mapCliente = {
             "nombre": usuario.nombre,
             "foto": usuario.foto,
           };
           solicitud.cliente = new Map<String, dynamic>();
           solicitud.cliente = mapCliente;
+          Map<String, dynamic> mapProveedor = {
+            "nombre": widget.servicio.usuario["nombre"],
+            "foto": widget.servicio.usuario["foto"],
+          };
+          solicitud.proveedor = new Map<String, dynamic>();
+          solicitud.proveedor = mapProveedor;
           Map<String, dynamic> mapServicio = {
-            "descripcion": widget.descripcionServicio,
-            "evidencia": widget.evidenciaServicio,
-            "nombre": widget.nombreServicio
+            "descripcion": widget.servicio.descripcion,
+            "evidencia": widget.servicio.evidencia[0],
+            "nombre": widget.servicio.nombre
           };
           solicitud.servicio = new Map<String, dynamic>();
           solicitud.servicio = mapServicio;

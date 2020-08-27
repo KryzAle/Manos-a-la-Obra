@@ -9,8 +9,8 @@ import 'package:manos_a_la_obra/src/pages/item_descripcion.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:manos_a_la_obra/src/widgets/item_header_solicitud.dart';
 
-class DetalleSolicitudPage extends StatefulWidget {
-  DetalleSolicitudPage(this.solicitud, {Key key}) : super(key: key);
+class DetalleSolicitudActivaPage extends StatefulWidget {
+  DetalleSolicitudActivaPage(this.solicitud, {Key key}) : super(key: key);
 
   final Solicitud solicitud;
 
@@ -18,8 +18,10 @@ class DetalleSolicitudPage extends StatefulWidget {
   _DetalleSolicitudPageState createState() => _DetalleSolicitudPageState();
 }
 
-class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
+class _DetalleSolicitudPageState extends State<DetalleSolicitudActivaPage> {
   final providerSolicitud = SolicitudDataProvider();
+  final formkey = GlobalKey<FormState>();
+  String razonCancelacion;
   Completer<GoogleMapController> _controller = Completer();
   Set<Marker> _markers = HashSet<Marker>();
 
@@ -42,7 +44,7 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
       child: SingleChildScrollView(
         child: Column(
           children: [
-            SolicitudDetalleHeader(widget.solicitud),
+            SolicitudDetalleHeader(widget.solicitud, false),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 32, 16, 0),
               child: SizedBox(
@@ -54,16 +56,15 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                              title: Text("Aceptar esta Solicitud"),
-                              content: Text("¿Esta seguro?"),
+                              title: Text("Finalizar esta Solicitud"),
+                              content: Text("¿La solicitud fue completada?"),
                               actions: <Widget>[
                                 FlatButton(
-                                  child: Text('Aceptar'),
+                                  child: Text('Solicitud Completada'),
                                   onPressed: () {
-                                    providerSolicitud
-                                        .aceptarSolicitud(widget.solicitud.id);
-                                    Navigator.popAndPushNamed(
-                                        context, "mis_solicitudes_activas");
+                                    providerSolicitud.finalizarSolicitud(
+                                        widget.solicitud.id);
+                                    Navigator.of(context).pop();
                                   },
                                 ),
                                 FlatButton(
@@ -81,12 +82,12 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                       Padding(
                         padding: const EdgeInsets.only(right: 8),
                         child: Icon(
-                          Icons.work,
+                          Icons.done_outline,
                           color: Colors.white,
                         ),
                       ),
                       Text(
-                        "Aceptar Solicitud",
+                        "Finalizar Solicitud",
                         style: TextStyle(color: Colors.white),
                       ),
                     ],
@@ -94,7 +95,7 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.all(12),
-                  color: Colors.orange,
+                  color: Colors.green,
                   highlightColor: Colors.orange.shade400,
                   splashColor: Colors.orange.shade400,
                   elevation: 8,
@@ -112,19 +113,47 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                              title: Text("Rechazar esta solicitud"),
-                              content: Text("¿Esta seguro?"),
+                              title: Text("¿Esta seguro?"),
+                              content: Form(
+                                key: formkey,
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(horizontal: 20),
+                                  padding: EdgeInsets.only(bottom: 10.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                      labelText:
+                                          "Escriba la razón de la cancelación",
+                                      labelStyle: TextStyle(
+                                          color: Colors.black87, fontSize: 13),
+                                      hintText:
+                                          "Ejemplo: No puedo movilizarme a brindar el servicio",
+                                      hintStyle: TextStyle(fontSize: 12.0),
+                                      border: OutlineInputBorder(),
+                                    ),
+                                    initialValue: razonCancelacion,
+                                    maxLines: 5,
+                                    onSaved: (value) {
+                                      razonCancelacion = value;
+                                    },
+                                    validator: (value) {
+                                      if (value.length < 10) {
+                                        return 'Debe ser mayor a 10 caracteres';
+                                      } else {
+                                        return null;
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
                               actions: <Widget>[
                                 FlatButton(
-                                  child: Text('Rechazar'),
+                                  child: Text('Cancelar la solicitud'),
                                   onPressed: () {
-                                    providerSolicitud
-                                        .rechazarSolicitud(widget.solicitud.id);
-                                    Navigator.of(context).pop();
+                                    _submit(context);
                                   },
                                 ),
                                 FlatButton(
-                                  child: Text('Cancelar'),
+                                  child: Text('Atrás'),
                                   onPressed: () {
                                     Navigator.of(context).pop();
                                   },
@@ -143,7 +172,7 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                         ),
                       ),
                       Text(
-                        "Rechazar Solicitud",
+                        "Cancelar Solicitud",
                         style: TextStyle(color: Colors.black),
                       ),
                     ],
@@ -151,12 +180,12 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(4)),
                   padding: const EdgeInsets.all(12),
-                  borderSide: BorderSide(color: Colors.orange, width: 4),
+                  borderSide: BorderSide(color: Colors.red[200], width: 4),
                   color: Colors.white,
                   highlightColor: Colors.white70,
-                  splashColor: Colors.orange.shade200,
+                  splashColor: Colors.red.shade200,
                   highlightElevation: 0,
-                  highlightedBorderColor: Colors.orange.shade400,
+                  highlightedBorderColor: Colors.red.shade400,
                 ),
               ),
             ),
@@ -193,5 +222,14 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudPage> {
         ),
       ),
     );
+  }
+
+  void _submit(BuildContext context) {
+    if (!formkey.currentState.validate()) return;
+    formkey.currentState.save();
+
+    providerSolicitud.cancelarSolicitud(
+        widget.solicitud.id, true, razonCancelacion);
+    Navigator.of(context).pop();
   }
 }

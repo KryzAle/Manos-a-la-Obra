@@ -5,10 +5,10 @@ import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 class SolicitudBoxItem extends StatefulWidget {
   static const IMAGE_RATIO = 1.50;
 
-  SolicitudBoxItem(this.buildContext, this.solicitud, {this.width = 120});
+  SolicitudBoxItem(this.buildContext, this.solicitud, this.cliente);
   final BuildContext buildContext;
   final Solicitud solicitud;
-  final double width;
+  final cliente;
 
   @override
   _SolicitudBoxItemState createState() => _SolicitudBoxItemState();
@@ -19,9 +19,14 @@ class _SolicitudBoxItemState extends State<SolicitudBoxItem> {
 
   @override
   Widget build(BuildContext context) {
-    _obtenerUrlImagen(widget.solicitud.cliente["foto"]);
+    if (!widget.cliente) {
+      _obtenerUrlImagen(widget.solicitud.cliente["foto"]);
+    } else {
+      _obtenerUrlImagen(widget.solicitud.proveedor["foto"]);
+    }
 
-    double height = 150;
+    double height = 130;
+    double width = 120;
 
     return Material(
       borderRadius: BorderRadius.circular(20.0),
@@ -40,7 +45,7 @@ class _SolicitudBoxItemState extends State<SolicitudBoxItem> {
               ? Image.network(
                   imgUrl,
                   fit: BoxFit.cover,
-                  width: widget.width,
+                  width: width,
                   height: height,
                 )
               : null,

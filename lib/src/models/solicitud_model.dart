@@ -24,6 +24,7 @@ class Solicitud {
   String idProveedor;
   String idServicio;
   Map<String, dynamic> cliente;
+  Map<String, dynamic> proveedor;
   Map<String, dynamic> servicio;
 
   bool terminado;
@@ -45,11 +46,12 @@ class Solicitud {
     this.idProveedor,
     this.idServicio,
     this.cliente,
+    this.proveedor,
     this.servicio,
     this.terminado = false,
     this.canceladoCliente = false,
     this.canceladoProveedor = false,
-    this.puntuacionPendiente = false,
+    this.puntuacionPendiente = true,
     this.puntuado = false,
     this.razonCancelacion,
   });
@@ -66,6 +68,7 @@ class Solicitud {
     this.idProveedor = json['id-cliente'];
     this.idServicio = json['id-servicio'];
     this.cliente = json['cliente'];
+    this.proveedor = json['proveedor'];
     this.servicio = json['servicio'];
     this.terminado = json['terminado'];
     this.canceladoCliente = json['canceladoCliente'];

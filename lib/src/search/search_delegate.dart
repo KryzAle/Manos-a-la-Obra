@@ -74,14 +74,7 @@ class ServiciosSearch extends SearchDelegate {
                         context,
                         MaterialPageRoute(
                           builder: (context) => DetalleServicio(
-                            categoria: servicio.categoria,
-                            descripcion: servicio.descripcion,
-                            nombre: servicio.nombre,
-                            disponibilidad: servicio.disponibilidad,
-                            evidencia: servicio.evidencia,
-                            puntajes: servicio.puntaje,
-                            idServicio: servicio.id,
-                            idUsuario: servicio.usuario["id"],
+                            servicio: servicio,
                           ),
                         ));
                   },

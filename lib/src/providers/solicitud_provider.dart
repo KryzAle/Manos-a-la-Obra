@@ -54,6 +54,7 @@ class SolicitudDataProvider {
       'id-proveedor': datasolicitud.idProveedor,
       'id-servicio': datasolicitud.idServicio,
       'cliente': datasolicitud.cliente,
+      'proveedor': datasolicitud.proveedor,
       'servicio': datasolicitud.servicio,
       'terminado': datasolicitud.terminado,
       'canceladoCliente': datasolicitud.canceladoCliente,

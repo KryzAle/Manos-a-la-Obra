@@ -6,9 +6,10 @@ import 'package:manos_a_la_obra/src/widgets/item_solicitud_box.dart';
 import 'item_header_diagonal.dart';
 
 class SolicitudDetalleHeader extends StatefulWidget {
-  SolicitudDetalleHeader(this.solicitud);
+  SolicitudDetalleHeader(this.solicitud, this.cliente);
 
   final Solicitud solicitud;
+  final cliente;
 
   @override
   _SolicitudDetalleHeaderState createState() => _SolicitudDetalleHeaderState();
@@ -44,7 +45,7 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
                   child: SolicitudBoxItem(
                     context,
                     widget.solicitud,
-                    width: 150,
+                    true,
                   )),
               Expanded(
                 child: Padding(
@@ -53,45 +54,47 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.solicitud.cliente["nombre"],
+                        !widget.cliente
+                            ? widget.solicitud.cliente["nombre"]
+                            : widget.solicitud.proveedor["nombre"],
                         style: Theme.of(context).textTheme.headline6,
                         maxLines: 3,
                         overflow: TextOverflow.fade,
                       ),
-                      /*Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: RatingInformation(solicitud),
-                      ),*/
                       Padding(
                         padding: const EdgeInsets.only(top: 12),
                         child: Row(
                           children: [
-                            OutlineButton(
-                              onPressed: () => {},
-                              child: Row(
-                                children: <Widget>[
-                                  Icon(
-                                    Icons.location_on,
-                                    color: Theme.of(context)
-                                        .textTheme
-                                        .headline2
-                                        .color,
-                                  ),
-                                  Text("Ruta",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headline6),
-                                ],
-                              ),
-                              padding: const EdgeInsets.fromLTRB(6, 0, 12, 0),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
-                              borderSide:
-                                  BorderSide(color: Colors.black54, width: 2),
-                              highlightColor: Colors.white70,
-                              splashColor: Colors.black12,
-                              highlightElevation: 0,
-                            ),
+                            !widget.cliente
+                                ? OutlineButton(
+                                    onPressed: () => {},
+                                    child: Row(
+                                      children: <Widget>[
+                                        Icon(
+                                          Icons.location_on,
+                                          color: Theme.of(context)
+                                              .textTheme
+                                              .headline2
+                                              .color,
+                                        ),
+                                        Text("Ruta",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .headline6),
+                                      ],
+                                    ),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(6, 0, 12, 0),
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                    borderSide: BorderSide(
+                                        color: Colors.black54, width: 2),
+                                    highlightColor: Colors.white70,
+                                    splashColor: Colors.black12,
+                                    highlightElevation: 0,
+                                  )
+                                : SizedBox(width: 1),
                             Padding(padding: EdgeInsets.only(left: 8)),
                             OutlineButton(
                               onPressed: () => {},
