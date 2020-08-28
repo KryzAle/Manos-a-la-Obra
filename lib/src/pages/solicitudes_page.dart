@@ -70,7 +70,7 @@ class _SolicitudesPageState extends State<SolicitudesPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Text(
-                                  'Nuevas Solicitudes',
+                                  'Solicitudes Pendientes',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,
@@ -153,7 +153,7 @@ class _SolicitudesPageState extends State<SolicitudesPage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 8.0),
                                 child: Text(
-                                  'Mis Solicitudes',
+                                  'Solicitudes Activas',
                                   textAlign: TextAlign.left,
                                   style: TextStyle(
                                     fontWeight: FontWeight.normal,

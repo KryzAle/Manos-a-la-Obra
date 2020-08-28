@@ -81,7 +81,6 @@ class ServicioBloc {
     }
   }
   void filtrarServiciosFiltros(String filtros){
-    print(_filtrado.elementAt(1).nombre);
     List<Servicio> _filtro = List<Servicio>();
     if(filtros!=''){
       switch (filtros) {
@@ -94,8 +93,6 @@ class ServicioBloc {
         case 'popularidad':
           _filtro.addAll(_filtrado);
           _filtro.sort((a,b){
-            print(a.popularidad);
-            print(b.popularidad);
             return b.popularidad.compareTo(a.popularidad);
           });
           break;
