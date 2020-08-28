@@ -56,9 +56,9 @@ class _MyAppState extends State<MyApp> {
                 usuarioBloc.cargarUsuario();
                 direccionBloc.cargarDireccionUsuario();
                 serviciosBloc.cargarServiciosUsuario();
+                solicitudesBloc.cargarMisSolicitudesActivas();
                 solicitudesBloc.cargarSolicitudesUsuario();
                 solicitudesBloc.cargarNuevasSolicitudesUsuario();
-                solicitudesBloc.cargarMisSolicitudesActivas();
               }
               return MaterialApp(
                 theme: ThemeData(

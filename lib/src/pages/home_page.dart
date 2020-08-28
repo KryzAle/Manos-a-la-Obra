@@ -81,7 +81,7 @@ class _HomePageState extends State<HomePage> {
       ),
       BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Inicio')),
       BottomNavigationBarItem(
-          icon: Icon(Icons.work), title: Text('Solicitudes')),
+          icon: Icon(Icons.work), title: Text('Trabajos')),
     ];
   }
 

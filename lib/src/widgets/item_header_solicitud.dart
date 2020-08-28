@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:manos_a_la_obra/src/widgets/item_solicitud_box.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'item_header_diagonal.dart';
 
@@ -45,7 +48,7 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
                   child: SolicitudBoxItem(
                     context,
                     widget.solicitud,
-                    true,
+                    widget.cliente,
                   )),
               Expanded(
                 child: Padding(
@@ -67,7 +70,9 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
                           children: [
                             !widget.cliente
                                 ? OutlineButton(
-                                    onPressed: () => {},
+                                    onPressed: () => {
+                                      _launchGoogleMaps()
+                                    },
                                     child: Row(
                                       children: <Widget>[
                                         Icon(
@@ -97,7 +102,9 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
                                 : SizedBox(width: 1),
                             Padding(padding: EdgeInsets.only(left: 8)),
                             OutlineButton(
-                              onPressed: () => {},
+                              onPressed: () => {
+                                _launchWhatsApp()
+                              },
                               child: Row(
                                 children: <Widget>[
                                   Image(
@@ -146,7 +153,7 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
               image: imgUrl,
               fit: BoxFit.cover,
               width: screenWidth,
-              height: 260,
+              height: 150,
             )
           : null,
       color: const Color(0x00FFFFFF),
@@ -161,5 +168,46 @@ class _SolicitudDetalleHeaderState extends State<SolicitudDetalleHeader> {
         imgUrl = fileURL;
       });
     }
+  }
+  Future<void> _launchWhatsApp() async{
+    final telefono =  widget.cliente?widget.solicitud.proveedor["telefono"]:widget.solicitud.cliente["telefono"];
+    String url() {
+    if (Platform.isIOS) {
+      return "whatsapp://wa.me/$telefono";
+    } else {
+      return "whatsapp://send?phone=$telefono";
+    }
+  }
+    if(await canLaunch(url())){
+      await launch(
+        url(),
+        forceSafariVC: false,
+        forceWebView: false,
+      );
+    }else{
+      throw 'No se puede Lanzar WhatsApp';
+    }
+
+  }
+  Future<void> _launchGoogleMaps() async{
+    final latitud =  widget.solicitud.direccion["latitud"];
+    final longitud = widget.solicitud.direccion["longitud"];
+    String url() {
+    if (Platform.isIOS) {
+      return "https://www.google.com/maps/dir/?api=1&destination=$latitud, $longitud";
+    } else {
+      return "https://www.google.com/maps/dir/?api=1&destination=$latitud, $longitud";
+    }
+  }
+    if(await canLaunch(url())){
+      await launch(
+        url(),
+        forceSafariVC: false,
+        forceWebView: false,
+      );
+    }else{
+      throw 'No se puede Lanzar Google Maps';
+    }
+
   }
 }
