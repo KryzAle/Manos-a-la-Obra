@@ -1,4 +1,4 @@
-package com.example.manos_a_la_obra
+package com.ak.manos_a_la_obra
 
 import io.flutter.embedding.android.FlutterActivity
 

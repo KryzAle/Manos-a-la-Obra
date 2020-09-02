@@ -24,11 +24,11 @@ class _MyAppState extends State<MyApp> {
     cargarUsuario();
 
     super.initState();
-    /*final pushProvider = new PushNotificationProvider();
+    final pushProvider = new PushNotificationProvider();
     pushProvider.initNotifications();
     pushProvider.mensajeStream.listen((event) {
       print(event);
-    });*/
+    });
   }
 
   void cargarUsuario() async {
