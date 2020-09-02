@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:manos_a_la_obra/src/models/servicio_model.dart';
 import 'package:manos_a_la_obra/src/providers/servicio_provider.dart';
+import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
 import 'package:rxdart/rxdart.dart';
@@ -13,6 +14,7 @@ class ServicioBloc {
   final puntuacionProvider = new UsuarioProvider();
   final usuarioProvider = new UserDataProvider();
   final servicioProvider = ServicioDataProvider();
+  final solicitudProvider = SolicitudDataProvider();
   final _serviciosController = BehaviorSubject<List<Servicio>>();
   final _serviciosSearchController = BehaviorSubject<List<Servicio>>();
   final _serviciosUsuarioController = BehaviorSubject<List<Servicio>>();
@@ -136,5 +138,19 @@ class ServicioBloc {
     }
     dataservicio.evidencia = listaPaths;
     await servicioProvider.loadServicio("servicio", dataservicio, idUsuario);
+  }
+  Future<void> updateRateServicio(double rate, String id,String idSolicitud) async {
+    final servicio =servicios.firstWhere((element) => element.id == id);
+    rate = rate + servicio.valoracionTotal;
+    final popularidad = servicio.popularidad+1;
+    Map<String, dynamic> _datos = {
+      'valoracionTotal': rate,
+      'popuparidad' : popularidad,
+    };
+    await servicioProvider.updateRateServicio(_datos,id);
+    Map<String, dynamic> _datos2 = {
+      'puntuado': true,
+    };
+    await solicitudProvider.updatePuntuacionPendiente(_datos2, idSolicitud);
   }
 }

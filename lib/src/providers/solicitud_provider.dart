@@ -106,4 +106,11 @@ class SolicitudDataProvider {
       "razonCancelacion": razonCancelacion,
     }).then((value) => print("Solicitud Cancelada"));
   }
+  Future<bool> updatePuntuacionPendiente(Map<String, dynamic> datos,String id) async {
+    await Firestore.instance
+        .collection('solicitudes')
+        .document(id)
+        .updateData(datos);
+    return true;
+  }
 }
