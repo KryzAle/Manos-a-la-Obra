@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
+import 'package:manos_a_la_obra/src/providers/push_notification_provider.dart';
 import 'package:manos_a_la_obra/src/routes/routes.dart';
 
 void main() {
@@ -21,7 +22,13 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     cargarUsuario();
+
     super.initState();
+    /*final pushProvider = new PushNotificationProvider();
+    pushProvider.initNotifications();
+    pushProvider.mensajeStream.listen((event) {
+      print(event);
+    });*/
   }
 
   void cargarUsuario() async {

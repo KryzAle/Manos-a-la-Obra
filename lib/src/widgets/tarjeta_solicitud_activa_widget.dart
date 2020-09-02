@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
-import 'package:manos_a_la_obra/src/pages/detalle_nueva_solicitud_page.dart';
 import 'package:manos_a_la_obra/src/pages/detalle_solicitud_activa_page.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
