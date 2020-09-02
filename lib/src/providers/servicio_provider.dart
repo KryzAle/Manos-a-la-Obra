@@ -68,4 +68,11 @@ class ServicioDataProvider {
         .document(idDocument)
         .delete();
   }
+  Future<bool> updateRateServicio(Map<String, dynamic> datos,String id) async {
+    await Firestore.instance
+        .collection('servicio')
+        .document(id)
+        .updateData(datos);
+    return true;
+  }
 }

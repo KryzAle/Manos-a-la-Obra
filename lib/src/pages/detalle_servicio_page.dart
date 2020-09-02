@@ -193,7 +193,7 @@ class _DetalleServicioState extends State<DetalleServicio> {
                                   child: Row(
                                     children: <Widget>[
                                       Text(
-                                        widget.servicio.puntaje.toString(),
+                                        double.parse((widget.servicio.puntaje).toStringAsFixed(2)).toString(),
                                         textAlign: TextAlign.left,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w200,

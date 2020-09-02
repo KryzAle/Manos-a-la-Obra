@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:manos_a_la_obra/src/bloc/provider.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
 import 'package:manos_a_la_obra/src/pages/item_descripcion.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
@@ -17,12 +18,13 @@ class DetalleMisPedidosPage extends StatefulWidget {
 
 class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
   final providerSolicitud = SolicitudDataProvider();
-
+  double _rating=0.0;
   String razonCancelacion;
   final formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    final serviciosBloc =  Provider.servicio(context);
     return Material(
       borderRadius: BorderRadius.circular(8),
       clipBehavior: Clip.hardEdge,
@@ -44,7 +46,7 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                     title: Text(
-                                        "Puntue su experiencia con el servicio"),
+                                        "Califica tu experiencia con el servicio"),
                                     content: Padding(
                                       padding: const EdgeInsets.only(top: 4),
                                       child: Row(
@@ -52,10 +54,13 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
                                           SmoothStarRating(
                                             allowHalfRating: true,
                                             starCount: 5,
-                                            rating: 4.5,
+                                            rating: _rating,
                                             size: 50,
                                             color: Colors.orange,
                                             borderColor: Colors.yellow,
+                                            onRated: (value){
+                                              _rating=value;
+                                            },
                                           ),
                                         ],
                                       ),
@@ -63,7 +68,11 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
                                     actions: <Widget>[
                                       FlatButton(
                                         child: Text('Aceptar'),
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          serviciosBloc.updateRateServicio(_rating, widget.solicitud.idServicio,widget.solicitud.id);
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        },
                                       ),
                                       FlatButton(
                                         child: Text('Cancelar'),
