@@ -62,12 +62,13 @@ class PushNotificationProvider {
         <String, dynamic>{
           'notification': <String, dynamic>{
             'body': body,
-            'title': title
+            'title': title,
+            'sound': 'default',
           },
           'priority': 'high',
           'data': <String, dynamic>{
             'click_action': 'FLUTTER_NOTIFICATION_CLICK',
-            'ruta': ruta
+            'ruta': ruta,
           },
           'to': token,
         },

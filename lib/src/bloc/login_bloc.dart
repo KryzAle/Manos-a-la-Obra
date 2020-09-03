@@ -43,8 +43,12 @@ class LoginBloc with Validators {
 
   Future<bool> login() async {
     try {
-      final login =
-          await _usuarioProvider.signInWithCredentials(email, password);
+      final login = await _usuarioProvider.signInWithCredentials(email, password);
+      final token = await pushProvider.getTokenDevice();
+      Map<String, dynamic> _datos = {
+        'token_dispositivo': token,
+      };
+      userDataProvider.updateUserDoc(_datos);
       return login;
     } catch (e) {
       return Future.error(e);
@@ -53,11 +57,7 @@ class LoginBloc with Validators {
 
   Future<bool> isLogin() async {
     final login = await _usuarioProvider.isSignedIn();
-    final token = await pushProvider.getTokenDevice();
-    Map<String, dynamic> _datos = {
-      'token_dispositivo': token,
-    };
-    userDataProvider.updateUserDoc(_datos);
+
     return login;
   }
 
