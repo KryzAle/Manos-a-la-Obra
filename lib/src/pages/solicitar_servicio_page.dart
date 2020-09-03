@@ -250,7 +250,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
           solicitud.direccion = new Map<String, dynamic>();
           solicitud.direccion = mapDireccion;
 
-          await solicitudBloc.insertarSolicitud(solicitud);
+          await solicitudBloc.insertarSolicitud(solicitud,usuario.token_dispositivo);
           Navigator.of(context).pop();
           showDialog(
               barrierDismissible: false,

@@ -1,12 +1,14 @@
 import 'dart:async';
 
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/providers/push_notification_provider.dart';
 import 'package:manos_a_la_obra/src/providers/solicitud_provider.dart';
 import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 import 'package:manos_a_la_obra/src/providers/usuario_provider.dart';
 import 'package:rxdart/rxdart.dart';
 
 class SolicitudBloc {
+  final pushProvider = PushNotificationProvider();
   final puntuacionProvider = new UsuarioProvider();
   final usuarioProvider = new UserDataProvider();
   final solicitudProvider = SolicitudDataProvider();
@@ -87,7 +89,8 @@ class SolicitudBloc {
     });
   }
 
-  Future<void> insertarSolicitud(Solicitud datasolicitud) async {
+  Future<void> insertarSolicitud(Solicitud datasolicitud,String token) async {
     await solicitudProvider.loadSolicitud("solicitudes", datasolicitud);
+    pushProvider.sendNotifications('tienes una solicitud de ${datasolicitud.servicio['nombre']}', 'Nueva Solicitud', 'mis_nuevas_solicitudes', token);
   }
 }

@@ -18,8 +18,7 @@ class _MyAppState extends State<MyApp> {
   final loginBloc = new LoginBloc();
   String ruta = 'welcome';
   bool autenticado = false;
-  final GlobalKey<NavigatorState> navigatorKey =
-      new GlobalKey<NavigatorState>();
+  final GlobalKey<NavigatorState> navigatorKey =new GlobalKey<NavigatorState>();
 
   @override
   void initState() {

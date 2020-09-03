@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'dart:io';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -25,15 +26,11 @@ class PushNotificationProvider {
 
   initNotifications() {
     _firebaseMessaging.requestNotificationPermissions();
-    _firebaseMessaging.getToken().then((token) {
-      print(token);
-      //eF_Doz6sij8:APA91bGx-X0CQKLw2NMbW_nRZ-O-9z-doszMZjooV7uP-w_5cPKnw7M1b8GzuIumzIQqL0pQhkI0NAs81UD0VSJ16u_aGsDc6wLSacQm2fSuo_qQnNG7nkipaSOPC2nZlR5AqbTPkmPK
-    });
+    
     _firebaseMessaging.configure(
       onBackgroundMessage: onBackgroundMessage,
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage: $message");
-        _mensajesController.sink.add(message['data']['ruta']);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print("onLaunch: $message");
@@ -48,5 +45,37 @@ class PushNotificationProvider {
 
   dispose() {
     _mensajesController?.close();
+  }
+
+  sendNotifications(String body, String title, String ruta, String token) async {
+    final String serverToken =
+        'AAAAqvASkdk:APA91bGgEt74q3T-vK152YcQBiutI60ZkH0yAmH6Hjt3IkX41bEMj4MCFo_TutrP02zyYcJGeC_yXLdGW1Uu3nmZEKMGHYSmHFJYCfvWEF9R6r1mfiF8NANMuyhKbRbh5DtnGEOOHXCv';
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging();
+
+    await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverToken',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'notification': <String, dynamic>{
+            'body': body,
+            'title': title
+          },
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'ruta': ruta
+          },
+          'to': token,
+        },
+      ),
+    );
+  }
+
+  Future<String>getTokenDevice()async{
+   return await _firebaseMessaging.getToken();
   }
 }
