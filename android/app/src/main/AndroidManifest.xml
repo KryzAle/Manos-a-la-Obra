@@ -11,7 +11,7 @@
 
     <application
         android:name=".Application"
-        android:label="manos_a_la_obra"
+        android:label="Manos a la Obra"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

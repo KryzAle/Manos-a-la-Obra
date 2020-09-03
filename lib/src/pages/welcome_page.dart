@@ -56,7 +56,11 @@ class WelcomePage extends StatelessWidget {
 
   Widget _title(BuildContext context) {
     return Container(
-      child: Image(image: AssetImage('assets/logo.png')),
+      child: Image(
+        image: AssetImage('assets/logo.png'),
+        alignment: Alignment.center,
+        fit: BoxFit.cover,
+      ),
     );
   }
 

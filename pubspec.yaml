@@ -44,8 +44,12 @@ dependencies:
   intl: ^0.16.1
   url_launcher: ^5.5.0
   firebase_messaging: 
+  flutter_launcher_icons: "^0.7.3"
 
-
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/launcher.png"
 
 
 
