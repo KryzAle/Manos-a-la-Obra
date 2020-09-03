@@ -6,9 +6,11 @@ class Usuario {
   String cedula;
   String telefono;
   bool   proveedor;
-  Usuario({this.foto,this.nombre,this.cedula,this.proveedor,this.telefono});
+  String token_dispositivo;
+  Usuario({this.foto,this.nombre,this.cedula,this.proveedor,this.telefono,this.token_dispositivo});
   Usuario.fromMap(Map<String, dynamic> data) {
     this.foto = data['foto'] != null ?data['foto']:'';
+    this.token_dispositivo = data['token_dispositivo'] != null ?data['token_dispositivo']:'';
     this.nombre = data['nombre']!= null ?data['nombre']:'';
     this.cedula = data['cedula']!= null ?data['cedula']:'';
     this.telefono = data['telefono']!= null ?data['telefono']:'';

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:manos_a_la_obra/src/bloc/login_bloc.dart';
 import 'package:manos_a_la_obra/src/bloc/provider.dart';
+import 'package:manos_a_la_obra/src/providers/push_notification_provider.dart';
 import 'package:manos_a_la_obra/src/routes/routes.dart';
 
 void main() {
@@ -17,11 +18,21 @@ class _MyAppState extends State<MyApp> {
   final loginBloc = new LoginBloc();
   String ruta = 'welcome';
   bool autenticado = false;
+  final GlobalKey<NavigatorState> navigatorKey =new GlobalKey<NavigatorState>();
 
   @override
   void initState() {
     cargarUsuario();
+
     super.initState();
+    final pushProvider = new PushNotificationProvider();
+    pushProvider.initNotifications();
+    pushProvider.mensajeStream.listen((event) {
+      print(event);
+      if (event != null) {
+        navigatorKey.currentState.pushNamed(event);
+      }
+    });
   }
 
   void cargarUsuario() async {
@@ -61,6 +72,7 @@ class _MyAppState extends State<MyApp> {
                 solicitudesBloc.cargarNuevasSolicitudesUsuario();
               }
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 theme: ThemeData(
                   primaryColor: Colors.orangeAccent,
                   primarySwatch: Colors.orange,

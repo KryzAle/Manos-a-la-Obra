@@ -226,6 +226,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
           };
           solicitud.cliente = new Map<String, dynamic>();
           solicitud.cliente = mapCliente;
+          final proveedor = await usuarioactual.getUserToken(widget.servicio.usuario['id']);
           Map<String, dynamic> mapProveedor = {
             "nombre": widget.servicio.usuario["nombre"],
             "foto": widget.servicio.usuario["foto"],
@@ -250,7 +251,7 @@ class _SolicitarServicioPageState extends State<SolicitarServicioPage> {
           solicitud.direccion = new Map<String, dynamic>();
           solicitud.direccion = mapDireccion;
 
-          await solicitudBloc.insertarSolicitud(solicitud);
+          await solicitudBloc.insertarSolicitud(solicitud,proveedor.data['token_dispositivo']);
           Navigator.of(context).pop();
           showDialog(
               barrierDismissible: false,

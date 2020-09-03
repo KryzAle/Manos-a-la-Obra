@@ -3,8 +3,14 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:manos_a_la_obra/src/models/solicitud_model.dart';
+import 'package:manos_a_la_obra/src/models/usuario_model.dart';
+import 'package:manos_a_la_obra/src/providers/push_notification_provider.dart';
+import 'package:manos_a_la_obra/src/providers/user_data_provider.dart';
 
 class SolicitudDataProvider {
+  final usuarioProvider = UserDataProvider();
+  final pushProvider = PushNotificationProvider();
+
   Stream<QuerySnapshot> getSolicitudes() {
     return Firestore.instance.collection('solicitudes').snapshots();
   }
@@ -78,33 +84,49 @@ class SolicitudDataProvider {
         .delete();
   }
 
-  aceptarSolicitud(idSolicitud) async {
+  aceptarSolicitud(idSolicitud,String servicio, String id) async {
     await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
       "aceptado": true,
       "revisado": true,
       "fechaInicio": Timestamp.fromDate(DateTime.now())
     }).then((value) => print("Solicitud Aceptada"));
+    final cliente = await usuarioProvider.getUserToken(id);
+    pushProvider.sendNotifications('Tu solicitud para el servicio $servicio ha sido aceptada', 'Solicitud Aceptada', null, cliente.data['token_dispositivo']);
   }
 
-  rechazarSolicitud(idSolicitud) async {
+  rechazarSolicitud(idSolicitud,String servicio, String id) async {
     await Firestore.instance
         .document("solicitudes/" + idSolicitud)
         .updateData({"aceptado": false, "revisado": true}).then(
             (value) => print("Solicitud Rechazada"));
+    final cliente = await usuarioProvider.getUserToken(id);
+    pushProvider.sendNotifications('Tu solicitud para el servicio $servicio ha sido rechazada', 'Solicitud Rechazada', null, cliente.data['token_dispositivo']);
+    
   }
 
-  finalizarSolicitud(idSolicitud) async {
+  finalizarSolicitud(idSolicitud,String servicio, String id) async {
     await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
       "terminado": true,
       "fechaFin": Timestamp.fromDate(DateTime.now())
     }).then((value) => print("Solicitud Aceptada"));
+    final cliente = await usuarioProvider.getUserToken(id);
+    pushProvider.sendNotifications('Tu solicitud para el servicio $servicio ha finalizado', 'Puntuar el servicio', null, cliente.data['token_dispositivo']);
   }
 
-  cancelarSolicitud(idSolicitud, proveedor, razonCancelacion) async {
+  cancelarSolicitud(idSolicitud, proveedor, razonCancelacion,String servicio, String id) async {
     await Firestore.instance.document("solicitudes/" + idSolicitud).updateData({
       proveedor ? "canceladoProveedor" : "canceladoCliente": true,
       "razonCancelacion": razonCancelacion,
     }).then((value) => print("Solicitud Cancelada"));
+    String _mensaje='';
+    if(proveedor){
+      _mensaje='Tu solicitud para el servicio $servicio ha sido cancelada';
+
+    }else{
+      _mensaje = 'La solicitud para tu servicio $servicio ha sido cancelada';
+    }
+    final cliente = await usuarioProvider.getUserToken(id);
+    pushProvider.sendNotifications(_mensaje, 'Solicitud Cancelada', null, cliente.data['token_dispositivo']);
   }
   Future<bool> updatePuntuacionPendiente(Map<String, dynamic> datos,String id) async {
     await Firestore.instance

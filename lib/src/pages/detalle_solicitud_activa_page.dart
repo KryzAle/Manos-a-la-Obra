@@ -63,7 +63,7 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudActivaPage> {
                                   child: Text('Solicitud Completada'),
                                   onPressed: () {
                                     providerSolicitud.finalizarSolicitud(
-                                        widget.solicitud.id);
+                                        widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                     Navigator.of(context).pop();
                                   },
                                 ),
@@ -229,7 +229,7 @@ class _DetalleSolicitudPageState extends State<DetalleSolicitudActivaPage> {
     formkey.currentState.save();
 
     providerSolicitud.cancelarSolicitud(
-        widget.solicitud.id, true, razonCancelacion);
+        widget.solicitud.id, true, razonCancelacion,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
     Navigator.of(context).pop();
   }
 }
