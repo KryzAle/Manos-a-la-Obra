@@ -242,7 +242,7 @@ class _TarjetaPedidosWidgetState extends State<TarjetaPedidosWidget> {
     formkey.currentState.save();
 
     providerServicio.cancelarSolicitud(
-        widget.solicitud.id, true, razonCancelacion);
+        widget.solicitud.id, false, razonCancelacion,widget.solicitud.servicio['nombre'],widget.solicitud.idProveedor);
     Navigator.of(context).pop();
   }
 

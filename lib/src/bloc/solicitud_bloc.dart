@@ -91,6 +91,6 @@ class SolicitudBloc {
 
   Future<void> insertarSolicitud(Solicitud datasolicitud,String token) async {
     await solicitudProvider.loadSolicitud("solicitudes", datasolicitud);
-    pushProvider.sendNotifications('tienes una solicitud de ${datasolicitud.servicio['nombre']}', 'Nueva Solicitud', 'mis_nuevas_solicitudes', token);
+    pushProvider.sendNotifications('Tienes una solicitud para tu servicio ${datasolicitud.servicio['nombre']}', 'Nueva Solicitud', 'mis_nuevas_solicitudes', token);
   }
 }

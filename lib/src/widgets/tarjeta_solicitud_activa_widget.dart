@@ -226,7 +226,7 @@ class _TarjetaSolicitudActivaWidgetState
                                       child: Text('Solicitud Completada'),
                                       onPressed: () {
                                         providerSolicitud.finalizarSolicitud(
-                                            widget.solicitud.id);
+                                            widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -273,7 +273,7 @@ class _TarjetaSolicitudActivaWidgetState
     formkey.currentState.save();
 
     providerSolicitud.cancelarSolicitud(
-        widget.solicitud.id, true, razonCancelacion);
+        widget.solicitud.id, true, razonCancelacion,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
     Navigator.of(context).pop();
   }
 

@@ -159,7 +159,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                       child: Text('Eliminar'),
                                       onPressed: () {
                                         providerSolicitud.rechazarSolicitud(
-                                            widget.solicitud.id);
+                                            widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                         Navigator.of(context).pop();
                                       },
                                     ),
@@ -203,7 +203,7 @@ class _TarjetaNuevaSolicitudWidgetState
                                       child: Text('Aceptar'),
                                       onPressed: () {
                                         providerSolicitud.aceptarSolicitud(
-                                            widget.solicitud.id);
+                                            widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                         Navigator.popAndPushNamed(
                                             context, "mis_solicitudes_activas");
                                       },

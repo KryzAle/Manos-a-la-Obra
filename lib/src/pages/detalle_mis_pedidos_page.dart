@@ -209,9 +209,9 @@ class _DetalleSolicitudPageState extends State<DetalleMisPedidosPage> {
   void _submit(BuildContext context) {
     if (!formkey.currentState.validate()) return;
     formkey.currentState.save();
-
+    print(widget.solicitud.idProveedor);
     providerSolicitud.cancelarSolicitud(
-        widget.solicitud.id, true, razonCancelacion);
+        widget.solicitud.id, false, razonCancelacion,widget.solicitud.servicio['nombre'],widget.solicitud.idProveedor);
     Navigator.of(context).pop();
   }
 }

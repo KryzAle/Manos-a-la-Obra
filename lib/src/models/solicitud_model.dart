@@ -65,7 +65,7 @@ class Solicitud {
     this.fechaInicio = json['fechaInicio'];
     this.fechaFin = json['fechaFin'];
     this.idCliente = json['id-cliente'];
-    this.idProveedor = json['id-cliente'];
+    this.idProveedor = json['id-proveedor'];
     this.idServicio = json['id-servicio'];
     this.cliente = json['cliente'];
     this.proveedor = json['proveedor'];

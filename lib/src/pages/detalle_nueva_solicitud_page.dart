@@ -61,7 +61,7 @@ class _DetalleSolicitudPageState extends State<DetalleNuevaSolicitudPage> {
                                   child: Text('Aceptar'),
                                   onPressed: () {
                                     providerSolicitud
-                                        .aceptarSolicitud(widget.solicitud.id);
+                                        .aceptarSolicitud(widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                     Navigator.popAndPushNamed(
                                         context, "mis_solicitudes_activas");
                                   },
@@ -119,7 +119,7 @@ class _DetalleSolicitudPageState extends State<DetalleNuevaSolicitudPage> {
                                   child: Text('Rechazar'),
                                   onPressed: () {
                                     providerSolicitud
-                                        .rechazarSolicitud(widget.solicitud.id);
+                                        .rechazarSolicitud(widget.solicitud.id,widget.solicitud.servicio['nombre'],widget.solicitud.idCliente);
                                     Navigator.of(context).pop();
                                   },
                                 ),

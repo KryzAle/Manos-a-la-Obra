@@ -28,6 +28,10 @@ class UserDataProvider {
     FirebaseUser user = await _auth.currentUser();
     return user.uid;
   }
+  Future<DocumentSnapshot> getUserToken(String id) async {
+    final Firestore _firestore = Firestore.instance;
+    return _firestore.collection('usuario').document(id).get();
+  }
 
   Future<void> saveImageUser(
     File data,
