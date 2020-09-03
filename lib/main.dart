@@ -18,6 +18,8 @@ class _MyAppState extends State<MyApp> {
   final loginBloc = new LoginBloc();
   String ruta = 'welcome';
   bool autenticado = false;
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
 
   @override
   void initState() {
@@ -28,6 +30,9 @@ class _MyAppState extends State<MyApp> {
     pushProvider.initNotifications();
     pushProvider.mensajeStream.listen((event) {
       print(event);
+      if (event != null) {
+        navigatorKey.currentState.pushNamed(event);
+      }
     });
   }
 
@@ -68,6 +73,7 @@ class _MyAppState extends State<MyApp> {
                 solicitudesBloc.cargarNuevasSolicitudesUsuario();
               }
               return MaterialApp(
+                navigatorKey: navigatorKey,
                 theme: ThemeData(
                   primaryColor: Colors.orangeAccent,
                   primarySwatch: Colors.orange,

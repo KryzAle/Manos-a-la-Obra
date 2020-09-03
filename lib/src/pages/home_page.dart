@@ -80,8 +80,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Pedidos'),
       ),
       BottomNavigationBarItem(icon: Icon(Icons.home), title: Text('Inicio')),
-      BottomNavigationBarItem(
-          icon: Icon(Icons.work), title: Text('Trabajos')),
+      BottomNavigationBarItem(icon: Icon(Icons.work), title: Text('Trabajos')),
     ];
   }
 
