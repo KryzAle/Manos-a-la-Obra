@@ -27,16 +27,29 @@ class MisNuevasSolicitudesPage extends StatelessWidget {
                 stream: pedidoUsuario.getNuevasSolicitudes,
                 builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
                   if (snapshot.hasData) {
-                    if(snapshot.data.isNotEmpty){
+                    if (snapshot.data.isNotEmpty) {
                       return CardNuevaSolicitud(lista: snapshot.data);
-                    }
-                    else{
+                    } else {
                       return Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          SizedBox(height: 50,),
-                          Image(image: NetworkImage('https://www.generadormemes.com/media/created/1lww28xpr7hodxdgmk92d28e0v5dh9wph358znp2g48ep5e8n3eabu1dqu5tsvq.jpg')),
+                          SizedBox(
+                            height: 50,
+                          ),
+                          Container(
+                            alignment: Alignment.center,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "¡Ups! Aun no has recibido nuevas Solicitudes",
+                                  style: TextStyle(
+                                    fontSize: 15.0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         ],
                       );
                     }
